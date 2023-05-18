@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
           "lib/assets/images/logo_w.png",
           width: 200.0,
           height: 200.0,
-        )
+        ),
       ),
     );
   }
