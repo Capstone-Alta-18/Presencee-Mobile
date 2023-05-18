@@ -1,16 +1,30 @@
-# presencee
+<p align='center'>
+    <a href="">
+        <img src="/lib/assets/images/banner.png"></img>
+    </a>
+</p>
 
-A new Flutter project.
+# Presencee
+
+Presensee merupakan platform untuk presensi berbasis online. Presensee hadir untuk memudahkan akses dalam mengisi absensi dari segi peserta didik dan membantu pendidikan mengetahui kehadiran dari peserta didik maupun karyawan.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Requirements and Packages
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter version 3.10.1 (Stable)
+- [Providers](https://pub.dev/packages/provider)
+- [Local_auth](https://pub.dev/packages/local_auth) _(not installed yet)_
+- [Shimmer](https://pub.dev/packages/shimmer) _(not installed yet)_
+- [Cached_network_image](https://pub.dev/packages/cached_network_image) _(not installed yet)_
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+git clone https://github.com/Capstone-Alta-18/Presencee-Mobile.git
+```
+
+```
+flutter cd Presencee-Mobile
+flutter run
+```
