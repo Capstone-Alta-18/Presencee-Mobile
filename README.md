@@ -1,14 +1,12 @@
-<h1 align='center'>
+<p align='center'>
     <a href="">
         <img src="/lib/assets/images/banner.jpg"></img>
     </a>
-</h1>
+</p>
 
 # Presencee
 
 Presensee merupakan platform untuk presensi berbasis online. Presensee hadir untuk memudahkan akses dalam mengisi absensi dari segi peserta didik dan membantu pendidikan mengetahui kehadiran dari peserta didik maupun karyawan.
-
----
 
 ## Getting Started
 
