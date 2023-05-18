@@ -1,12 +1,14 @@
 <p align='center'>
     <a href="">
-        <img src="/lib/assets/images/banner.png"></img>
+        <img src="/lib/assets/images/bannerTrans.png"></img>
     </a>
 </p>
 
 # Presencee
 
-Presensee merupakan platform untuk presensi berbasis online. Presensee hadir untuk memudahkan akses dalam mengisi absensi dari segi peserta didik dan membantu pendidikan mengetahui kehadiran dari peserta didik maupun karyawan.
+Temukan kecanggihan sistem presensi masa depan bersama Presensee - platform online yang mengubah cara kita mencatat kehadiran. Dengan Presensee, pengelolaan absensi dapat dilakukan kapan saja, di mana saja.
+
+Discover the future of attendance systems with Presensee - the online platform that revolutionizes how we track presence. Gone are the days of manual registers and time cards. With Presensee, attendance management is at your fingertips, anywhere, anytime.
 
 ## Getting Started
 
