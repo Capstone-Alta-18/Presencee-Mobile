@@ -14,7 +14,7 @@ Discover the future of attendance systems with Presensee - the online platform t
 
 ### Requirements and Packages
 
-- Flutter version 3.10.1 (Stable)
+> Flutter (Channel Stable, version 3.10.1 )
 - [Providers](https://pub.dev/packages/provider)
 - [Local_auth](https://pub.dev/packages/local_auth) _(not installed yet)_
 - [Shimmer](https://pub.dev/packages/shimmer) _(not installed yet)_
