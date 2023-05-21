@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/view/homepage/homePage.dart';
 import 'package:presencee/view/splashscreen/splashView.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Poppins",
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(),
+      home: HomePage(),
     );
   }
 }
