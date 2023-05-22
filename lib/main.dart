@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/theme/contant.dart';
 import 'package:provider/provider.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/home/homePage.dart';
-import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/splashscreen/splashView.dart';
 
 void main() {
@@ -19,10 +18,12 @@ class MyApp extends StatelessWidget {
       theme: Theme.of(context).copyWith(
         colorScheme: const ColorScheme.light(
           primary: primaryTheme,
-          secondary: componentsColor,
         ),
       ),
-      home: IntroductionScreen(),
+      routes: {
+        '/': (context) => const IntroductionScreen(),
+        '/home': (context) => HomePage(),
+      }
     );
   }
 }

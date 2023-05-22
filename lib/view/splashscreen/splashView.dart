@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/theme/contant.dart';
+import 'package:presencee/theme/constant.dart';
 import '../auth/login_view.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -42,10 +42,10 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 500),
+      alignment: Alignment.center,
       crossFadeState: _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      sizeCurve: Curves.easeIn,
-      firstChild: First(),
-      secondChild: Second(),
+      firstChild: const First(),
+      secondChild: const Second(),
     );
   }
 }
@@ -56,8 +56,6 @@ class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: double.infinity,
       color: primaryTheme,
       child: Center(
         child: Image.asset(
