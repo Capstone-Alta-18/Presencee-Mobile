@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:presencee/theme/contant.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigationProvider with ChangeNotifier {
