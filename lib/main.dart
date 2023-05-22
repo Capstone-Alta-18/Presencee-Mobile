@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/view/splashscreen/splashView.dart';
 import 'package:provider/provider.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/home/homePage.dart';
+import 'package:presencee/view/splashscreen/splashView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,11 +15,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Poppins",
-        primarySwatch: Colors.blue,
+      theme: Theme.of(context).copyWith(
+        colorScheme: const ColorScheme.light(
+          primary: primaryTheme,
+        ),
       ),
-      home: const SplashScreen(),
+      routes: {
+        '/': (context) => const IntroductionScreen(),
+        '/home': (context) => HomePage(),
+      }
     );
   }
 }
