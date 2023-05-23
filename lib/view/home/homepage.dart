@@ -54,40 +54,48 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BottomNavigationProvider>(
-      builder: (context, provider, _) {
-        return BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_rounded),
-              label: 'Jadwal',
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+      child: Consumer<BottomNavigationProvider>(
+        builder: (context, provider, _) {
+          return BottomNavigationBar(
+            elevation: 15,
+            backgroundColor: Colors.white,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu_book_rounded),
+                label: 'Jadwal',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history_rounded),
+                label: 'Riwayat',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outlined),
+                label: 'Profil',
+              ),
+            ],
+            currentIndex: provider.selectedIndex,
+            selectedItemColor: primaryTheme,
+            selectedLabelStyle: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history_rounded),
-              label: 'Riwayat',
+            unselectedIconTheme: const IconThemeData(
+              color: iconGray,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined),
-              label: 'Profil',
-            ),
-          ],
-          currentIndex: provider.selectedIndex,
-          selectedItemColor: const Color(0xFFFE7968),
-          selectedLabelStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ),
-          unselectedIconTheme: const IconThemeData(
-            color: iconGray,
-          ),
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          onTap: (index) {
-            provider.setIndex(index);
-          },
-        );
-      },
+            showSelectedLabels: true,
+            showUnselectedLabels: false,
+            onTap: (index) {
+              provider.setIndex(index);
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -151,7 +159,7 @@ Widget _today() {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Color(0xFFCD4F3E), Color(0xFFFE7968)],
+        colors: [Color(0xFFCD4F3E), primaryTheme],
       ),
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(40),
@@ -163,14 +171,14 @@ Widget _today() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            DateFormat('EEEE, d MMM yyyy').format(DateTime.now()),
+            DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
               fontFamily: 'Poppins',
             ),
           ),
-          const SizedBox(height: 10),
+          // const SizedBox(height: 10),
           Text(
             DateFormat('HH.mm').format(DateTime.now()),
             style: const TextStyle(
