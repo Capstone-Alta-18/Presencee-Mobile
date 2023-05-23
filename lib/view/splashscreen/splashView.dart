@@ -1,3 +1,4 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 import '../auth/login_view.dart';
@@ -21,27 +22,28 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   void _changeView() async {
     await Future.delayed(Duration(milliseconds: 800));
     setState(() {
-      _showFirst = false;     // duration 300ms
+      _showFirst = false;
     });
-    await Future.delayed(Duration(milliseconds: 1400));
-    Navigator.of(context).push(
+    await Future.delayed(Duration(milliseconds: 3200));
+    Navigator.push(
+      context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, _) => const LoginPage(),
-        transitionDuration: const Duration(milliseconds: 800),
-        transitionsBuilder: (context, animation, _, child) {
+        pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
             opacity: animation,
             child: child,
           );
         },
-      )
+        transitionDuration: Duration(milliseconds: 800),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 900),
       alignment: Alignment.center,
       crossFadeState: _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstChild: const First(),
@@ -56,6 +58,8 @@ class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
       color: primaryTheme,
       child: Center(
         child: Image.asset(
@@ -63,7 +67,7 @@ class First extends StatelessWidget {
           width: 200.0,
           height: 200.0,
         ),
-      ),
+      )
     );
   }
 }
@@ -75,6 +79,7 @@ class Second extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      height: MediaQuery.of(context).size.height,
       color: Colors.white,
       child: Center(
         child: Image.asset(

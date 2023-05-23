@@ -1,6 +1,8 @@
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
+import '../home/homePage.dart';
 import 'dart:math' as math;
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
-  bool isButtonActive = true;
+  bool isButtonActive = false;
 
   showHide() {
     setState(() {
@@ -54,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Container(
                 height: 200,
-                margin: const EdgeInsets.symmetric(horizontal: 72, vertical: 40),
+                margin: const EdgeInsets.symmetric(horizontal: 52, vertical: 40),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("lib/assets/images/logo_logins.png"),
@@ -62,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                height: 320,
+                height: 330,
                 margin: const EdgeInsets.symmetric(horizontal: 52),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,11 +89,20 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                       validator: (value) {
+                        final emailRegex = RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
+                        } else if (value.length < 6) {
+                          return 'Email must be at least 6 characters';
+                        } else if (!emailRegex.hasMatch(value)) {
+                          return 'Invalid email format';
                         }
                         return null;
                       },
+                      style: const TextStyle(
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w400,
+                      )
                     ),
                     const SizedBox(height: 10),
                     const Text(
@@ -128,6 +139,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                       ),
+                      style: const TextStyle(
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w400,
+                      ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password must be filled';
@@ -145,10 +160,25 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(2),
                           ),
                           disabledBackgroundColor: iconGray.withOpacity(0.5),
+                          disabledForegroundColor: Colors.black,
                         ),
                         onPressed: isButtonActive ? () {
                           if (formKey.currentState!.validate()) {
-                            Navigator.pushNamed(context, '/home');
+                            // https://stackoverflow.com/questions/60743359/flutter-how-to-use-popuntil-without-animation
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation1, animation2) => HomePage(),
+                                transitionDuration: const Duration(milliseconds: 800),
+                                transitionsBuilder: (context, animation1, animation2, child) {
+                                  return FadeTransition(
+                                    opacity: animation1,
+                                    child: child,
+                                  );
+                                },
+                              ),
+                              (route) => false,
+                            );
                           }
                         } : null,
                         child: const Text(
