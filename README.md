@@ -1,16 +1,48 @@
-# presencee
+<p align='center'>
+    <a href="">
+        <img src="/lib/assets/images/bannerTrans.png"></img>
+    </a>
+</p>
 
-A new Flutter project.
+# Presencee
+
+> Welcome to Presensee - the cutting-edge online attendance management platform that revolutionizes how we track and record attendance. Say goodbye to manual registers and time cards. With Presensee, you can effortlessly manage attendance anytime, anywhere.
+
+## Features
+- Easy and convenient attendance tracking
+- Real-time attendance monitoring
+- Secure login with biometric authentication
+- Customizable attendance reports
+- Integration with existing HR systems
+- Mobile and web platform compatibility
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Requirements and Packages
 
-A few resources to get you started if this is your first Flutter project:
+Make sure you have the following requirements and packages installed:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter (Channel Stable, version 3.10.1 )
+- [Intl](https://pub.dev/packages/intl)
+- [Providers](https://pub.dev/packages/provider)
+- [Local_auth](https://pub.dev/packages/local_auth) _(not installed yet)_
+- [Shimmer](https://pub.dev/packages/shimmer) _(not installed yet)_
+- [Cached_network_image](https://pub.dev/packages/cached_network_image) _(not installed yet)_
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
+
+To get started with Presensee, follow these steps:
+
+1. Clone the repository:
+
+```
+git clone https://github.com/Capstone-Alta-18/Presencee-Mobile.git
+```
+2. Navigate to the cloned directory:
+```
+flutter cd Presencee-Mobile
+```
+3. Run the application:
+```
+flutter run
+```

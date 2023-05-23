@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/view/homepage/homePage.dart';
+import 'package:provider/provider.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/view/splashscreen/splashView.dart';
 
 void main() {
@@ -12,12 +14,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Poppins",
-        primarySwatch: Colors.blue,
-      ),
-      home: HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: Theme.of(context).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: primaryTheme,
+          ),
+        ),
+        routes: {
+          '/': (context) => const IntroductionScreen(),
+          '/home': (context) => HomePage(),
+        });
   }
 }
