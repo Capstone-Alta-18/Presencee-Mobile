@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/view/splashscreen/splashView.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:presencee/view/auth/login_view.dart';
 import 'package:provider/provider.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/home/homePage.dart';
+import 'package:presencee/view/splashscreen/splashView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,12 +16,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('id', 'ID'),
+      ],
+      // locale: const Locale('id', 'ID'),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Poppins",
-        primarySwatch: Colors.blue,
+      theme: Theme.of(context).copyWith(
+        colorScheme: const ColorScheme.light(
+          primary: primaryTheme,
+          secondary: primaryTheme,
+          // tertiary: primaryTheme,
+        ),
       ),
-      home: const SplashScreen(),
+      routes: {
+        '/': (context) => const IntroductionScreen(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => HomePage(),
+      }
     );
   }
 }
