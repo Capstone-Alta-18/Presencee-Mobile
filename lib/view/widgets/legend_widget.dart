@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/constant.dart';
 
 class LegendWidget extends StatelessWidget {
   const LegendWidget({
@@ -15,8 +16,8 @@ class LegendWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 10,
-          height: 10,
+          width: 16,
+          height: 16,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color,
@@ -25,11 +26,10 @@ class LegendWidget extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           name,
-          style: const TextStyle(
-            color: Color.fromRGBO(36, 36, 36, 1),
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w400,
+          style: AppTextStyle.poppinsTextStyle(
+            color: AppTheme.black,
             fontSize: 14,
+            fontsWeight: FontWeight.w400,
           ),
         ),
       ],

@@ -9,46 +9,50 @@ class PersentaseKehadiran extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 75, left: 95, right: 95),
-      child: CircularPercentIndicator(
-        radius: 105.0,
-        animation: true,
-        animationDuration: 1200,
-        lineWidth: 15.0,
-        percent: 0.8,
-        center: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "62,5%",
-              style: TextStyle(
+      child: Transform(
+        transform: Matrix4.rotationZ(0.0),
+        alignment: FractionalOffset.center,
+        child: CircularPercentIndicator(
+          radius: 105.0,
+          animation: true,
+          animationDuration: 1200,
+          lineWidth: 15.0,
+          percent: 0.8,
+          center: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "62,5%",
+                style: AppTextStyle.poppinsTextStyle(
                   color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 28),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              width: 127,
-              height: 27,
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: primaryTheme,
-                  borderRadius: BorderRadius.circular(24)),
-              child: const Text(
-                "Minggu ke-10",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                ),
-                textAlign: TextAlign.center,
+                  fontSize: 28,
+                  fontsWeight: FontWeight.w600
+                )
               ),
-            )
-          ],
+              const SizedBox(height: 10),
+              Container(
+                width: 120,
+                height: 28,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: AppTheme.primaryTheme_3,
+                  borderRadius: BorderRadius.circular(24)
+                ),
+                child: Text(
+                  "Minggu ke-10",
+                  style: AppTextStyle.poppinsTextStyle(
+                    color: AppTheme.white,
+                    fontSize: 12,
+                    fontsWeight: FontWeight.w600
+                  ),
+                ),
+              )
+            ],
+          ),
+          backgroundColor: AppTheme.gray,
+          progressColor: AppTheme.primaryTheme,
         ),
-        backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
-        progressColor: primaryTheme,
       ));
   }
 }
