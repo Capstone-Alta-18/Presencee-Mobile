@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/view/widgets/card_matkul.dart';
+import 'package:presencee/theme/constant.dart';
 
 class KehadiranSemester extends StatelessWidget {
   const KehadiranSemester({super.key});
@@ -13,26 +13,25 @@ class KehadiranSemester extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Kehadiran Semester ini',
-              style: TextStyle(
-                color: Color.fromRGBO(36, 36, 36, 1),
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
+              style: AppTextStyle.poppinsTextStyle(
+                color: AppTheme.black,
                 fontSize: 18,
-              ),
+                fontsWeight: FontWeight.w600
+              )
             ),
             SizedBox(
               height: 30,
               width: 130,
               child: ElevatedButton(
                 onPressed: () {},
-                child: const Text(
+                child: Text(
                   'Lihat Semua',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
+                  style: AppTextStyle.poppinsTextStyle(
+                    color: AppTheme.white,
                     fontSize: 14,
+                    fontsWeight: FontWeight.w400
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -40,8 +39,7 @@ class KehadiranSemester extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 19),
-        const CardMatkul(),
+        const SizedBox(height: 20),
       ],
     ),
   );

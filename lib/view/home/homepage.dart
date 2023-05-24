@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/history_view.dart';
+
 class BottomNavigationProvider with ChangeNotifier {
   int _selectedIndex = 0;
 
@@ -79,14 +81,14 @@ class BottomNavigation extends StatelessWidget {
               ),
             ],
             currentIndex: provider.selectedIndex,
-            selectedItemColor: primaryTheme,
-            selectedLabelStyle: const TextStyle(
-              fontFamily: 'Poppins',
+            selectedItemColor: AppTheme.primaryTheme,
+            selectedLabelStyle: AppTextStyle.poppinsTextStyle(
+              color: AppTheme.primaryTheme,
               fontSize: 12,
-              fontWeight: FontWeight.w700,
+              fontsWeight: FontWeight.w700,
             ),
             unselectedIconTheme: const IconThemeData(
-              color: iconGray,
+              color: AppTheme.gray_2,
             ),
             showSelectedLabels: true,
             showUnselectedLabels: false,
@@ -110,12 +112,12 @@ Widget _searchBar() {
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
         hintText: 'input search text...',
         hintStyle: const TextStyle(
-          color: iconGray,
+          color: AppTheme.gray_2,
         ),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
-            color: iconGray,
+            color: AppTheme.gray_2,
           ),
         ),
         suffixIcon: Container(
@@ -123,7 +125,7 @@ Widget _searchBar() {
             // color: isSearch ? highlightSearch : Colors.transparent,      // change color when search are clicked
             border: Border(
               left: BorderSide(
-                color: iconGray,
+                color: AppTheme.gray_2,
               ),
             )
           ),
@@ -139,7 +141,7 @@ Widget _searchBar() {
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
-            color: highlightSearch,
+            color: AppTheme.primaryTheme_2,
             width: 1,
           ),
         ),
@@ -159,7 +161,7 @@ Widget _today() {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Color(0xFFCD4F3E), primaryTheme],
+        colors: [Color(0xFFCD4F3E), AppTheme.primaryTheme],
       ),
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(40),

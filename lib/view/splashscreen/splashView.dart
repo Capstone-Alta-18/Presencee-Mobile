@@ -1,6 +1,5 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:flutter/material.dart';
 import '../auth/login_view.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -25,7 +24,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
       _showFirst = false;
     });
     await Future.delayed(Duration(milliseconds: 3200));
-    Navigator.push(
+    Navigator.pushAndRemoveUntil(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
@@ -35,8 +34,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
             child: child,
           );
         },
-        transitionDuration: Duration(milliseconds: 800),
+        transitionDuration: Duration(milliseconds: 1550),
       ),
+      (route) => false,
     );
   }
 
@@ -60,7 +60,7 @@ class First extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
-      color: primaryTheme,
+      color: AppTheme.primaryTheme,
       child: Center(
         child: Image.asset(
           "lib/assets/images/logo_w.png",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/legend_widget.dart';
 
 class BarChartWidget extends StatelessWidget {
@@ -13,14 +14,15 @@ class BarChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 344,
-      height: 304,
+      margin: const EdgeInsets.symmetric(horizontal: 24),
+      width: double.infinity,
+      height: 316,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Color.fromARGB(26, 0, 0, 0).withOpacity(0.2),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -38,31 +40,32 @@ class BarChartWidget extends StatelessWidget {
               ),
               Column(
                 children: [
+                  const SizedBox(height: 18),
                   Container(
                     height: 27,
                     width: 130,
                     decoration: BoxDecoration(
-                      color: const Color.fromRGBO(254, 148, 134, 1),
+                      color: AppTheme.primaryTheme_2,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
                         'Minggu ke-8',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Color.fromRGBO(36, 36, 36, 1)),
+                        style: AppTextStyle.poppinsTextStyle(
+                          color: AppTheme.white,
+                          fontSize: 14,
+                          fontsWeight: FontWeight.w500
+                        ),
                       ),
                     ),
                   ),
-                  const Text(
+                  Text(
                     '10-14 April 2022',
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                        color: Color.fromRGBO(36, 36, 36, 1)),
+                    style: AppTextStyle.poppinsTextStyle(
+                      color: AppTheme.black,
+                      fontSize: 12,
+                      fontsWeight: FontWeight.w400
+                    ),
                   )
                 ],
               ),
@@ -85,11 +88,10 @@ class BarChartWidget extends StatelessWidget {
                     show: true,
                     bottomTitles: SideTitles(
                       showTitles: true,
-                      getTextStyles: (value) => const TextStyle(
-                        color: Color.fromRGBO(36, 36, 36, 1),
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
+                      getTextStyles: (value) => AppTextStyle.poppinsTextStyle(
+                        color: AppTheme.black_2,
                         fontSize: 12,
+                        fontsWeight: FontWeight.w400
                       ),
                       margin: 16,
                       getTitles: (double value) {
@@ -123,7 +125,7 @@ class BarChartWidget extends StatelessWidget {
                               BarChartRodData(
                                 y: value,
                                 colors: [
-                                  const Color.fromRGBO(254, 175, 164, 1)
+                                  AppTheme.primaryTheme_3
                                 ],
                                 width: 8,
                               ),
