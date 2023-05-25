@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
 
+import '../pages/history_view.dart';
+
 class BottomNavigationProvider with ChangeNotifier {
   int _selectedIndex = 0;
 
@@ -54,40 +56,48 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BottomNavigationProvider>(
-      builder: (context, provider, _) {
-        return BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_rounded),
-              label: 'Jadwal',
+    return ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
+      ),
+      child: Consumer<BottomNavigationProvider>(
+        builder: (context, provider, _) {
+          return BottomNavigationBar(
+            elevation: 15,
+            backgroundColor: Colors.white,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu_book_rounded),
+                label: 'Jadwal',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history_rounded),
+                label: 'Riwayat',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outlined),
+                label: 'Profil',
+              ),
+            ],
+            currentIndex: provider.selectedIndex,
+            selectedItemColor: AppTheme.primaryTheme,
+            selectedLabelStyle: AppTextStyle.poppinsTextStyle(
+              color: AppTheme.primaryTheme,
+              fontSize: 12,
+              fontsWeight: FontWeight.w700,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history_rounded),
-              label: 'Riwayat',
+            unselectedIconTheme: const IconThemeData(
+              color: AppTheme.gray_2,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined),
-              label: 'Profil',
-            ),
-          ],
-          currentIndex: provider.selectedIndex,
-          selectedItemColor: const Color(0xFFFE7968),
-          selectedLabelStyle: const TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-          ),
-          unselectedIconTheme: const IconThemeData(
-            color: iconGray,
-          ),
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          onTap: (index) {
-            provider.setIndex(index);
-          },
-        );
-      },
+            showSelectedLabels: true,
+            showUnselectedLabels: false,
+            onTap: (index) {
+              provider.setIndex(index);
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -102,12 +112,12 @@ Widget _searchBar() {
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
         hintText: 'input search text...',
         hintStyle: const TextStyle(
-          color: iconGray,
+          color: AppTheme.gray_2,
         ),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
-            color: iconGray,
+            color: AppTheme.gray_2,
           ),
         ),
         suffixIcon: Container(
@@ -115,7 +125,7 @@ Widget _searchBar() {
             // color: isSearch ? highlightSearch : Colors.transparent,      // change color when search are clicked
             border: Border(
               left: BorderSide(
-                color: iconGray,
+                color: AppTheme.gray_2,
               ),
             )
           ),
@@ -131,7 +141,7 @@ Widget _searchBar() {
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           borderSide: BorderSide(
-            color: highlightSearch,
+            color: AppTheme.primaryTheme_2,
             width: 1,
           ),
         ),
@@ -151,7 +161,7 @@ Widget _today() {
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Color(0xFFCD4F3E), Color(0xFFFE7968)],
+        colors: [Color(0xFFCD4F3E), AppTheme.primaryTheme],
       ),
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(40),
@@ -163,14 +173,14 @@ Widget _today() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            DateFormat('EEEE, d MMM yyyy').format(DateTime.now()),
+            DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
               fontFamily: 'Poppins',
             ),
           ),
-          const SizedBox(height: 10),
+          // const SizedBox(height: 10),
           Text(
             DateFormat('HH.mm').format(DateTime.now()),
             style: const TextStyle(
