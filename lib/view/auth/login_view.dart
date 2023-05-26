@@ -1,8 +1,8 @@
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
+import '../pages/customers.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -29,12 +29,14 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(() {
       setState(() {
-        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive =
+            emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
     passController.addListener(() {
       setState(() {
-        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive =
+            emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
   }
@@ -55,8 +57,9 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               Container(
-                height: 200,
-                margin: const EdgeInsets.symmetric(horizontal: 52, vertical: 40),
+                height: 300,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 52, vertical: 40),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("lib/assets/images/logo_logins.png"),
@@ -69,11 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       "Email/NIM",
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 14,
                       ),
                     ),
                     TextFormField(
@@ -81,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: const InputDecoration(
                         hintText: "yourname@students.com",
                         hintStyle: TextStyle(
-                          color: greyText,
+                          color: AppTheme.greyText,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(2)),
@@ -89,7 +91,8 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                       validator: (value) {
-                        final emailRegex = RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        final emailRegex =
+                            RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
@@ -99,17 +102,15 @@ class _LoginPageState extends State<LoginPage> {
                         }
                         return null;
                       },
-                      style: const TextStyle(
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w400,
-                      )
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
+                    Text(
                       "Password",
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 14,
                       ),
                     ),
                     TextFormField(
@@ -117,31 +118,32 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: _secureText,
                       decoration: InputDecoration(
                         suffixIcon: Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.rotationY(math.pi),
+                            alignment: Alignment.center,
+                            transform: Matrix4.rotationY(math.pi),
                             child: IconButton(
                               onPressed: () {
                                 setState(() {
                                   _secureText = !_secureText;
                                 });
-                              }, 
-                            icon: Icon(
-                              _secureText ? Icons.visibility_off_outlined : Icons.visibility,
-                            ),
-                          )
-                        ),
+                              },
+                              icon: Icon(
+                                _secureText
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility,
+                              ),
+                            )),
                         hintText: "input password",
                         hintStyle: const TextStyle(
-                          color: greyText,
+                          color: AppTheme.greyText,
                         ),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(2)),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
                       ),
-                      style: const TextStyle(
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 14,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -155,47 +157,68 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: highlightSearch,
+                          primary: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
-                          disabledBackgroundColor: iconGray.withOpacity(0.5),
-                          disabledForegroundColor: Colors.black,
+                          disabledBackgroundColor: AppTheme.disabled,
                         ),
-                        onPressed: isButtonActive ? () {
-                          if (formKey.currentState!.validate()) {
-                            // https://stackoverflow.com/questions/60743359/flutter-how-to-use-popuntil-without-animation
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation1, animation2) => HomePage(),
-                                transitionDuration: const Duration(milliseconds: 800),
-                                transitionsBuilder: (context, animation1, animation2, child) {
-                                  return FadeTransition(
-                                    opacity: animation1,
-                                    child: child,
+                        onPressed: isButtonActive
+                            ? () {
+                                if (formKey.currentState!.validate()) {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                              HomePage(),
+                                      transitionsBuilder: (context, animation1,
+                                          animation2, child) {
+                                        return FadeTransition(
+                                          opacity: animation1,
+                                          child: child,
+                                        );
+                                      },
+                                      transitionDuration:
+                                          const Duration(milliseconds: 1200),
+                                    ),
+                                    (route) => false,
                                   );
-                                },
-                              ),
-                              (route) => false,
-                            );
-                          }
-                        } : null,
-                        child: const Text(
+                                }
+                              }
+                            : null,
+                        child: Text(
                           "Login",
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            color: Colors.white,
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w400,
+                          style: AppTextStyle.poppinsTextStyle(
                             fontSize: 14,
+                            color: AppTheme.white,
                           ),
                         ),
                       ),
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: () {}, 
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        const CustomerService(),
+                                transitionsBuilder:
+                                    (context, animation1, animation2, child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(1, 0),
+                                      end: Offset.zero,
+                                    ).animate(animation1),
+                                    child: child,
+                                  );
+                                },
+                                transitionDuration:
+                                    const Duration(milliseconds: 490),
+                              ));
+                        },
                         child: const Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,
@@ -205,14 +228,14 @@ class _LoginPageState extends State<LoginPage> {
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                             fontSize: 14,
-                            color: highlightSearch,
+                            color: AppTheme.primaryTheme_2,
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
-                )
-              )
+                ),
+              ),
             ],
           ),
         ),

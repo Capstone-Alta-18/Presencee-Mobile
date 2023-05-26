@@ -18,22 +18,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('id', 'ID'),
-      ],
-      // locale: const Locale('id', 'ID'),
-      debugShowCheckedModeBanner: false,
-      theme: Theme.of(context).copyWith(
-        colorScheme: const ColorScheme.light(
-          primary: primaryTheme,
-          secondary: primaryTheme,
-          // tertiary: primaryTheme,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('id', 'ID'),
+        ],
+        debugShowCheckedModeBanner: false,
+        theme: Theme.of(context).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppTheme.primaryTheme,
+            secondary: AppTheme.primaryTheme,
+            // tertiary: primaryTheme,
+          ),
         ),
       ),
       routes: {

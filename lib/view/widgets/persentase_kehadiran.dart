@@ -67,5 +67,7 @@ class PersentaseKehadiran extends StatelessWidget {
             backgroundColor: const Color.fromRGBO(209, 209, 209, 1),
             progressColor: primaryTheme,
           );
+
+
   }
 }

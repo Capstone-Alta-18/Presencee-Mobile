@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/theme/constant.dart';
 
 class RingkasanKehadiran extends StatelessWidget {
   const RingkasanKehadiran({super.key});
@@ -6,18 +7,18 @@ class RingkasanKehadiran extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-    margin: const EdgeInsets.only(top: 44, left: 24, right: 24),
-    child: Column(
-      children: [
-        const Row(
-          children: [
-            Text(
-              'Ringkasan kehadiran',
-              style: TextStyle(
-                color: Color.fromRGBO(36, 36, 36, 1),
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
+      margin: const EdgeInsets.only(top: 44, left: 24, right: 24),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                'Ringkasan kehadiran',
+                style: AppTextStyle.poppinsTextStyle(
+                  color: AppTheme.black,
+                  fontSize: 18,
+                  fontsWeight: FontWeight.w600
+                )
               ),
             ),
           ],
