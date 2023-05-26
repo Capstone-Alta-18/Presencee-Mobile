@@ -23,8 +23,8 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            // _today(),
-            // _searchBar(),
+            _today(),
+            _searchBar(),
             Expanded(
               child: Consumer<BottomNavigationProvider>(
                 builder: (context, provider, _) {
