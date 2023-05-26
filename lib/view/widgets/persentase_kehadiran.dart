@@ -32,7 +32,7 @@ class PersentaseKehadiran extends StatelessWidget {
                   height: 27,
                   decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color: primaryTheme,
+                      color: AppTheme.primaryTheme,
                       borderRadius: BorderRadius.circular(24)),
                   child: const Text(
                     "Minggu ke-10",
@@ -48,7 +48,7 @@ class PersentaseKehadiran extends StatelessWidget {
               ],
             ),
             backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
-            progressColor: primaryTheme,
+            progressColor: AppTheme.primaryTheme,
           )
         : CircularPercentIndicator(
             radius: 105.0,
@@ -65,7 +65,7 @@ class PersentaseKehadiran extends StatelessWidget {
                   fontSize: 28),
             ),
             backgroundColor: const Color.fromRGBO(209, 209, 209, 1),
-            progressColor: primaryTheme,
+            progressColor: AppTheme.primaryTheme,
           );
 
 
