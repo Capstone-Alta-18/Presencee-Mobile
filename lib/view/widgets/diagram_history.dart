@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 
 class DiagramHistory extends StatelessWidget {
@@ -9,34 +10,6 @@ class DiagramHistory extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 37),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 76),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Bahasa Indonesia (MU)',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: Color.fromRGBO(36, 36, 36, 1),
-                ),
-              ),
-              Text(
-                'Siswandi',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  color: Color.fromRGBO(0, 0, 0, 1),
-                ),
-              ),
-            ],
-          ),
-        ),
         const SizedBox(height: 27),
         const Center(
           child: PersentaseKehadiran(
@@ -51,31 +24,39 @@ class DiagramHistory extends StatelessWidget {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24)),
-                  color: Color.fromRGBO(255, 228, 225, 1),
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  color: AppTheme.primaryTheme_5,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.25),
+                      offset: Offset(0, 4),
+                      blurRadius: 4,
+                    ),
+                  ],
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 20),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         '10 dari 16',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
+                        style: AppTextStyle.poppinsTextStyle(
+                          color: AppTheme.black,
+                          fontsWeight: FontWeight.w600,
                           fontSize: 20,
-                        ),
+                        )
                       ),
                       Text(
                         'pertemuan',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w600,
+                        style: AppTextStyle.poppinsTextStyle(
+                          color: AppTheme.black,
+                          fontsWeight: FontWeight.w600,
                           fontSize: 20,
-                        ),
-                      )
+                        )
+                      ),
                     ],
                   ),
                 ),
@@ -84,13 +65,21 @@ class DiagramHistory extends StatelessWidget {
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(24),
-                      bottomRight: Radius.circular(24)),
-                  color: Color.fromRGBO(245, 245, 245, 1),
+                    bottomLeft: Radius.circular(24),
+                    bottomRight: Radius.circular(24),
+                  ),
+                  color: AppTheme.gray,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.25),
+                      offset: Offset(0, 4),
+                      blurRadius: 4,
+                    )
+                  ], 
                 ),
-                child: const Padding(
+                child: Padding(
                   padding:
-                      EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 12),
+                      const EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 12),
                   child: Column(
                     children: [
                       Row(
@@ -98,19 +87,19 @@ class DiagramHistory extends StatelessWidget {
                         children: [
                           Text(
                             'Hadir',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16
+                            )
                           ),
                           Text(
                             '9',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16
+                            ),
                           ),
                         ],
                       ),
@@ -119,19 +108,19 @@ class DiagramHistory extends StatelessWidget {
                         children: [
                           Text(
                             'Alpa',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
                           Text(
                             '0',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
@@ -140,19 +129,19 @@ class DiagramHistory extends StatelessWidget {
                         children: [
                           Text(
                             'Sakit',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16
+                            ),
                           ),
                           Text(
                             '1',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16
+                            ),
                           ),
                         ],
                       ),
@@ -161,19 +150,19 @@ class DiagramHistory extends StatelessWidget {
                         children: [
                           Text(
                             'Izin',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
                           Text(
                             '0',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
@@ -182,19 +171,21 @@ class DiagramHistory extends StatelessWidget {
                         children: [
                           Text(
                             'Dispensasi',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
+                            style: 
+                              AppTextStyle.poppinsTextStyle(
+                                color: AppTheme.black,
+                                fontsWeight: FontWeight.w400,
                                 fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                              ),
                           ),
                           Text(
                             '0',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
+                            style: 
+                              AppTextStyle.poppinsTextStyle(
+                                color: AppTheme.black,
+                                fontsWeight: FontWeight.w400,
                                 fontSize: 16,
-                                color: Color.fromRGBO(36, 36, 36, 1)),
+                              ),
                           ),
                         ],
                       ),

@@ -22,18 +22,16 @@ class HeaderHistory extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    // icon: Image.asset('lib/assets/icons/close.png'),
-                    icon: Icon(PhosphorIcons.x,color: Colors.white,size: 30,),
+                    icon: const Icon(PhosphorIcons.x,color: AppTheme.white, size: 30,),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 38),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 38),
                     child: Text(
                       'Riwayat Kehadiran',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+                      style: AppTextStyle.poppinsTextStyle(
+                        color: AppTheme.white,
+                        fontsWeight: FontWeight.w600,
+                        fontSize: 24,
                       ),
                     ),
                   )
@@ -41,20 +39,20 @@ class HeaderHistory extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
+          SizedBox(
             width: 310,
             height: 32,
             child: TabBar(
-              indicatorColor: Colors.white,
-              labelStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
+              indicatorColor: AppTheme.white,
+              labelStyle: AppTextStyle.poppinsTextStyle(
+                  color: AppTheme.white,
+                  fontsWeight: FontWeight.w600,
                   fontSize: 14),
-              unselectedLabelStyle: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                  color: Color.fromRGBO(236, 173, 171, 1)),
+              unselectedLabelStyle: AppTextStyle.poppinsTextStyle(
+                  color: const Color(0xFFECADAB),
+                  fontsWeight: FontWeight.w400,
+                  fontSize: 14
+              ),
               tabs: [
                 Text("LIST"),
                 Text("DIAGRAM"),

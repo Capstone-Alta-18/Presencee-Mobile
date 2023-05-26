@@ -14,8 +14,10 @@ class CardAbsensi extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1.2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
+        splashColor: AppTheme.primaryTheme.withOpacity(0.2),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         onTap: () {
           // Navigator.push(
           //     context, MaterialPageRoute(builder: (context) => """DetailMatkul()"""));
