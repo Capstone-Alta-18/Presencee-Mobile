@@ -12,6 +12,7 @@ class CardMatkul extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 5,
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.only(left: 18),

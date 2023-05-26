@@ -33,6 +33,7 @@ class AppTheme {
   // Gradients
   static const Color gradient_1 = Color(0xFFCD4F3F);
   static const Color gradient_2 = Color(0xFFFE9486);
+  static const Color gradient_3 = Color(0xFFFE7968);
 
   // cards
   static const Color greenCard = Color(0xFFE1FFE6);

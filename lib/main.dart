@@ -15,39 +15,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-// <<<<<<< HEAD
-//         debugShowCheckedModeBanner: false,
-//         theme: Theme.of(context).copyWith(
-//           colorScheme: const ColorScheme.light(
-//             primary: primaryTheme
-//           ),
-//         ),
-//         routes: {
-//           '/': (context) => const IntroductionScreen(),
-//           '/home': (context) => HomePage(),
-//         });
-// =======
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('id', 'ID'),
-        ],
-        debugShowCheckedModeBanner: false,
-        theme: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppTheme.primaryTheme,
-            secondary: AppTheme.primaryTheme,
-            // tertiary: primaryTheme,
-          ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('id', 'ID'),
+      ],
+      debugShowCheckedModeBanner: false,
+      theme: Theme.of(context).copyWith(
+        colorScheme: const ColorScheme.light(
+          primary: AppTheme.primaryTheme,
+          secondary: AppTheme.primaryTheme,
+          // tertiary: primaryTheme,
         ),
-        routes: {
-          '/': (context) => const IntroductionScreen(),
-          '/login': (context) => const LoginPage(),
-          '/home': (context) => HomePage(),
-        });
+      ),
+      routes: {
+        // '/': (context) => const IntroductionScreen(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => HomePage(),
+      },
+      initialRoute: '/home'
+    );
   }
 }
