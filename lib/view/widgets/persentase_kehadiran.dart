@@ -51,17 +51,17 @@ class PersentaseKehadiran extends StatelessWidget {
         progressColor: AppTheme.primaryTheme,
       )
     : CircularPercentIndicator(
-        radius: 105.0,
+        radius: 120.0,
         animation: true,
         animationDuration: 1200,
-        lineWidth: 24.0,
+        lineWidth: 30.0,
         percent: 0.8,
         center: Text(
-          "62,5%",
+          "63,5%",
           style: AppTextStyle.poppinsTextStyle(
             color: AppTheme.black,
-            fontSize: 28,
-            fontsWeight: FontWeight.w600,
+            fontSize: 40,
+            fontsWeight: FontWeight.w700,
           ),
         ),
         backgroundColor: AppTheme.gray,

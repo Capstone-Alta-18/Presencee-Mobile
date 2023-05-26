@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 
+import '../../theme/constant.dart';
+
 class ListHistory extends StatefulWidget {
   const ListHistory({super.key});
 
@@ -12,39 +14,12 @@ List<String> list = <String>['Terlama', 'Terbaru'];
 
 class _ListHistoryState extends State<ListHistory> {
   String dropdownValue = list.first;
+  
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 37),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 76),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Bahasa Indonesia (MU)',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: Color.fromRGBO(36, 36, 36, 1),
-                ),
-              ),
-              Text(
-                'Siswandi',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  color: Color.fromRGBO(0, 0, 0, 1),
-                ),
-              ),
-            ],
-          ),
-        ),
         const SizedBox(height: 27),
         Container(
           width: double.infinity,
@@ -57,17 +32,16 @@ class _ListHistoryState extends State<ListHistory> {
             padding: const EdgeInsets.only(left: 12, right: 12),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                // icon: Image.asset('lib/assets/icons/caret_down.png'),
                 icon: const Icon(
                   PhosphorIcons.caret_down,
                   color: Color.fromRGBO(0, 0, 0, 0.25),
                 ),
-                hint: const Text(
+                hint: Text(
                   'Pilih filter',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
+                  style: AppTextStyle.poppinsTextStyle(
+                    color: AppTheme.black_3,
+                    fontsWeight: FontWeight.w400,
+                    fontSize: 12,
                   ),
                 ),
                 value: dropdownValue,
@@ -94,26 +68,24 @@ class _ListHistoryState extends State<ListHistory> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Bahasa Indonesia (MU22)',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
+                      style: AppTextStyle.poppinsTextStyle(
+                        color: AppTheme.black,
+                        fontsWeight: FontWeight.w600,
                         fontSize: 14,
-                        color: Color.fromRGBO(36, 36, 36, 1),
-                      ),
+                      )
                     ),
                     Text(
                       'Masuk : 28 Februari',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 13,
-                        color: Color.fromRGBO(97, 97, 97, 1),
-                      ),
+                      style: AppTextStyle.poppinsTextStyle(
+                        color: AppTheme.black_3,
+                        fontsWeight: FontWeight.w400,
+                        fontSize: 12,
+                      )
                     )
                   ],
                 ),
@@ -121,16 +93,17 @@ class _ListHistoryState extends State<ListHistory> {
                   height: 30,
                   width: 125,
                   decoration: BoxDecoration(
-                      color: const Color.fromRGBO(254, 148, 134, 1),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Center(
+                    color: const Color.fromRGBO(254, 148, 134, 1),
+                    borderRadius: BorderRadius.circular(10),
+                    ),
+                  child: Center(
                     child: Text(
                       'Terkonfirmasi',
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: Colors.white),
+                      style: AppTextStyle.poppinsTextStyle(
+                        color: Colors.white,
+                        fontsWeight: FontWeight.w400,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
                 ),
