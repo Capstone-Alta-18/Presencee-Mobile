@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/history/history_view.dart';
+import 'package:provider/provider.dart';
 import '../pages/history_view.dart';
 import '../widgets/card_absensi.dart';
 

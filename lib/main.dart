@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presencee/view/auth/login_view.dart';
+import 'package:presencee/view/history/course_history_view.dart';
+import 'package:presencee/view/history/semester_attendance_history_view.dart';
+import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/view/splashscreen/splashView.dart';
@@ -15,18 +18,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-// <<<<<<< HEAD
-//         debugShowCheckedModeBanner: false,
-//         theme: Theme.of(context).copyWith(
-//           colorScheme: const ColorScheme.light(
-//             primary: primaryTheme
-//           ),
-//         ),
-//         routes: {
-//           '/': (context) => const IntroductionScreen(),
-//           '/home': (context) => HomePage(),
-//         });
-// =======
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -44,10 +35,14 @@ class MyApp extends StatelessWidget {
             // tertiary: primaryTheme,
           ),
         ),
-        routes: {
-          '/': (context) => const IntroductionScreen(),
-          '/login': (context) => const LoginPage(),
-          '/home': (context) => HomePage(),
-        });
+      ),
+      routes: {
+        '/': (context) => const IntroductionScreen(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => HomePage(),
+        '/semester_history' : (context) => const SemesterHistory(),
+        '/course_history' : (context) => const CourseHistory(),
+      }
+    );
   }
 }

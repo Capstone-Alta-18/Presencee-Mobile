@@ -20,39 +20,34 @@ class RingkasanKehadiran extends StatelessWidget {
                   fontsWeight: FontWeight.w600
                 )
               ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SizedBox(
-                height: 30,
-                width: 112,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+                  height: 25,
+                  width: 90,
+                  decoration: BoxDecoration(
+                      color: const Color.fromRGBO(254, 148, 134, 1),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: const Center(
+                    child: Text(
+                      'Mingguan',
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: Colors.white),
                     ),
-                    elevation: MaterialStateProperty.all<double>(0),
-                    backgroundColor: MaterialStateProperty.all<Color>(AppTheme.primaryTheme_3)
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    'Mingguan',
-                    style: AppTextStyle.poppinsTextStyle(
-                      color: AppTheme.white,
-                      fontSize: 14,
-                      fontsWeight: FontWeight.w400
-                    ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
+          ],
+        ),
+        const SizedBox(height: 19),
+      ],
+    ),
+  );
   }
 }
