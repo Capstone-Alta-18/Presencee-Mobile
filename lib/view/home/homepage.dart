@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/history/history_view.dart';
 import 'package:provider/provider.dart';
 import '../pages/history_view.dart';
 import '../widgets/card_absensi.dart';
@@ -27,8 +26,7 @@ class _HomePageState extends State<HomePage> {
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => JadwalPage()));
     } else if (_selectedIndex == 1) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HistoryPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryPage()));
     } else if (_selectedIndex == 2) {
       print('ini profile');
       // Navigator.push(

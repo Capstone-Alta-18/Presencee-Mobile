@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
             // tertiary: primaryTheme,
           ),
         ),
-      ),
       routes: {
         '/': (context) => const IntroductionScreen(),
         '/login': (context) => const LoginPage(),

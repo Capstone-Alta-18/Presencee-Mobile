@@ -20,7 +20,6 @@ class RingkasanKehadiran extends StatelessWidget {
                   fontsWeight: FontWeight.w600
                 )
               ),
-            ),
           ],
         ),
         Row(

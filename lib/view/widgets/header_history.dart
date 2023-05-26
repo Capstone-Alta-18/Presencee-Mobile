@@ -10,7 +10,7 @@ class HeaderHistory extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 120,
-      color: primaryTheme,
+      color: AppTheme.primaryTheme,
       child: Column(
         children: [
           Expanded(
