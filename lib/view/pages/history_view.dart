@@ -13,20 +13,25 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Header(title: 'Riwayat Kehadiran', subtitle: 'Semester 2022/2',),
-              const PersentaseKehadiran(),
-              const KehadiranSemester(),
-              const CardMatkul(),
-              const RingkasanKehadiran(),
-              BarChartWidget(),
-              const SizedBox(height: 50),
-            ],
-          ),
+        child: Column(
+          children: [
+            const Header(
+              title: 'Riwayat Kehadiran',
+              subtitle: 'Semester 2022/2', back: false,
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 75, left: 95, right: 95),
+              child: const PersentaseKehadiran(diagram: false,),
+            ),
+            const KehadiranSemester(),
+            const SizedBox(height: 20),
+            const CardMatkul(semester: false),
+            const RingkasanKehadiran(),
+            BarChartWidget(),
+            const SizedBox(height: 50),
+          ],
         ),
+      ),
     );
-    
   }
 }
-

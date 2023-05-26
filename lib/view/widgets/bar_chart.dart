@@ -7,8 +7,8 @@ class BarChartWidget extends StatelessWidget {
   BarChartWidget({super.key});
 
   final List<double> data = [10, 5, 8, 3, 6];
-  final hadirColor = const Color.fromRGBO(254, 175, 164, 1);
-  final absenColor = const Color.fromRGBO(174, 56, 56, 1);
+  final hadirColor = AppTheme.primaryTheme_3;
+  final absenColor = AppTheme.error;
   final terlambatColor = const Color.fromRGBO(255, 155, 4, 1);
 
   @override

@@ -52,7 +52,7 @@ class CardAbsensi extends StatelessWidget {
           ],
         ),
         trailing: Container(
-          margin: EdgeInsets.symmetric(vertical: 8),
+          margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.02),
           height: 22,
           child: ElevatedButton(
             onPressed: () {

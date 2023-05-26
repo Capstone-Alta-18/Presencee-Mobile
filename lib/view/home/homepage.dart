@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:provider/provider.dart';
 import '../pages/history_view.dart';
 import '../widgets/card_absensi.dart';
 
@@ -13,7 +14,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isTodaySelected = true;    // Set initial selection state of "Hari ini" button
   bool isAllSelected = false;     // Set initial selection state of "Semua" button
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -49,9 +49,6 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 20),
                   _viewJadwal(),
                   SizedBox(height: 20),
-                  _buildJadwalAbsensi(),
-                  _buildJadwalAbsensi(),
-                  _buildJadwalAbsensi(),
                   _buildJadwalAbsensi(),
                 ],
               )

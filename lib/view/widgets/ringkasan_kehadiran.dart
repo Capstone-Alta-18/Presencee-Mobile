@@ -17,40 +17,35 @@ class RingkasanKehadiran extends StatelessWidget {
                 style: AppTextStyle.poppinsTextStyle(
                   color: AppTheme.black,
                   fontSize: 18,
-                  fontsWeight: FontWeight.w600
-                )
+                  fontsWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SizedBox(
-                height: 30,
-                width: 112,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))
-                    ),
-                    elevation: MaterialStateProperty.all<double>(0),
-                    backgroundColor: MaterialStateProperty.all<Color>(AppTheme.primaryTheme_3)
-                  ),
-                  onPressed: () {},
+              Container(
+                height: 25,
+                width: 90,
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryTheme_2,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Center(
                   child: Text(
                     'Mingguan',
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.white,
-                      fontSize: 14,
-                      fontsWeight: FontWeight.w400
+                      fontSize: 12,
+                      fontsWeight: FontWeight.w500,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 19),
         ],
       ),
     );
