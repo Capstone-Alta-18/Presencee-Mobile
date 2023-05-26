@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presencee/view/auth/login_view.dart';
+import 'package:presencee/view/history/course_history_view.dart';
+import 'package:presencee/view/history/semester_attendance_history_view.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/home/homePage.dart';
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => const IntroductionScreen(),
         '/login': (context) => const LoginPage(),
         '/home': (context) => HomePage(),
+        '/semester_history' : (context) => const SemesterHistory(),
+        '/course_history' : (context) => const CourseHistory(),
       }
     );
   }

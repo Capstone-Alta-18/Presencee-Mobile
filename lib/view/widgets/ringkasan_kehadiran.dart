@@ -25,29 +25,23 @@ class RingkasanKehadiran extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            SizedBox(
-              height: 30,
-              width: 112,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromRGBO(254, 175, 164, 1)),
-                ),
-                onPressed: () {},
-                child: const Text(
-                  'Mingguan',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
+            Container(
+                  height: 25,
+                  width: 90,
+                  decoration: BoxDecoration(
+                      color: const Color.fromRGBO(254, 148, 134, 1),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: const Center(
+                    child: Text(
+                      'Mingguan',
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                          color: Colors.white),
+                    ),
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ),
           ],
         ),
         const SizedBox(height: 19),

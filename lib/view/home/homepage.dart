@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/history/history_view.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavigationProvider with ChangeNotifier {
@@ -22,8 +23,8 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            _today(),
-            _searchBar(),
+            // _today(),
+            // _searchBar(),
             Expanded(
               child: Consumer<BottomNavigationProvider>(
                 builder: (context, provider, _) {
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
                     // return JadwalPage();
                   } else if (provider.selectedIndex == 1) {
                     print('ini history');
-                    // return HistoryPage();
+                    return HistoryPage();
                   } else if (provider.selectedIndex == 2) {
                     print('ini profile');
                     // return ProfilePage();

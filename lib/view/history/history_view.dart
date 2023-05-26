@@ -11,19 +11,23 @@ class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-          children: [
-            const Header(title: 'Riwayat Kehadiran', subtitle: 'Semester 2022/2',),
-            const PersentaseKehadiran(),
-            const KehadiranSemester(),
-            const RingkasanKehadiran(),
-            const SizedBox(height: 22),
-            BarChartWidget(),
-            const SizedBox(height: 50),
-          ],
-        ),
-      );
-    
+      child: Column(
+        children: [
+          const Header(
+            title: 'Riwayat Kehadiran',
+            subtitle: 'Semester 2022/2', back: false,
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 75, left: 95, right: 95),
+            child: const PersentaseKehadiran(diagram: false,),
+          ),
+          const KehadiranSemester(),
+          const RingkasanKehadiran(),
+          const SizedBox(height: 22),
+          BarChartWidget(),
+          const SizedBox(height: 50),
+        ],
+      ),
+    );
   }
 }
-
