@@ -22,7 +22,7 @@ class Header extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFCD4F3E), Color(0xFFFE7968)],
+                colors: [AppTheme.gradient_1, AppTheme.gradient_3],
               ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
@@ -37,19 +37,19 @@ class Header extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600),
+                    style: AppTextStyle.poppinsTextStyle(
+                      color: AppTheme.white,
+                      fontSize: 24,
+                      fontsWeight: FontWeight.w600,
+                    ),
                   ),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600),
+                    style: AppTextStyle.poppinsTextStyle(
+                      color: AppTheme.white,
+                      fontSize: 24,
+                      fontsWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -62,7 +62,7 @@ class Header extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFFCD4F3E), Color(0xFFFE7968)],
+                colors: [AppTheme.gradient_1, AppTheme.gradient_3],
               ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
@@ -80,7 +80,7 @@ class Header extends StatelessWidget {
                     },
                     icon: const Icon(
                       PhosphorIcons.arrow_left,
-                      color: Colors.white,
+                      color: AppTheme.white,
                       size: 28,
                     ),
                     padding: EdgeInsets.zero,
@@ -89,19 +89,19 @@ class Header extends StatelessWidget {
                   const SizedBox(height: 70),
                   Text(
                     title,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600),
+                    style: AppTextStyle.poppinsTextStyle(
+                      color: AppTheme.white,
+                      fontSize: 24,
+                      fontsWeight: FontWeight.w600,
+                    ),
                   ),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600),
+                    style: AppTextStyle.poppinsTextStyle(
+                      color: AppTheme.white,
+                      fontSize: 24,
+                      fontsWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

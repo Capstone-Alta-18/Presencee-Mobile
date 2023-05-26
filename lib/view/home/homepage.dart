@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
@@ -11,10 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isTodaySelected =
-      true; // Set initial selection state of "Hari ini" button
-  bool isAllSelected = false; // Set initial selection state of "Semua" button
-
+  bool isTodaySelected = true;    // Set initial selection state of "Hari ini" button
+  bool isAllSelected = false;     // Set initial selection state of "Semua" button
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -37,32 +36,64 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _today(),
-          _searchBar(),
-          _viewJadwal(),
-          _buildJadwalAbsensi(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _today(),
+            Padding(
+              // padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Column(
+                children: [
+                  _searchBar(),
+                  SizedBox(height: 20),
+                  _viewJadwal(),
+                  SizedBox(height: 20),
+                  _buildJadwalAbsensi(),
+                ],
+              )
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppTheme.primaryTheme_2,
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_rounded),
-            label: 'Jadwal',
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(    // need rounded corner bottom navbar
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.gray_2,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        
+        child: BottomNavigationBar(
+          selectedItemColor: AppTheme.primaryTheme,
+          selectedLabelStyle: AppTextStyle.poppinsTextStyle(
+            color: AppTheme.primaryTheme,
+            fontSize: 12,
+            fontsWeight: FontWeight.w700,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'History',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_rounded),
-            label: 'Profile',
-          ),
-        ],
+          unselectedIconTheme: const IconThemeData(color: AppTheme.gray_2),
+          showSelectedLabels: true,
+          showUnselectedLabels: false,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              // icon: Icon(Icons.menu_book_rounded),
+              icon: Icon(PhosphorIcons.book_open_bold),
+              label: 'Jadwal',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(PhosphorIcons.clock_counter_clockwise_bold),
+              label: 'History',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(PhosphorIcons.user_bold),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -88,70 +119,65 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _viewJadwal() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12, right: 24, bottom: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isTodaySelected = true;
-                isAllSelected = false;
-              });
-            },
-            child: Container(
-              height: 22,
-              width: 57,
-              decoration: BoxDecoration(
-                color:
-                    isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_5,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  'Hari ini',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: isTodaySelected ? Colors.white : Colors.black,
-                  ),
-                ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isTodaySelected = true;
+              isAllSelected = false;
+            });
+          },
+          child: Container(
+            height: 22,
+            width: 57,
+            decoration: BoxDecoration(
+              color:
+                  isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(
+                'Hari ini',
+                style: AppTextStyle.poppinsTextStyle(
+                  color: AppTheme.white,
+                  fontSize: 12,
+                )
               ),
             ),
           ),
-          SizedBox(
-            width: 5,
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isTodaySelected = false;
-                isAllSelected = true;
-              });
-            },
-            child: Container(
-              height: 22,
-              width: 57,
-              decoration: BoxDecoration(
-                color:
-                    isAllSelected ? AppTheme.primaryTheme_2 : AppTheme.gray_5,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  'Semua',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color: isAllSelected ? Colors.white : Colors.black,
-                  ),
-                ),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isTodaySelected = false;
+              isAllSelected = true;
+            });
+          },
+          child: Container(
+            height: 22,
+            width: 57,
+            decoration: BoxDecoration(
+              color:
+                  isAllSelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(
+                'Semua',
+                style: AppTextStyle.poppinsTextStyle(
+                  color: AppTheme.white,
+                  fontSize: 12,
+                )
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -160,7 +186,7 @@ Widget _searchBar() {
   // bool isSearch = false;
 
   return Container(
-    margin: const EdgeInsets.only(top: 12, left: 24, right: 24),
+    // margin: const EdgeInsets.only(top: 12, left: 24, right: 24),
     child: TextField(
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 8),
@@ -211,40 +237,42 @@ Widget _today() {
     height: 237,
     width: double.maxFinite,
     decoration: const BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: AppTheme.gray_2,
+          blurRadius: 5,
+          offset: Offset(0, 3),
+        ),
+      ],
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [Color(0xFFCD4F3E), AppTheme.primaryTheme],
+        colors: [AppTheme.gradient_1, AppTheme.gradient_3],
       ),
       borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(40),
         bottomRight: Radius.circular(40),
       ),
     ),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            DateFormat('EEEE, d MMM yyyy').format(DateTime.now()),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-            ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
+          style: AppTextStyle.poppinsTextStyle(
+            color: AppTheme.white,
+            fontSize: 16,
           ),
-          // const SizedBox(height: 10),
-          Text(
-            DateFormat('HH.mm').format(DateTime.now()),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 45,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-            ),
+        ),
+        Text(
+          DateFormat('HH.mm').format(DateTime.now()),
+          style: AppTextStyle.poppinsTextStyle(
+            color: AppTheme.white,
+            fontSize: 48,
+            fontsWeight: FontWeight.w700,
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

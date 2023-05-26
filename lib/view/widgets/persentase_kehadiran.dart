@@ -9,65 +9,63 @@ class PersentaseKehadiran extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return diagram == false
-        ? CircularPercentIndicator(
-            radius: 105.0,
-            animation: true,
-            animationDuration: 1200,
-            lineWidth: 15.0,
-            percent: 0.8,
-            center: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  "62,5%",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 28),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  width: 127,
-                  height: 27,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: AppTheme.primaryTheme,
-                      borderRadius: BorderRadius.circular(24)),
-                  child: const Text(
-                    "Minggu ke-10",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                )
-              ],
-            ),
-            backgroundColor: const Color.fromRGBO(245, 245, 245, 1),
-            progressColor: AppTheme.primaryTheme,
-          )
-        : CircularPercentIndicator(
-            radius: 105.0,
-            animation: true,
-            animationDuration: 1200,
-            lineWidth: 24.0,
-            percent: 0.8,
-            center: const Text(
+    ? CircularPercentIndicator(
+        radius: 105.0,
+        animation: true,
+        animationDuration: 1200,
+        lineWidth: 15.0,
+        percent: 0.8,
+        center: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
               "62,5%",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 28),
+              style: AppTextStyle.poppinsTextStyle(
+                color: AppTheme.black,
+                fontSize: 28,
+                fontsWeight: FontWeight.w600,
+              ),
             ),
-            backgroundColor: const Color.fromRGBO(209, 209, 209, 1),
-            progressColor: AppTheme.primaryTheme,
-          );
-
-
+            const SizedBox(height: 10),
+            Container(
+              width: 127,
+              height: 27,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: AppTheme.primaryTheme,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Text(
+                "Minggu ke-10",
+                style: AppTextStyle.poppinsTextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontsWeight: FontWeight.w600,
+                ),
+              ),
+            )
+          ],
+        ),
+        backgroundColor: AppTheme.gray,
+        progressColor: AppTheme.primaryTheme,
+      )
+    : CircularPercentIndicator(
+        radius: 105.0,
+        animation: true,
+        animationDuration: 1200,
+        lineWidth: 24.0,
+        percent: 0.8,
+        center: Text(
+          "62,5%",
+          style: AppTextStyle.poppinsTextStyle(
+            color: AppTheme.black,
+            fontSize: 28,
+            fontsWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: AppTheme.gray,
+        progressColor: AppTheme.primaryTheme,
+      );
   }
 }

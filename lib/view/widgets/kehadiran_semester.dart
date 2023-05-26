@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 
 class KehadiranSemester extends StatelessWidget {
@@ -14,44 +15,47 @@ class KehadiranSemester extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Kehadiran Semester ini',
-                style: TextStyle(
-                  color: Color.fromRGBO(36, 36, 36, 1),
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                ),
+                style: AppTextStyle.poppinsTextStyle(
+                    color: AppTheme.black,
+                    fontSize: 16,
+                    fontsWeight: FontWeight.w600),
               ),
               SizedBox(
                 height: 30,
                 width: 130,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/semester_history');
+                    Navigator.of(context).push(
+                      PageRouteBuilder(
+                        transitionDuration: Duration(milliseconds: 500),
+                        pageBuilder: (context, animation, secondaryAnimation) => const SemesterHistory(),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = Offset(1.0, 0.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
                   },
-                  child: const Text(
+                  child: Text(
                     'Lihat Semua',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
+                    style: AppTextStyle.poppinsTextStyle(
+                        color: AppTheme.white,
+                        fontSize: 14,
+                        fontsWeight: FontWeight.w500),
                     textAlign: TextAlign.center,
                   ),
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 19),
-          const SizedBox(
-            width: 114,
-            height: 128,
-            child: Card(
-                elevation: 2,
-                child: CardMatkul(
-                  semester: false,
-                )),
           ),
         ],
       ),
