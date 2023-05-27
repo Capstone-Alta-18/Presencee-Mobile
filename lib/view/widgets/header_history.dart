@@ -34,7 +34,7 @@ class HeaderHistory extends StatelessWidget {
                         fontSize: 24,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -45,13 +45,14 @@ class HeaderHistory extends StatelessWidget {
             child: TabBar(
               indicatorColor: AppTheme.white,
               labelStyle: AppTextStyle.poppinsTextStyle(
-                  color: AppTheme.white,
-                  fontsWeight: FontWeight.w600,
-                  fontSize: 14),
+                color: AppTheme.white,
+                fontsWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
               unselectedLabelStyle: AppTextStyle.poppinsTextStyle(
-                  color: const Color(0xFFECADAB),
-                  fontsWeight: FontWeight.w400,
-                  fontSize: 14
+                color: const Color(0xFFECADAB),
+                fontsWeight: FontWeight.w400,
+                fontSize: 14,
               ),
               tabs: [
                 Text("LIST"),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
-import 'package:presencee/view/widgets/card_matkul.dart';
 
 class KehadiranSemester extends StatelessWidget {
   const KehadiranSemester({super.key});
@@ -18,9 +17,10 @@ class KehadiranSemester extends StatelessWidget {
               Text(
                 'Kehadiran Semester ini',
                 style: AppTextStyle.poppinsTextStyle(
-                    color: AppTheme.black,
-                    fontSize: 16,
-                    fontsWeight: FontWeight.w600),
+                  color: AppTheme.black,
+                  fontSize: 16,
+                  fontsWeight: FontWeight.w600,
+                ),
               ),
               SizedBox(
                 height: 30,
@@ -29,7 +29,7 @@ class KehadiranSemester extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       PageRouteBuilder(
-                        transitionDuration: Duration(milliseconds: 500),
+                        transitionDuration: const Duration(milliseconds: 500),
                         pageBuilder: (context, animation, secondaryAnimation) => const SemesterHistory(),
                         transitionsBuilder: (context, animation, secondaryAnimation, child) {
                           var begin = Offset(1.0, 0.0);
@@ -48,9 +48,10 @@ class KehadiranSemester extends StatelessWidget {
                   child: Text(
                     'Lihat Semua',
                     style: AppTextStyle.poppinsTextStyle(
-                        color: AppTheme.white,
-                        fontSize: 14,
-                        fontsWeight: FontWeight.w500),
+                      color: AppTheme.white,
+                      fontSize: 14,
+                      fontsWeight: FontWeight.w500,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

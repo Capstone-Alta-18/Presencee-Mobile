@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presencee/view/auth/login_view.dart';
-import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
-import 'package:provider/provider.dart';
-import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/home/homePage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/splashscreen/splashView.dart';
+import 'package:presencee/view/auth/login_view.dart';
+import 'package:presencee/view/home/homePage.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());

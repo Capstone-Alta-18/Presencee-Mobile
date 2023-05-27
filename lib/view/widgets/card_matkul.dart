@@ -49,10 +49,10 @@ class CardMatkul extends StatelessWidget {
                                   child: Center(
                                     child: Text("MU",
                                       style: AppTextStyle.poppinsTextStyle(
-                                          color: AppTheme.black,
-                                          fontSize: 22,
-                                          fontsWeight: FontWeight.w600),
-                                        ),
+                                        color: AppTheme.black,
+                                        fontSize: 22,
+                                        fontsWeight: FontWeight.w600),
+                                      ),
                                   ),
                                 ),
                                 backgroundColor: AppTheme.gray,
@@ -62,10 +62,11 @@ class CardMatkul extends StatelessWidget {
                               Text(
                                 'Bhs Indonesia',
                                 style: AppTextStyle.poppinsTextStyle(
-                                    color: AppTheme.black,
-                                    fontSize: 12,
-                                    fontsWeight: FontWeight.w600),
-                              )
+                                  color: AppTheme.black,
+                                  fontSize: 12,
+                                  fontsWeight: FontWeight.w600,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -92,7 +93,7 @@ class CardMatkul extends StatelessWidget {
                     height: 50,
                     decoration: const BoxDecoration(
                         color: AppTheme.greenCard,
-                        shape: BoxShape.circle),
+                        shape: BoxShape.circle,),
                     child: Center(
                       child: Text(
                         "MU",
@@ -117,16 +118,18 @@ class CardMatkul extends StatelessWidget {
                       Text(
                         'Bhs Indonesia',
                         style: AppTextStyle.poppinsTextStyle(
-                            color: AppTheme.black,
-                            fontSize: 16,
-                            fontsWeight: FontWeight.w600),
+                          color: AppTheme.black,
+                          fontSize: 16,
+                          fontsWeight: FontWeight.w600,
+                        ),
                       ),
                       Text(
                         'Siswandi',
                         style: AppTextStyle.poppinsTextStyle(
-                            color: AppTheme.black,
-                            fontSize: 14,
-                            fontsWeight: FontWeight.w400),
+                          color: AppTheme.black,
+                          fontSize: 14,
+                          fontsWeight: FontWeight.w400,
+                        ),
                       ),
                     ],
                   ),
@@ -137,7 +140,8 @@ class CardMatkul extends StatelessWidget {
                   Navigator.of(context).pushNamed('/course_history');
                 },
                 icon: const Icon(PhosphorIcons.caret_right,
-                    color: AppTheme.black_3),
+                  color: AppTheme.black_3,
+                ),
               ),
             ],
           );

@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import '../pages/customers.dart';
@@ -116,22 +117,25 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: passController,
                       obscureText: _secureText,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r"\s")),
+                        LengthLimitingTextInputFormatter(20)
+                      ],
                       decoration: InputDecoration(
                         suffixIcon: Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.rotationY(math.pi),
-                            child: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _secureText = !_secureText;
-                                });
-                              },
-                              icon: Icon(
-                                _secureText
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility,
-                              ),
-                            )),
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(math.pi),
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _secureText = !_secureText;
+                              });
+                            },
+                            icon: Icon(
+                              _secureText ? Icons.visibility_off_outlined : Icons.visibility,
+                            ),
+                          ),
+                        ),
                         hintText: "input password",
                         hintStyle: const TextStyle(
                           color: AppTheme.greyText,
