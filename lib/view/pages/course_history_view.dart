@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
 import 'package:presencee/view/widgets/list_history.dart';
-
 import '../../theme/constant.dart';
 
 class CourseHistory extends StatefulWidget {
@@ -21,7 +20,8 @@ class _CourseHistoryState extends State<CourseHistory> {
       child: Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(120),
-          child: HeaderHistory()),
+          child: HeaderHistory(),
+        ),
         body: Column(
           children: [
             const SizedBox(height: 37),
@@ -39,7 +39,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                         color: AppTheme.black,
                         fontsWeight: FontWeight.w600,
                         fontSize: 24
-                      )
+                      ),
                     ),
                     Text(
                       'Siswandi',
@@ -47,7 +47,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                         color: AppTheme.black,
                         fontsWeight: FontWeight.w400,
                         fontSize: 20
-                      )
+                      ),
                     ),
                   ],
                 ),

@@ -31,6 +31,7 @@ class _ListHistoryState extends State<ListHistory> {
               borderRadius: BorderRadius.circular(2),
             ),
             child: DropdownButton2(
+              // https://stackoverflow.com/questions/70650773/flutter-i-want-to-show-dropdown-list-under-dropdown-flutter
               iconStyleData: const IconStyleData(
                 icon: Icon(
                   PhosphorIcons.caret_down,
