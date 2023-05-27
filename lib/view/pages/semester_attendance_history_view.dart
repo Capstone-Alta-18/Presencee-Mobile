@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
 
@@ -7,27 +8,41 @@ class SemesterHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Header(
+            const Header(
               title: 'Riwayat Kehadiran',
-              subtitle: 'Semester 2022/2', back: true,
+              subtitle: 'Semester 2022/2',
+              back: true,
             ),
-            SizedBox(height: 24),
             Padding(
-              padding: EdgeInsets.only(left: 24, right: 24),
-              child: SizedBox(
-                height: 125,
-                child: Card(
-                  elevation: 2,
-                  child: CardMatkul(
-                    semester: true,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                children: [
+                  const SizedBox(height: 24),
+                  Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: InkWell(
+                      splashColor: AppTheme.primaryTheme.withOpacity(0.4),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/course_history');
+                      },
+                      child: const SizedBox(
+                        height: 128,
+                        child: CardMatkul(
+                          semester: true,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

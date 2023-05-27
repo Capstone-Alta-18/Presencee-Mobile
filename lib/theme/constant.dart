@@ -35,8 +35,9 @@ class AppTheme {
   static const Color gradient_2 = Color(0xFFFE9486);
   static const Color gradient_3 = Color(0xFFFE7968);
 
-  // cards
+  // cards color
   static const Color greenCard = Color(0xFFE1FFE6);
+  static const Color purpleCard = Color(0xFFE3E1FF);
 }
 
 class AppTextStyle {
