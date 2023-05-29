@@ -1,9 +1,8 @@
 import 'dart:io';
-import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/maintenance_view.dart';
 
@@ -15,42 +14,41 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  XFile? image;
+
   final emailController = TextEditingController();
   final telponController = TextEditingController();
   final jurusanController = TextEditingController();
   final tahunController = TextEditingController();
   final ipkController = TextEditingController();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    emailController.text = 'kristina.faboulus@students.com';
-    telponController.text = '081213476509';
-    jurusanController.text = 'Seni Rupa';
-    tahunController.text = '2020/Semester 6';
-    ipkController.text = '3,85';
-  }
+  Future getImage(ImageSource source) async {
+      try{
+        ImagePicker picker = ImagePicker();
+        var photo = await picker.pickImage(source: source);
 
-  @override
-  Widget build(BuildContext context) {
-    File? image;
-
-    Future getCamera() async {
-      final ImagePicker picker = ImagePicker();
-      final XFile? photo = await picker.pickImage(source: ImageSource.camera);
-      image = File(photo!.path);
-      setState(() {});
+        setState(() {
+          if (photo != null){
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: AppTheme.gray,
+                content: Text('Foto profil kamu sudah disematkan !',
+                  style: AppTextStyle.poppinsTextStyle(
+                    fontsWeight: FontWeight.w400,
+                    color: AppTheme.primaryTheme
+                  )
+                ),
+              )
+          );
+          }
+          image = photo;
+        });
+      }on PlatformException catch (e) {
+        print('Failed to pick Image : $e');
+      }
     }
 
-    Future getGallery() async {
-      final ImagePicker picker = ImagePicker();
-      final XFile? gallery = await picker.pickImage(source: ImageSource.gallery);
-      image = File(gallery!.path);
-      setState(() {});
-    }
-
-    Future<void> bottomSheet() async {
+  Future<void> bottomSheet() async {
       return showModalBottomSheet(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -83,7 +81,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              await getCamera();
+                              await getImage(ImageSource.camera);
+                              Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               side: BorderSide(color: Colors.black38),
@@ -95,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: const Icon(
                               Icons.photo_camera_rounded,
                               size: 30,
-                              color: Color.fromARGB(255, 254, 121, 104),
+                              color: AppTheme.primaryTheme,
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: 20)),
@@ -109,7 +108,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           ElevatedButton(
                             onPressed: () async {
-                              await getGallery();
+                              await getImage(ImageSource.gallery);
+                              Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               side: BorderSide(color: Colors.black38),
@@ -121,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: const Icon(
                               Icons.photo_library_rounded,
                               size: 30,
-                              color: Color.fromARGB(255, 254, 121, 104),
+                              color: AppTheme.primaryTheme,
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: 20)),
@@ -134,7 +134,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       Column(
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pop(context);
+                              setState(() {
+                                if(image != null){
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: AppTheme.gray,
+                                      content: Text('Foto Profil kamu sudah di hapus !',
+                                        style: AppTextStyle.poppinsTextStyle(
+                                          fontsWeight: FontWeight.w400,
+                                          color: AppTheme.primaryTheme
+                                        ),
+                                      ),
+                                    )
+                                  );
+                                  image = null;
+                                }
+                              });
+                            },
                             style: ElevatedButton.styleFrom(
                               side: BorderSide(color: Colors.black38),
                               elevation: 0,
@@ -145,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: const Icon(
                               Icons.delete,
                               size: 30,
-                              color: Color.fromARGB(255, 254, 121, 104),
+                              color: AppTheme.primaryTheme,
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: 20)),
@@ -162,46 +180,93 @@ class _ProfilePageState extends State<ProfilePage> {
           });
     }
 
-    ;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    emailController.text = 'kristina.faboulus@students.com';
+    telponController.text = '081213476509';
+    jurusanController.text = 'Seni Rupa';
+    tahunController.text = '2020/Semester 6';
+    ipkController.text = '3,85';
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profil',style: AppTextStyle.poppinsTextStyle(fontsWeight: FontWeight.w500)),
       ),
       body: ListView(
         children: [
-          image == null
-              ? Container(
-                  margin: EdgeInsets.all(21),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      bottomSheet();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        side: BorderSide(color: Color.fromARGB(255, 254, 121, 104)),
-                        elevation: 0,
-                        shape: CircleBorder(),
-                        fixedSize: Size(130, 130)),
-                    child: Icon(Icons.person,
-                        size: 70, color: Colors.black38),
-                  ))
-              : Container(
-                  margin: EdgeInsets.all(21),
-                  child: CircleAvatar(
-                    radius: 70,
-                    backgroundColor: Colors.transparent,
-                    child: InkWell(
-                        onTap: () {
-                          bottomSheet();
-                        },
-                        child: ClipOval(
-                            child: Image.file(
-                          image!,
-                          fit: BoxFit.contain,
-                        ))),
+          Column(
+            children: [
+              image != null
+                ? Container(
+                    margin: EdgeInsets.all(21),
+                    height: 130,
+                    width: 130,
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor: Colors.white,
+                          child: InkWell(
+                              onTap: () {
+                                bottomSheet();
+                              },
+                              child: ClipOval(
+                                  child: Image.file(
+                                File(image!.path),
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              )
+                            )
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            backgroundColor: AppTheme.primaryTheme,
+                            child: Icon(Icons.edit,color: Colors.white,),
+                          )
+                        )
+                      ],
+                    ),
+                  )
+                : Container(
+                    margin: EdgeInsets.all(21),
+                    height: 130,
+                    width: 130,
+                    alignment: Alignment.center,
+                    child: Stack(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            bottomSheet();
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              side: BorderSide(color: Color.fromARGB(255, 254, 121, 104)),
+                              elevation: 0,
+                              shape: CircleBorder(),
+                              fixedSize: Size(130, 130)),
+                          child: const Icon(Icons.person,
+                              size: 70, color: Colors.black38),
+                        ),
+                        const Align(
+                          alignment: Alignment.bottomRight,
+                          child: CircleAvatar(
+                            backgroundColor: AppTheme.primaryTheme,
+                            child: Icon(Icons.edit,color: Colors.white,),
+                          )
+                        )
+                      ],
+                    )
                   ),
-                ),
+            ],
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
