@@ -9,7 +9,7 @@ class MaintenancePage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("lib/assets/images/maintenance.png"),
             Padding(padding: EdgeInsets.only(bottom: 44)),

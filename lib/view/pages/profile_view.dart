@@ -40,8 +40,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               )
           );
-          }
           image = photo;
+          }
+          
         });
       }on PlatformException catch (e) {
         print('Failed to pick Image : $e');
@@ -227,9 +228,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            backgroundColor: AppTheme.primaryTheme,
-                            child: Icon(Icons.edit,color: Colors.white,),
+                          child: InkWell(
+                            onTap: () => bottomSheet(),
+                            child: const CircleAvatar(
+                              backgroundColor: AppTheme.primaryTheme,
+                              child: Icon(Icons.edit,color: Colors.white,),
+                            ),
                           )
                         )
                       ],
@@ -255,11 +259,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: const Icon(Icons.person,
                               size: 70, color: Colors.black38),
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            backgroundColor: AppTheme.primaryTheme,
-                            child: Icon(Icons.edit,color: Colors.white,),
+                          child: InkWell(
+                            onTap: () => bottomSheet(),
+                            child: const CircleAvatar(
+                              backgroundColor: AppTheme.primaryTheme,
+                              child: Icon(Icons.edit,color: Colors.white,),
+                            ),
                           )
                         )
                       ],
@@ -303,10 +310,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 16, fontsWeight: FontWeight.w500)),
                       Container(
                         width: 250,
-                        height: 35,
-                        child: TextField(
+                        height: 40,
+                        child: TextFormField(
                           style: AppTextStyle.poppinsTextStyle(
-                              fontSize: 13, fontsWeight: FontWeight.w400),
+                              fontSize: 13 , fontsWeight: FontWeight.w400),
                           controller: emailController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -324,10 +331,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 16, fontsWeight: FontWeight.w500)),
                       Container(
                         width: 250,
-                        height: 35,
+                        height: 40,
                         child: TextFormField(
                           style: AppTextStyle.poppinsTextStyle(
-                              fontSize: 13, fontsWeight: FontWeight.w400),
+                              fontSize: 14, fontsWeight: FontWeight.w400),
                           controller: telponController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -345,10 +352,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 16, fontsWeight: FontWeight.w500)),
                       Container(
                         width: 250,
-                        height: 35,
+                        height: 40,
                         child: TextFormField(
                           style: AppTextStyle.poppinsTextStyle(
-                              fontSize: 13, fontsWeight: FontWeight.w400),
+                              fontSize: 14, fontsWeight: FontWeight.w400),
                           controller: jurusanController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -366,10 +373,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontSize: 16, fontsWeight: FontWeight.w500)),
                       Container(
                         width: 250,
-                        height: 35,
+                        height: 40,
                         child: TextFormField(
                           style: AppTextStyle.poppinsTextStyle(
-                              fontSize: 13, fontsWeight: FontWeight.w400),
+                              fontSize: 14, fontsWeight: FontWeight.w400),
                           controller: tahunController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -389,10 +396,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Container(
                         width: 250,
-                        height: 35,
+                        height: 40,
                         child: TextFormField(
                           style: AppTextStyle.poppinsTextStyle(
-                              fontSize: 13, fontsWeight: FontWeight.w400),
+                              fontSize: 14, fontsWeight: FontWeight.w400),
                           controller: ipkController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -414,7 +421,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
                 child: Text('Pusat Bantuan'),
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 254, 121, 104),
+                    backgroundColor: AppTheme.primaryTheme_2,
                     foregroundColor: Colors.white),
               ),
               OutlinedButton(
