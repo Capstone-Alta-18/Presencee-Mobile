@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/header.dart';
 
 class ProfilePage extends StatelessWidget {
