@@ -35,13 +35,13 @@ class MyApp extends StatelessWidget {
           // tertiary: primaryTheme,
         ),
       ),
-    routes: {
-      '/': (context) => const IntroductionScreen(),
-      '/login': (context) => const LoginPage(),
-      '/home': (context) => HomePage(),
-      '/semester_history' : (context) => const SemesterHistory(),
-      '/course_history' : (context) => const CourseHistory(),
-    }
-  );
+      routes: {
+        '/': (context) => const IntroductionScreen(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => HomePage(),
+        '/semester_history' : (context) => const SemesterHistory(),
+        '/course_history' : (context) => const CourseHistory(),
+      }
+    );
   }
 }
