@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
+import 'mahasiswa_Viewmodel.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -14,6 +16,12 @@ class SchedulePage extends StatefulWidget {
 class _SchedulePageState extends State<SchedulePage> {
   bool isTodaySelected = true;    // Set initial selection state of "Hari ini" button
   bool isAllSelected = false;     // Set initial selection state of "Semua" button
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +47,12 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
+    final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
+
     if (isTodaySelected) {
       return CardAbsensi(
-        //kalau datanya udah ada nanti pakai list view
-        Matkul: 'Bahasa Indonesia (MU22)', //nanti diganti sesuai Data Base
+        // Matkul: 'Bahasa Indonesia (MU22)',
+        Matkul: mahasiswaList.mahasiswas[0].status.toString(),
         hari: 'Senin',
         jam: '09.00 - 10.00',
       );
@@ -54,7 +64,7 @@ class _SchedulePageState extends State<SchedulePage> {
         jam: '09.00 - 10.00',
       );
     } else {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 
@@ -73,8 +83,7 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 22,
             width: 57,
             decoration: BoxDecoration(
-              color:
-                  isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              color: isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -83,7 +92,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 style: AppTextStyle.poppinsTextStyle(
                   color: AppTheme.white,
                   fontSize: 12,
-                )
+                ),
               ),
             ),
           ),
@@ -100,8 +109,7 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 22,
             width: 57,
             decoration: BoxDecoration(
-              color:
-                  isAllSelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              color: isAllSelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -110,7 +118,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 style: AppTextStyle.poppinsTextStyle(
                   color: AppTheme.white,
                   fontSize: 12,
-                )
+                ),
               ),
             ),
           ),
