@@ -30,11 +30,11 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         if (photo != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: AppTheme.gray,
+            backgroundColor: AppTheme.primaryTheme,
             content: Text('Foto profil kamu sudah disematkan !',
                 style: AppTextStyle.poppinsTextStyle(
-                  fontsWeight: FontWeight.w400,
-                  color: AppTheme.primaryTheme,
+                  fontsWeight: FontWeight.w500,
+                  color: AppTheme.white,
                   ),
                 ),
           ));
@@ -153,12 +153,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               if (image != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    backgroundColor: AppTheme.gray,
+                                    backgroundColor: AppTheme.primaryTheme,
                                     content: Text(
                                       'Foto Profil kamu sudah di hapus !',
                                       style: AppTextStyle.poppinsTextStyle(
-                                          fontsWeight: FontWeight.w400,
-                                          color: AppTheme.primaryTheme),
+                                        fontsWeight: FontWeight.w500,
+                                        color: AppTheme.white,
+                                      ),
                                     ),
                                   ),
                                 );
@@ -235,14 +236,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               onTap: () {
                                 bottomSheet();
                               },
-                              child: ClipOval(
-                                  child: Image.file(
-                                    File(image!.path),
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                  ),
+                              child: ClipPath(
+                                clipper: const ShapeBorderClipper(
+                                  shape: CircleBorder(),
+                                ),
+                                child: Image.file(
+                                  File(image!.path),
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
                                 ),
                               ),
+                            ),
                           ),
                           Align(
                             alignment: Alignment.bottomRight,
@@ -276,8 +280,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               side: const BorderSide(
                                   color: AppTheme.primaryTheme),
                               elevation: 0,
-                              shape: CircleBorder(),
-                              fixedSize: Size(130, 130),
+                              shape: const CircleBorder(),
+                              fixedSize: const Size(130, 130),
                             ),
                             child: const Icon(
                               PhosphorIcons.camera_fill,
