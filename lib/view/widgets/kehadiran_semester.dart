@@ -30,12 +30,15 @@ class KehadiranSemester extends StatelessWidget {
                     Navigator.of(context).push(
                       PageRouteBuilder(
                         transitionDuration: const Duration(milliseconds: 500),
-                        pageBuilder: (context, animation, secondaryAnimation) => const SemesterHistory(),
-                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            const SemesterHistory(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
                           var begin = Offset(1.0, 0.0);
                           var end = Offset.zero;
                           var curve = Curves.ease;
-                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          var tween = Tween(begin: begin, end: end)
+                              .chain(CurveTween(curve: curve));
 
                           return SlideTransition(
                             position: animation.drive(tween),

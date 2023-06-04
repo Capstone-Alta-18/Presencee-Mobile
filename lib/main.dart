@@ -18,30 +18,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('id', 'ID'),
-      ],
-      debugShowCheckedModeBanner: false,
-      theme: Theme.of(context).copyWith(
-        colorScheme: const ColorScheme.light(
-          primary: AppTheme.primaryTheme,
-          secondary: AppTheme.primaryTheme,
-          // tertiary: primaryTheme,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('id', 'ID'),
+        ],
+        debugShowCheckedModeBanner: false,
+        theme: Theme.of(context).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppTheme.primaryTheme,
+            secondary: AppTheme.primaryTheme,
+            // tertiary: primaryTheme,
+          ),
         ),
-      ),
-      routes: {
-        '/': (context) => const IntroductionScreen(),
-        '/login': (context) => const LoginPage(),
-        '/home': (context) => HomePage(),
-        '/semester_history' : (context) => const SemesterHistory(),
-        '/course_history' : (context) => const CourseHistory(),
-      }
-    );
+        routes: {
+          '/': (context) => const IntroductionScreen(),
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => HomePage(),
+          '/semester_history': (context) => SemesterHistory(),
+          '/course_history': (context) => const CourseHistory(),
+        });
   }
 }
