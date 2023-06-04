@@ -58,7 +58,7 @@ class CardAbsensi extends StatelessWidget {
           height: 22,
           child: ElevatedButton(
             onPressed: () {
-              //logika absensi
+              Navigator.pushNamed(context, '/presence');
             },
             style: ElevatedButton.styleFrom(
               primary: isTodayPresent ? AppTheme.primaryTheme : AppTheme.primaryTheme_3,

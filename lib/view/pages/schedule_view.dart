@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
 import 'mahasiswa_Viewmodel.dart';
@@ -28,7 +28,7 @@ class _SchedulePageState extends State<SchedulePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _today(),
+          const TodayWidgets(presensi: false, back: false,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
@@ -179,47 +179,47 @@ Widget _searchBar() {
   );
 }
 
-Widget _today() {
-  return Container(
-    height: 237,
-    width: double.maxFinite,
-    decoration: const BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-          color: AppTheme.gray_2,
-          blurRadius: 5,
-          offset: Offset(0, 3),
-        ),
-      ],
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [AppTheme.gradient_1, AppTheme.gradient_3],
-      ),
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(40),
-        bottomRight: Radius.circular(40),
-      ),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
-          style: AppTextStyle.poppinsTextStyle(
-            color: AppTheme.white,
-            fontSize: 16,
-          ),
-        ),
-        Text(
-          DateFormat('HH.mm').format(DateTime.now()),
-          style: AppTextStyle.poppinsTextStyle(
-            color: AppTheme.white,
-            fontSize: 48,
-            fontsWeight: FontWeight.w700,
-          ),
-        ),
-      ],
-    ),
-  );
-}
+// Widget _today() {
+//   return Container(
+//     height: 237,
+//     width: double.maxFinite,
+//     decoration: const BoxDecoration(
+//       boxShadow: [
+//         BoxShadow(
+//           color: AppTheme.gray_2,
+//           blurRadius: 5,
+//           offset: Offset(0, 3),
+//         ),
+//       ],
+//       gradient: LinearGradient(
+//         begin: Alignment.topCenter,
+//         end: Alignment.bottomCenter,
+//         colors: [AppTheme.gradient_1, AppTheme.gradient_3],
+//       ),
+//       borderRadius: BorderRadius.only(
+//         bottomLeft: Radius.circular(40),
+//         bottomRight: Radius.circular(40),
+//       ),
+//     ),
+//     child: Column(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: [
+//         Text(
+//           DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
+//           style: AppTextStyle.poppinsTextStyle(
+//             color: AppTheme.white,
+//             fontSize: 16,
+//           ),
+//         ),
+//         Text(
+//           DateFormat('HH.mm').format(DateTime.now()),
+//           style: AppTextStyle.poppinsTextStyle(
+//             color: AppTheme.white,
+//             fontSize: 48,
+//             fontsWeight: FontWeight.w700,
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
