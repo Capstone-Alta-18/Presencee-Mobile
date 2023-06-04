@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => const IntroductionScreen(),
           '/login': (context) => const LoginPage(),
           '/home': (context) => HomePage(),
-          '/semester_history': (context) => SemesterHistory(),
+          '/semester_history': (context) => const SemesterHistory(),
           '/course_history': (context) => const CourseHistory(),
         });
   }
