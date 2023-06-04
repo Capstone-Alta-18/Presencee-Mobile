@@ -10,7 +10,7 @@ class FingerprintView extends StatelessWidget {
     return const Scaffold(
       body: SingleChildScrollView(
         child: Stack(
-          alignment: Alignment.center,
+          // alignment: Alignment.center,
           children: [
             TodayWidgets(presensi: true,back: true),
             FingerprintBottomsheet(),

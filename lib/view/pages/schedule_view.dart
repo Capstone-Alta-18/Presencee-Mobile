@@ -39,7 +39,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 const SizedBox(height: 20),
                 _buildJadwalAbsensi(),
               ],
-            )
+            ),
           ),
         ],
       ),
@@ -47,12 +47,12 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
-    final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
+    // final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
 
     if (isTodaySelected) {
       return CardAbsensi(
-        // Matkul: 'Bahasa Indonesia (MU22)',
-        Matkul: mahasiswaList.mahasiswas[0].status.toString(),
+        Matkul: 'Bahasa Indonesia (MU22)',
+        // Matkul: mahasiswaList.mahasiswas[0].status.toString(),
         hari: 'Senin',
         jam: '09.00 - 10.00',
       );
@@ -178,48 +178,3 @@ Widget _searchBar() {
     },
   );
 }
-
-// Widget _today() {
-//   return Container(
-//     height: 237,
-//     width: double.maxFinite,
-//     decoration: const BoxDecoration(
-//       boxShadow: [
-//         BoxShadow(
-//           color: AppTheme.gray_2,
-//           blurRadius: 5,
-//           offset: Offset(0, 3),
-//         ),
-//       ],
-//       gradient: LinearGradient(
-//         begin: Alignment.topCenter,
-//         end: Alignment.bottomCenter,
-//         colors: [AppTheme.gradient_1, AppTheme.gradient_3],
-//       ),
-//       borderRadius: BorderRadius.only(
-//         bottomLeft: Radius.circular(40),
-//         bottomRight: Radius.circular(40),
-//       ),
-//     ),
-//     child: Column(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         Text(
-//           DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
-//           style: AppTextStyle.poppinsTextStyle(
-//             color: AppTheme.white,
-//             fontSize: 16,
-//           ),
-//         ),
-//         Text(
-//           DateFormat('HH.mm').format(DateTime.now()),
-//           style: AppTextStyle.poppinsTextStyle(
-//             color: AppTheme.white,
-//             fontSize: 48,
-//             fontsWeight: FontWeight.w700,
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }

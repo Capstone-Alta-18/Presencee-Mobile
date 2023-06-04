@@ -206,9 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        const CustomerService(),
+                                pageBuilder: (context, animation1, animation2) => const CustomerService(),
                                 transitionsBuilder:
                                     (context, animation1, animation2, child) {
                                   return SlideTransition(

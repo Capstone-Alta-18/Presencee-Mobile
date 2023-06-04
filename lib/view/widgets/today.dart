@@ -25,7 +25,7 @@ class TodayWidgets extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [AppTheme.gradient_1, AppTheme.gradient_3],
+                colors: [AppTheme.gradient_1, AppTheme.gradient_2],
               ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
@@ -69,7 +69,7 @@ class TodayWidgets extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [AppTheme.gradient_1, AppTheme.gradient_3],
+                colors: [AppTheme.gradient_1, AppTheme.gradient_2],
               ),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
@@ -82,14 +82,15 @@ class TodayWidgets extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          PhosphorIcons.arrow_left,
-                          color: AppTheme.white,
-                          size: 28,
-                        ))
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        PhosphorIcons.arrow_left,
+                        color: AppTheme.white,
+                        size: 28,
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(height: 27),

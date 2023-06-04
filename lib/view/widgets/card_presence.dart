@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +13,6 @@ class CardPresence extends StatefulWidget {
 
 class _CardPresenceState extends State<CardPresence> {
   int? _selectedValue;
-
   File? _image;
   String? _location;
 
@@ -26,7 +24,7 @@ class _CardPresenceState extends State<CardPresence> {
         _image = File(pickedImage.path);
         _getLocation();
       } else {
-        print('No image selected.');
+        debugPrint('No image selected.');
       }
     });
   }
@@ -38,15 +36,14 @@ class _CardPresenceState extends State<CardPresence> {
     // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      print('Location services are disabled.');
+      debugPrint('Location services are disabled.');
       return;
     }
 
     // Request location permission
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
-      print(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      debugPrint( 'Location permissions are permanently denied, we cannot request permissions.');
       return;
     }
 
@@ -121,7 +118,7 @@ class _CardPresenceState extends State<CardPresence> {
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 16,
               ),
             ),
             const SizedBox(height: 2),
@@ -130,7 +127,7 @@ class _CardPresenceState extends State<CardPresence> {
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_3,
                 fontsWeight: FontWeight.w400,
-                fontSize: 12,
+                fontSize: 14,
               ),
             ),
             const SizedBox(height: 30),
@@ -152,68 +149,52 @@ class _CardPresenceState extends State<CardPresence> {
                       context: context,
                       builder: (BuildContext context) {
                         return StatefulBuilder(
-                          builder:
-                              (BuildContext context, StateSetter setState) {
+                          builder: (BuildContext context, StateSetter setState) {
                             return AlertDialog(
-                              title: Center(
-                                  child: Text(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              title: Text(
                                 'Alasan Absen',
                                 style: AppTextStyle.poppinsTextStyle(
                                   color: AppTheme.black,
                                   fontSize: 24,
                                   fontsWeight: FontWeight.w600,
                                 ),
-                              )),
+                                textAlign: TextAlign.center,
+                              ),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  ListTile(
+                                  RadioListTile(
                                     title: const Text('Sakit'),
-                                    titleTextStyle:
-                                        AppTextStyle.poppinsTextStyle(
-                                            fontsWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: AppTheme.black),
-                                    leading: Radio<int>(
-                                        value: 1,
-                                        groupValue: _selectedValue,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            _selectedValue = value;
-                                          });
-                                        }),
+                                    value: 1,
+                                    groupValue: _selectedValue,
+                                    onChanged: (int? value) {
+                                      setState(() {
+                                        _selectedValue = value;
+                                      });
+                                    },
                                   ),
-                                  ListTile(
+                                  RadioListTile(
                                     title: const Text('Izin'),
-                                    titleTextStyle:
-                                        AppTextStyle.poppinsTextStyle(
-                                            fontsWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: AppTheme.black),
-                                    leading: Radio<int>(
-                                        value: 2,
-                                        groupValue: _selectedValue,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            _selectedValue = value;
-                                          });
-                                        }),
+                                    value: 2,
+                                    groupValue: _selectedValue,
+                                    onChanged: (int? value) {
+                                      setState(() {
+                                        _selectedValue = value;
+                                      });
+                                    },
                                   ),
-                                  ListTile(
-                                    title: const Text('Sakit'),
-                                    titleTextStyle:
-                                        AppTextStyle.poppinsTextStyle(
-                                            fontsWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: AppTheme.black),
-                                    leading: Radio<int>(
-                                        value: 3,
-                                        groupValue: _selectedValue,
-                                        onChanged: (int? value) {
-                                          setState(() {
-                                            _selectedValue = value;
-                                          });
-                                        }),
+                                  RadioListTile(
+                                    title: const Text('Dispensasi'),
+                                    value: 3,
+                                    groupValue: _selectedValue,
+                                    onChanged: (int? value) {
+                                      setState(() {
+                                        _selectedValue = value;
+                                      });
+                                    },
                                   ),
                                   const SizedBox(height: 10),
                                   Row(
@@ -226,11 +207,13 @@ class _CardPresenceState extends State<CardPresence> {
                                             color: AppTheme.primaryTheme_2,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(2),
+                                            borderRadius: BorderRadius.circular(2),
                                           ),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          _selectedValue = null;
+                                        },
                                         child: Text(
                                           'Batal',
                                           style: AppTextStyle.poppinsTextStyle(
@@ -245,7 +228,7 @@ class _CardPresenceState extends State<CardPresence> {
                                         style: ElevatedButton.styleFrom(
                                           primary: AppTheme.primaryTheme_2,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
+                                            borderRadius: 
                                                 BorderRadius.circular(2),
                                           ),
                                         ),
@@ -260,7 +243,7 @@ class _CardPresenceState extends State<CardPresence> {
                                         ),
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             );
@@ -292,15 +275,17 @@ class _CardPresenceState extends State<CardPresence> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Center(
-                              child: Text(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          title: Text(
                             'Pilih metode Presensi',
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontSize: 24,
                               fontsWeight: FontWeight.w600,
                             ),
-                          )),
+                          ),
                           content: SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Row(
@@ -308,8 +293,7 @@ class _CardPresenceState extends State<CardPresence> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, '/fingerprint');
+                                    Navigator.pushNamed(context, '/fingerprint');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     primary: AppTheme.primaryTheme_2,
@@ -318,7 +302,7 @@ class _CardPresenceState extends State<CardPresence> {
                                     ),
                                   ),
                                   child: Text(
-                                    ' Sidik Jari',
+                                    'Sidik Jari',
                                     style: AppTextStyle.poppinsTextStyle(
                                       color: AppTheme.white,
                                       fontSize: 14,

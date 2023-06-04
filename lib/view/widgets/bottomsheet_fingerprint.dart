@@ -73,7 +73,7 @@ class FingerprintBottomsheet extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            const SizedBox(height: 158),
+            SizedBox(height: MediaQuery.of(context).size.height / 6),
             Text(
               'Letakkan sidik jari',
               style: AppTextStyle.poppinsTextStyle(
