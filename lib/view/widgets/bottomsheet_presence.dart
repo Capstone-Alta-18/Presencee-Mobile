@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/pages/course_history_view.dart';
 
 class BottomSheetPresence extends StatefulWidget {
   const BottomSheetPresence({super.key});
@@ -14,148 +15,169 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 0,
-      child: GestureDetector(
-        onVerticalDragDown: (details) {
-          if (_isExpanded == true) {
-            setState(() {
-              _isExpanded = false;
-            });
-          }
-        },
-        onVerticalDragUpdate: (details) {
-          if (_isExpanded == false) {
-            setState(() {
-              _isExpanded = true;
-            });
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-          height: _isExpanded == true
-              ? MediaQuery.of(context).size.height / 1.6
-              : MediaQuery.of(context).size.height / 3.8,
-          width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-            color: AppTheme.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeIn,
+        height: _isExpanded == true
+            ? MediaQuery.of(context).size.height / 1.6
+            : MediaQuery.of(context).size.height / 3.8,
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          color: AppTheme.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
           ),
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
+        ),
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            GestureDetector(
+              onPanUpdate: (details) {
+                if (details.delta.dy > 4) {
                   setState(() {
-                    _isExpanded = !_isExpanded;
+                    _isExpanded = false;
                   });
-                },
-                child: Container(
-                  width: 94,
-                  height: 7,
-                  decoration: BoxDecoration(
+                } else if (details.delta.dy < -6) {
+                  setState(() {
+                    _isExpanded = true;
+                  });
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                height: 30,
+                decoration: const BoxDecoration(
+                  // color: AppTheme.gray,
+                  color: Colors.transparent,
+                ),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    width: 94,
+                    height: 7,
+                    decoration: BoxDecoration(
                       color: AppTheme.black_5,
-                      borderRadius: BorderRadius.circular(19)),
-                ),
+                      borderRadius: BorderRadius.circular(19),
+                    ),
+                  ),
+                )
               ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: 5 + 1,
-                  itemBuilder: (context, index) {
-                    if (index < 5) {
-                      return SizedBox(
-                        width: double.infinity,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 24, right: 24),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Bahasa Indonesia (MU22)',
-                                    style: AppTextStyle.poppinsTextStyle(
-                                      color: AppTheme.black,
-                                      fontsWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Masuk : 28 Februari',
-                                    style: AppTextStyle.poppinsTextStyle(
-                                      color: AppTheme.black_3,
-                                      fontsWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Container(
-                                height: 30,
-                                width: 125,
-                                decoration: BoxDecoration(
-                                  color: AppTheme.primaryTheme_2,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Terkonfirmasi',
-                                    style: AppTextStyle.poppinsTextStyle(
-                                      color: AppTheme.white,
-                                      fontsWeight: FontWeight.w400,
-                                      fontSize: 12,
-                                    ),
+            ),
+            // const SizedBox(height: 20),
+            Expanded(
+              child: ListView.separated(
+                itemCount: 5 + 1,
+                itemBuilder: (context, index) {
+                  if (index < 5) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Bahasa Indonesia (MU22)',
+                                  style: AppTextStyle.poppinsTextStyle(
+                                    color: AppTheme.black,
+                                    fontsWeight: FontWeight.w600,
+                                    fontSize: 14,
                                   ),
                                 ),
+                                Text(
+                                  'Masuk : 28 Februari',
+                                  style: AppTextStyle.poppinsTextStyle(
+                                    color: AppTheme.black_3,
+                                    fontsWeight: FontWeight.w400,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Container(
+                              height: 30,
+                              width: 125,
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryTheme_2,
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
+                              child: Center(
+                                child: Text(
+                                  'Terkonfirmasi',
+                                  style: AppTextStyle.poppinsTextStyle(
+                                    color: AppTheme.white,
+                                    fontsWeight: FontWeight.w400,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 90),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: AppTheme.primaryTheme_2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(2),
                           ),
                         ),
-                      );
-                    } else {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            left: 165, right: 165, bottom: 22),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: AppTheme.primaryTheme_2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(2),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                                var curvedAnimation = CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.ease,
+                                );
+                                return FadeTransition(
+                                  opacity: tween.animate(curvedAnimation),
+                                  child: child,
+                                );
+                              },
+                              pageBuilder: (context, animation, secondaryAnimation) => const CourseHistory(),
                             ),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            "Lihat Semua",
-                            style: AppTextStyle.poppinsTextStyle(
-                              fontsWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color: AppTheme.white,
-                            ),
+                          );
+                        },
+                        child: Text(
+                          "Lihat Semua",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontsWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: AppTheme.white,
                           ),
                         ),
-                      );
-                    }
-                  },
-                  separatorBuilder: (context, index) {
-                    if (index < 5) {
-                      return const SizedBox(
-                          height: 24,
-                          child: Divider(
-                            thickness: 0.8,
-                            color: AppTheme.gray_2,
-                          ));
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  },
-                ),
+                      ),
+                    );
+                  }
+                },
+                separatorBuilder: (context, index) {
+                  if (index < 5) {
+                    return const SizedBox(
+                      height: 24,
+                      child: Divider(
+                        thickness: 0.8,
+                        color: AppTheme.gray_2,
+                      ),
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

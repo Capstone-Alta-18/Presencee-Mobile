@@ -11,8 +11,11 @@ class MaintenancePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("lib/assets/images/maintenance.png"),
-            Padding(padding: EdgeInsets.only(bottom: 44)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Image.asset("lib/assets/images/maintenance.png"),
+            ),
+            const SizedBox(height: 44),
             Text("Halaman ini dalam \nperbaikan",
               textAlign: TextAlign.center,
               style: AppTextStyle.poppinsTextStyle(
