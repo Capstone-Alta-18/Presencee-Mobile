@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetPresence extends StatefulWidget {
   const BottomSheetPresence({super.key});
@@ -132,6 +134,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                           ),
                         ),
                         onPressed: () {
+                          var manager = Provider.of<KehadiranViewModel>(context);
                           Navigator.push(
                             context,
                             PageRouteBuilder(
@@ -146,7 +149,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                                   child: child,
                                 );
                               },
-                              pageBuilder: (context, animation, secondaryAnimation) => const CourseHistory(),
+                              pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager,selectedIndex: index,),
                             ),
                           );
                         },

@@ -20,7 +20,9 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+      Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+    });
   }
 
   @override

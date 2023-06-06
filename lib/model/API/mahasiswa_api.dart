@@ -26,7 +26,7 @@ class MahasiswaApi {
         final datas = response.data['mahasiswas'];
         // log('datas: $datas');
         List<MahasiswaModel> mahasiswa = List<MahasiswaModel>.from(datas.map((model) => MahasiswaModel.fromJson(model)));
-        // log('mahasiswa: $mahasiswa');
+        log('mahasiswa: $mahasiswa');
         return mahasiswa;
       } else {
         throw Exception('Failed to load mahasiswa');
