@@ -10,10 +10,10 @@ enum DataState {
 }
 
 class MahasiswaViewModel extends ChangeNotifier {
-  List<MahasiswaModel> _mahasiswas = [];
+  List<Mahasiswas> _siswas = [];
   DataState _state = DataState.initial;
 
-  List<MahasiswaModel> get mahasiswas => _mahasiswas;
+  List<Mahasiswas> get mahasiswass => _siswas;
 
   DataState get state => _state;
 
@@ -21,12 +21,35 @@ class MahasiswaViewModel extends ChangeNotifier {
     _state = DataState.loading;
     notifyListeners();
     try {
-      final mahasiswas = await MahasiswaApi.getMahasiswa();
-      _mahasiswas = mahasiswas;
+      final mahasiswass = await MahasiswaAll.getMahasiswa();
+      _siswas = mahasiswass;
       _state = DataState.loaded;
     } catch (e) {
       _state = DataState.error;
     }
     notifyListeners();
   }
+}
+
+class MahasiswaOneViewModel extends ChangeNotifier {
+  List<Mahasiswas> _siswas = [];
+  DataState _state = DataState.initial;
+
+  List<Mahasiswas> get pelajar => _siswas;
+
+  DataState get state => _state;
+
+  getOneMahasiswa({required int ids}) async {
+    _state = DataState.loading;
+    notifyListeners();
+    try {
+      final pelajar = await MahasiswaOne.getOneMahasiswa(ids: ids);
+      _siswas = pelajar;
+      _state = DataState.loaded;
+    } catch (e) {
+      _state = DataState.error;
+    }
+    notifyListeners();
+  }
+  
 }

@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'help_center_view.dart';
+import 'mahasiswa_Viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,17 +25,22 @@ class _ProfilePageState extends State<ProfilePage> {
   final tahunController = TextEditingController();
   final ipkController = TextEditingController();
 
+  late SharedPreferences login;
+  late bool newUser;
+
   @override
   void initState() {
     super.initState();
-    emailController.text = 'kristina.faboulus@mail.com';
-    telponController.text = '081213476509';
-    jurusanController.text = 'Seni Rupa';
-    tahunController.text = '2020/Semester 6';
-    ipkController.text = '3,85';
+    /* WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+    }); */
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<MahasiswaOneViewModel>(context, listen: false).getOneMahasiswa(ids: 2);
+    });
   }
 
   Future getImage(ImageSource source) async {
+    // final imagesData = Provider.of<MahasiswaViewModel>(context, listen: false);
     try {
       ImagePicker picker = ImagePicker();
       var photo = await picker.pickImage(source: source);
@@ -41,12 +49,13 @@ class _ProfilePageState extends State<ProfilePage> {
         if (photo != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
-            content: Text('Foto profil kamu sudah disematkan !',
-                style: AppTextStyle.poppinsTextStyle(
-                  fontsWeight: FontWeight.w500,
-                  color: AppTheme.white,
-                  ),
+            content: Text(
+              'Foto profil kamu sudah disematkan !',
+              style: AppTextStyle.poppinsTextStyle(
+                fontsWeight: FontWeight.w500,
+                color: AppTheme.white,
                 ),
+              ),
           ));
           image = photo;
         }
@@ -202,9 +211,16 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Future<void> isLogout(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final dataMahas = Provider.of<MahasiswaOneViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -311,11 +327,12 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Kristina Fabulous",
+                dataMahas.pelajar.length.toString(),
                 style: AppTextStyle.poppinsTextStyle(
-                    fontSize: 24,
-                    fontsWeight: FontWeight.w500,
-                    color: AppTheme.black),
+                  fontSize: 24,
+                  fontsWeight: FontWeight.w500,
+                  color: AppTheme.black,
+                ),
               ),
               const Padding(padding: EdgeInsets.only(bottom: 8)),
               Text(
@@ -335,15 +352,18 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildTextField('Email', emailController),
+                // _buildTextField('Email', dataMahas.mahasiswass[0].email == null ? emailController : TextEditingController(text: dataMahas.mahasiswass[0].email)),
                 const SizedBox(height: 14,),
-                _buildTextField('No. Telp', telponController),
+                /* Text(
+                  dataMahas.pelajar[34].name.toString(),
+                ), */
+                // _buildTextField('No. Telp', dataMahas.mahasiswass[0].phone == null ? telponController : TextEditingController(text: dataMahas.mahasiswass[0].phone)),
                 const SizedBox(height: 14,),
-                _buildTextField('Jurusan', jurusanController),
+                // _buildTextField('Jurusan', dataMahas.mahasiswass[0].jurusan == null ? jurusanController : TextEditingController(text: dataMahas.mahasiswass[0].jurusan)),
                 const SizedBox(height: 14,),
-                _buildTextField('Tahun', tahunController),
+                // _buildTextField('Tahun', dataMahas.mahasiswass[0].tahunMasuk == null ? tahunController : TextEditingController(text: dataMahas.mahasiswass[0].tahunMasuk)),
                 const SizedBox(height: 14,),
-                _buildTextField('IPK', ipkController),
+                // _buildTextField('IPK', dataMahas.mahasiswass[0].ipk == null ? ipkController : TextEditingController(text: dataMahas.mahasiswass[0].ipk)),
                 const SizedBox(height: 14,),
               ],
             ),
@@ -371,7 +391,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: const Text('Pusat Bantuan'),
               ),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  isLogout(context);
+                },
                 style: ElevatedButton.styleFrom(
                   side: const BorderSide(color: AppTheme.primaryTheme),
                   foregroundColor: AppTheme.primaryTheme),

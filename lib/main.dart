@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => MahasiswaViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => MahasiswaOneViewModel(),
+        ),
       ],
       child: MaterialApp(
         localizationsDelegates: const [

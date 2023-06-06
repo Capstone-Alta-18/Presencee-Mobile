@@ -18,7 +18,7 @@ class _CardPresenceState extends State<CardPresence> {
 
   Future<void> _getImage() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.getImage(source: ImageSource.camera);
+    final pickedImage = await picker.pickImage(source: ImageSource.camera);
     setState(() {
       if (pickedImage != null) {
         _image = File(pickedImage.path);
@@ -51,7 +51,7 @@ class _CardPresenceState extends State<CardPresence> {
       permission = await Geolocator.requestPermission();
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
-        print('Location permissions are denied (actual value: $permission).');
+        debugPrint('Location permissions are denied (actual value: $permission).');
         return;
       }
     }
@@ -136,7 +136,7 @@ class _CardPresenceState extends State<CardPresence> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: AppTheme.primaryTheme_5,
+                    backgroundColor: AppTheme.primaryTheme_5,
                     side: const BorderSide(
                       color: AppTheme.primaryTheme_2,
                     ),
@@ -202,7 +202,7 @@ class _CardPresenceState extends State<CardPresence> {
                                     children: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: AppTheme.white,
+                                          backgroundColor: AppTheme.white,
                                           side: const BorderSide(
                                             color: AppTheme.primaryTheme_2,
                                           ),
@@ -226,7 +226,7 @@ class _CardPresenceState extends State<CardPresence> {
                                       const SizedBox(width: 8),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: AppTheme.primaryTheme_2,
+                                          backgroundColor: AppTheme.primaryTheme_2,
                                           shape: RoundedRectangleBorder(
                                             borderRadius: 
                                                 BorderRadius.circular(2),
@@ -264,7 +264,7 @@ class _CardPresenceState extends State<CardPresence> {
                 const SizedBox(width: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: AppTheme.primaryTheme_2,
+                    backgroundColor: AppTheme.primaryTheme_2,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(2),
                     ),
@@ -296,7 +296,7 @@ class _CardPresenceState extends State<CardPresence> {
                                     Navigator.pushNamed(context, '/fingerprint');
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: AppTheme.primaryTheme_2,
+                                    backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(2),
                                     ),
@@ -316,7 +316,7 @@ class _CardPresenceState extends State<CardPresence> {
                                     _getImage();
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: AppTheme.primaryTheme_2,
+                                    backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(2),
                                     ),

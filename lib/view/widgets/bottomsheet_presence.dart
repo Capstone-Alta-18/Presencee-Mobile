@@ -13,11 +13,11 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
   bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return Positioned(      // backdrop filter https://stackoverflow.com/questions/66288473/how-to-implement-blurred-background-for-modal-bottome-sheet-in-flutter
       bottom: 0,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        curve: Curves.easeIn,
+        curve: Curves.fastOutSlowIn,
         height: _isExpanded == true
             ? MediaQuery.of(context).size.height / 1.6
             : MediaQuery.of(context).size.height / 3.8,
@@ -126,7 +126,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                       padding: const EdgeInsets.symmetric(horizontal: 90),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppTheme.primaryTheme_2,
+                          backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
@@ -172,7 +172,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                       ),
                     );
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 },
               ),
