@@ -37,16 +37,15 @@ class MahasiswaAll {
 }
 
 class MahasiswaOne {
-  late int id;
   static const String url = "$baseURL/v1/mahasiswa";
 
-  static Future<List<Mahasiswas>> getOneMahasiswa({required int ids}) async {
+  static Future<Mahasiswas> getOneMahasiswa({required int oneId}) async {
     final dio = Dio();
     try {
       final response = await dio.get(
-        '$url/$ids',
+        '$url/$oneId',
         queryParameters: {
-          'id': ids,
+          'id': oneId,
         },
         options: Options(
           headers: {
@@ -55,14 +54,14 @@ class MahasiswaOne {
           }
         )
       );
-      log('response results = $response');
+      // log('response results = $response');
 
       if (response.statusCode == 200) {
         final datas = response.data['mahasiswa'];
         // log('datas: $datas');
-        List<Mahasiswas> siswaList = List<Mahasiswas>.from(datas.map((model) => Mahasiswas.fromJson(model)));
+        // List<Mahasiswas> siswaList = List<Mahasiswas>.from(datas.map((model) => Mahasiswas.fromJson(model)));
         // log('>> Data mahasiswa= $siswaList');
-        return siswaList;
+        return Mahasiswas.fromJson(datas);
       } else {
         throw Exception('Failed to load single mahasiswa...');
       }

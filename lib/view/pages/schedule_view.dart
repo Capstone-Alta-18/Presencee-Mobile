@@ -20,8 +20,7 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
       Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
     });
   }
@@ -39,7 +38,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 _searchBar(),
                 const SizedBox(height: 20),
                 _viewJadwal(),
-                // const SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildJadwalAbsensi(),
               ],
             ),
@@ -50,9 +49,9 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
-    final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
+    // final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
 
-    return ListView.builder(
+    /* return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: mahasiswaList.mahasiswass.length,
@@ -63,8 +62,8 @@ class _SchedulePageState extends State<SchedulePage> {
           jam: '09.00 - 10.00',
         );
       },
-    );
-    /*  if (isTodaySelected) {
+    ); */
+     if (isTodaySelected) {
       return CardAbsensi(
         Matkul: 'Bahasa Indonesia (MU22)',
         hari: 'Senin',
@@ -78,7 +77,7 @@ class _SchedulePageState extends State<SchedulePage> {
       );
     } else {
       return const SizedBox.shrink();
-    } */
+    }
   }
 
   Widget _viewJadwal() {

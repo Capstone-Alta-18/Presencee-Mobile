@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../pages/customers.dart';
+import '../pages/customers_view.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
 

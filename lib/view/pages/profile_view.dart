@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:presencee/view/pages/customers_view.dart';
+
 import 'help_center_view.dart';
 import 'mahasiswa_Viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -25,17 +27,11 @@ class _ProfilePageState extends State<ProfilePage> {
   final tahunController = TextEditingController();
   final ipkController = TextEditingController();
 
-  late SharedPreferences login;
-  late bool newUser;
-
   @override
   void initState() {
     super.initState();
-    /* WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
-    }); */
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaOneViewModel>(context, listen: false).getOneMahasiswa(ids: 2);
+      Provider.of<MahasiswaViewModel>(context, listen: false);
     });
   }
 
@@ -219,7 +215,28 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final dataMahas = Provider.of<MahasiswaOneViewModel>(context);
+    final dataMahas = Provider.of<MahasiswaViewModel>(context);
+
+    if (dataMahas.state == Status.initial) {
+      dataMahas.getOneMahasiswa(oneId: 2);
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (dataMahas.state == Status.loading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else if (dataMahas.state == Status.error) {
+      return Center(
+        child: Text(
+          'Failed to load data... Please Check Your Internet Connection!', 
+          style: AppTextStyle.poppinsTextStyle(
+            fontsWeight: FontWeight.w500,
+            fontSize: 16,
+          ),
+        ),
+      ); 
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -327,7 +344,7 @@ class _ProfilePageState extends State<ProfilePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                dataMahas.pelajar.length.toString(),
+                dataMahas.mahasiswaSingle.name.toString(),
                 style: AppTextStyle.poppinsTextStyle(
                   fontSize: 24,
                   fontsWeight: FontWeight.w500,
@@ -336,7 +353,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const Padding(padding: EdgeInsets.only(bottom: 8)),
               Text(
-                '200280120739',
+                dataMahas.mahasiswaSingle.nim.toString(),
                 style: AppTextStyle.poppinsTextStyle(
                   fontSize: 16,
                   fontsWeight: FontWeight.w400,
@@ -352,23 +369,14 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // _buildTextField('Email', dataMahas.mahasiswass[0].email == null ? emailController : TextEditingController(text: dataMahas.mahasiswass[0].email)),
-                const SizedBox(height: 14,),
-                /* Text(
-                  dataMahas.pelajar[34].name.toString(),
-                ), */
-                // _buildTextField('No. Telp', dataMahas.mahasiswass[0].phone == null ? telponController : TextEditingController(text: dataMahas.mahasiswass[0].phone)),
-                const SizedBox(height: 14,),
-                // _buildTextField('Jurusan', dataMahas.mahasiswass[0].jurusan == null ? jurusanController : TextEditingController(text: dataMahas.mahasiswass[0].jurusan)),
-                const SizedBox(height: 14,),
-                // _buildTextField('Tahun', dataMahas.mahasiswass[0].tahunMasuk == null ? tahunController : TextEditingController(text: dataMahas.mahasiswass[0].tahunMasuk)),
-                const SizedBox(height: 14,),
-                // _buildTextField('IPK', dataMahas.mahasiswass[0].ipk == null ? ipkController : TextEditingController(text: dataMahas.mahasiswass[0].ipk)),
-                const SizedBox(height: 14,),
+                _buildTextField('Email', dataMahas.mahasiswaSingle.email.toString() == 'null' ? emailController : TextEditingController(text: dataMahas.mahasiswaSingle.email.toString())),
+                _buildTextField('No. Telp', dataMahas.mahasiswaSingle.phone.toString() == 'null' ? telponController : TextEditingController(text: dataMahas.mahasiswaSingle.phone.toString())),
+                _buildTextField('Jurusan', dataMahas.mahasiswaSingle.jurusan.toString() == 'null' ? jurusanController : TextEditingController(text: dataMahas.mahasiswaSingle.jurusan.toString())),
+                _buildTextField('Tahun', dataMahas.mahasiswaSingle.tahunMasuk == 'null' ? tahunController : TextEditingController(text: dataMahas.mahasiswaSingle.tahunMasuk.toString())),
+                _buildTextField('IPK', dataMahas.mahasiswaSingle.ipk.toString() == 'null' ? ipkController : TextEditingController(text: dataMahas.mahasiswaSingle.ipk.toString())),
               ],
             ),
           ),
-          const Padding(padding: EdgeInsets.only(bottom: 36)),
           Column(
             children: [
               ElevatedButton(
@@ -387,58 +395,142 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryTheme_2,
                   foregroundColor: AppTheme.white,
+                  fixedSize: const Size(200, 40),
                 ),
                 child: const Text('Pusat Bantuan'),
               ),
               OutlinedButton(
                 onPressed: () {
-                  isLogout(context);
+                  showModalBottomSheet(
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    builder: (BuildContext context) {
+                      return ClipRRect(
+                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  // 'Are you sure you want to logout?',
+                                  "Apakah Anda yakin ingin keluar akun?",
+                                  style: AppTextStyle.poppinsTextStyle(
+                                    fontSize: 16,
+                                    fontsWeight: FontWeight.w600,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppTheme.primaryTheme,
+                                        foregroundColor: AppTheme.white,
+                                        fixedSize: const Size(150, 40),
+                                      ),
+                                      child: Text(
+                                        'Cancel',
+                                        style: AppTextStyle.poppinsTextStyle(
+                                          fontSize: 16,
+                                          fontsWeight: FontWeight.w500,
+                                          color: AppTheme.white,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        isLogout(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        side: const BorderSide(color: AppTheme.primaryTheme),
+                                        foregroundColor: AppTheme.primaryTheme,
+                                        fixedSize: const Size(150, 40),
+                                      ),
+                                      child: Text(
+                                        'Logout',
+                                        style: AppTextStyle.poppinsTextStyle(
+                                          fontSize: 16,
+                                          fontsWeight: FontWeight.w500,
+                                          color: AppTheme.primaryTheme,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   side: const BorderSide(color: AppTheme.primaryTheme),
-                  foregroundColor: AppTheme.primaryTheme),
+                  foregroundColor: AppTheme.primaryTheme,
+                  fixedSize: const Size(200, 40),
+                ),
                 child: const Text('Logout'),
               ),
             ],
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
   }
 
   Widget _buildTextField(String label, TextEditingController controllers) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: AppTextStyle.poppinsTextStyle(
-            fontSize: 16,
-            fontsWeight: FontWeight.w500,
-          ),
-        ),
-        SizedBox(
-          width: 245,
-          height: 40,
-          child: TextField(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
             style: AppTextStyle.poppinsTextStyle(
-              fontSize: 14,
-              fontsWeight: FontWeight.w400,
-              color: AppTheme.black,
+              fontSize: 16,
+              fontsWeight: FontWeight.w500,
             ),
-            readOnly: true,
-            controller: controllers,
-            textAlign: TextAlign.left,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              border: OutlineInputBorder(),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppTheme.primaryTheme_4),
+          ),
+          SizedBox(
+            width: 245,
+            height: 40,
+            child: TextField(
+              style: AppTextStyle.poppinsTextStyle(
+                fontSize: 14,
+                fontsWeight: FontWeight.w400,
+                color: AppTheme.black,
+              ),
+              readOnly: true,
+              controller: controllers,
+              textAlign: TextAlign.left,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppTheme.primaryTheme_4),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

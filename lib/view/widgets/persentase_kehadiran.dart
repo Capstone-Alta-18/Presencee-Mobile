@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 
-class PersentaseKehadiran extends StatelessWidget {
+class PersentaseKehadiran extends StatefulWidget {
   final bool diagram;
-  const PersentaseKehadiran({super.key, required this.diagram});
+  final KehadiranViewModel manager;
+  final int selectedIndex;
+  const PersentaseKehadiran({super.key, required this.diagram, required this.manager,required this.selectedIndex});
 
   @override
+  State<PersentaseKehadiran> createState() => _PersentaseKehadiranState();
+}
+
+class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
+  @override
   Widget build(BuildContext context) {
-    return diagram == false
+    return widget.diagram == false
     ? CircularPercentIndicator(
         radius: 105.0,
         animation: true,
         animationDuration: 1200,
         lineWidth: 15.0,
         percent: 0.8,
+        // percent: widget.manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
         center: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "62,5%",
+            //  "${widget.manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16 * 100 }%",
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontSize: 28,
@@ -55,9 +65,9 @@ class PersentaseKehadiran extends StatelessWidget {
         animation: true,
         animationDuration: 1200,
         lineWidth: 30.0,
-        percent: 0.8,
+        percent: widget.manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
         center: Text(
-          "63,5%",
+          "${widget.manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16 * 100 }%",
           style: AppTextStyle.poppinsTextStyle(
             color: AppTheme.black,
             fontSize: 40,

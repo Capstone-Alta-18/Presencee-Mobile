@@ -1,10 +1,13 @@
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 
 class ListHistory extends StatefulWidget {
-  const ListHistory({super.key});
+  final KehadiranViewModel manager;
+  final int selectedIndex;
+  const ListHistory({super.key,required this.manager,required this.selectedIndex});
 
   @override
   State<ListHistory> createState() => _ListHistoryState();
@@ -92,7 +95,7 @@ class _ListHistoryState extends State<ListHistory> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Bahasa Indonesia (MU22)',
+                            widget.manager.kehadiran[widget.selectedIndex].mataKuliah.toString() + " (${widget.manager.kehadiran[widget.selectedIndex].kodeMatkul})",
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w600,

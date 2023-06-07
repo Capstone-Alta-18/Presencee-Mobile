@@ -2,54 +2,45 @@ import 'package:flutter/material.dart';
 import '../../model/API/mahasiswa_api.dart';
 import '../../model/mahasiswa_model.dart';
 
-enum DataState {
+enum Status {
   initial,
   loading,
-  loaded,
+  completed,
   error,
 }
 
 class MahasiswaViewModel extends ChangeNotifier {
   List<Mahasiswas> _siswas = [];
-  DataState _state = DataState.initial;
-
+  Mahasiswas _siswaOne = Mahasiswas();
   List<Mahasiswas> get mahasiswass => _siswas;
+  Mahasiswas get mahasiswaSingle => _siswaOne;
 
-  DataState get state => _state;
+  Status _state = Status.initial;
+  Status get state => _state;
 
   getMahasiswa() async {
-    _state = DataState.loading;
+    _state = Status.loading;
     notifyListeners();
     try {
       final mahasiswass = await MahasiswaAll.getMahasiswa();
       _siswas = mahasiswass;
-      _state = DataState.loaded;
+      _state = Status.completed;
     } catch (e) {
-      _state = DataState.error;
+      _state = Status.error;
     }
     notifyListeners();
   }
-}
 
-class MahasiswaOneViewModel extends ChangeNotifier {
-  List<Mahasiswas> _siswas = [];
-  DataState _state = DataState.initial;
-
-  List<Mahasiswas> get pelajar => _siswas;
-
-  DataState get state => _state;
-
-  getOneMahasiswa({required int ids}) async {
-    _state = DataState.loading;
+  getOneMahasiswa({required int oneId}) async {
+    _state = Status.loading;
     notifyListeners();
     try {
-      final pelajar = await MahasiswaOne.getOneMahasiswa(ids: ids);
-      _siswas = pelajar;
-      _state = DataState.loaded;
+      final mahasiswaSingle = await MahasiswaOne.getOneMahasiswa(oneId: oneId);
+      _siswaOne = mahasiswaSingle;
+      _state = Status.completed;
     } catch (e) {
-      _state = DataState.error;
+      _state = Status.error;
     }
     notifyListeners();
   }
-  
 }

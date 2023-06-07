@@ -14,8 +14,8 @@ class PresenceView extends StatefulWidget {
 class _PresenceViewState extends State<PresenceView> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SingleChildScrollView(
+    return Scaffold(
+      /* body: SingleChildScrollView(
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -24,15 +24,18 @@ class _PresenceViewState extends State<PresenceView> {
             BottomSheetPresence(),    // harus coba diganti https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html
           ],
         ),
-      ),
-      /* body: Stack(
+      ), */
+      body: Stack(
         alignment: Alignment.center,
         children: [
-          TodayWidgets(presensi: true, back: false,),
-          CardPresence(),
+          const TodayWidgets(presensi: true, back: false,),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.44,
+            child: CardPresence()
+          ),
           BottomContainer(),
         ],
-      ), */
+      ),
     );
   }
 }

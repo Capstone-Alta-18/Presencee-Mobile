@@ -33,14 +33,12 @@ class _CardPresenceState extends State<CardPresence> {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       debugPrint('Location services are disabled.');
       return;
     }
 
-    // Request location permission
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
       debugPrint( 'Location permissions are permanently denied, we cannot request permissions.');
@@ -56,7 +54,6 @@ class _CardPresenceState extends State<CardPresence> {
       }
     }
 
-    // Get the current location
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
