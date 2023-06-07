@@ -1,3 +1,5 @@
+import 'package:presencee/provider/kehadiran_viewModel.dart';
+import 'package:presencee/view/pages/customers_view.dart';
 import 'package:presencee/view/pages/mahasiswa_Viewmodel.dart';
 import 'package:presencee/view/pages/fingerprint_view.dart';
 import 'package:presencee/view/pages/presence_view.dart';
@@ -25,6 +27,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => MahasiswaViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => KehadiranViewModel(),
+        ),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -50,10 +55,12 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/home': (context) => HomePage(),
         '/semester_history' : (context) => const SemesterHistory(),
-        '/course_history' : (context) => const CourseHistory(),
+        // '/course_history' : (context) => CourseHistory(selectedIndex: 0, manager: KehadiranViewModel(),),
         '/presence': (context) => const PresenceView(),
         '/fingerprint': (context) => const FingerprintView(),
-      }
-    ));
+        '/help_center': (context) => const CustomerService(),
+        },
+      ),
+    );
   }
 }

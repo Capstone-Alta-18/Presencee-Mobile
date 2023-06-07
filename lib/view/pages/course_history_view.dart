@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
 import 'package:presencee/view/widgets/list_history.dart';
 import '../../theme/constant.dart';
 
 class CourseHistory extends StatefulWidget {
-  const CourseHistory({Key? key}) : super(key: key);
+  final KehadiranViewModel manager;
+  final int selectedIndex;
+  const CourseHistory({Key? key,required this.manager,required this.selectedIndex}) : super(key: key);
 
   @override
   State<CourseHistory> createState() => _CourseHistoryState();
@@ -34,7 +37,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Bahasa Indonesia (MU)',
+                      widget.manager.kehadiran[widget.selectedIndex].mataKuliah.toString() + " (${widget.manager.kehadiran[widget.selectedIndex].kodeMatkul})",
                       style: AppTextStyle.poppinsTextStyle(
                         color: AppTheme.black,
                         fontsWeight: FontWeight.w600,
@@ -42,7 +45,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                       ),
                     ),
                     Text(
-                      'Siswandi',
+                      widget.manager.kehadiran[widget.selectedIndex].namaDosen.toString(),
                       style: AppTextStyle.poppinsTextStyle(
                         color: AppTheme.black,
                         fontsWeight: FontWeight.w400,
@@ -53,12 +56,12 @@ class _CourseHistoryState extends State<CourseHistory> {
                 ),
               )
             ),
-            const Flexible(
+            Flexible(
               flex: 8,
               child: TabBarView(
                 children: [
-                  ListHistory(),
-                  DiagramHistory()
+                  ListHistory(manager: widget.manager, selectedIndex: widget.selectedIndex),
+                  DiagramHistory(selectedIndex: widget.selectedIndex, manager: widget.manager)
                 ],
               ),
             )
