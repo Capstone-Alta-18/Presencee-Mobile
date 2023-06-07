@@ -34,10 +34,13 @@ class BarChartWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Material(
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Image.asset("lib/assets/icons/arrow_left.png"),
+              ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Image.asset("lib/assets/icons/arrow_left.png"/* , height: 25 */),
+                  ),
                 ),
               ),
               Column(
@@ -71,10 +74,13 @@ class BarChartWidget extends StatelessWidget {
                   )
                 ],
               ),
-              Material(
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Image.asset("lib/assets/icons/arrow_right.png"),
+              ClipOval(
+                child: Material(
+                  color: Colors.transparent,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Image.asset("lib/assets/icons/arrow_right.png"/* , height: 25 */),
+                  ),
                 ),
               ),
             ],

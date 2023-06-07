@@ -1,3 +1,8 @@
+import 'package:presencee/provider/kehadiran_viewModel.dart';
+import 'package:presencee/view/pages/customers_view.dart';
+import 'package:presencee/view/pages/mahasiswa_Viewmodel.dart';
+import 'package:presencee/view/pages/fingerprint_view.dart';
+import 'package:presencee/view/pages/presence_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
@@ -17,7 +22,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MahasiswaViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => KehadiranViewModel(),
+        ),
+      ],
+      child: MaterialApp(
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -35,12 +49,18 @@ class MyApp extends StatelessWidget {
             // tertiary: primaryTheme,
           ),
         ),
+        initialRoute: '/',
         routes: {
           '/': (context) => const IntroductionScreen(),
           '/login': (context) => const LoginPage(),
           '/home': (context) => HomePage(),
           '/semester_history': (context) => const SemesterHistory(),
-          '/course_history': (context) => const CourseHistory(),
-        });
+          // '/course_history' : (context) => CourseHistory(selectedIndex: 0, manager: KehadiranViewModel(),),
+          '/presence': (context) => const PresenceView(),
+          '/fingerprint': (context) => const FingerprintView(),
+          '/help_center': (context) => const CustomerService(),
+        },
+      ),
+    );
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 
 class DiagramHistory extends StatelessWidget {
-  const DiagramHistory({super.key});
+  final int selectedIndex;
+  final KehadiranViewModel manager;
+  const DiagramHistory({super.key,required this.selectedIndex,required this.manager});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +14,11 @@ class DiagramHistory extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 27),
-        const Center(
+        Center(
           child: PersentaseKehadiran(
             diagram: true,
+            manager: manager,
+            selectedIndex: selectedIndex,
           ),
         ),
         Padding(
@@ -94,7 +99,7 @@ class DiagramHistory extends StatelessWidget {
                             )
                           ),
                           Text(
-                            '9',
+                            manager.kehadiran[selectedIndex].kehadiran![0].hadir.toString(),
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -115,7 +120,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '0',
+                            manager.kehadiran[selectedIndex].kehadiran![0].alpa.toString(),
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -136,7 +141,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '1',
+                            manager.kehadiran[selectedIndex].kehadiran![0].sakit.toString(),
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -157,7 +162,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '0',
+                            manager.kehadiran[selectedIndex].kehadiran![0].izin.toString(),
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -179,7 +184,7 @@ class DiagramHistory extends StatelessWidget {
                               ),
                           ),
                           Text(
-                            '0',
+                            manager.kehadiran[selectedIndex].kehadiran![0].dispensasi.toString(),
                             style: 
                               AppTextStyle.poppinsTextStyle(
                                 color: AppTheme.black,

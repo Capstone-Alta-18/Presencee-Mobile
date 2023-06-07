@@ -1,6 +1,8 @@
-import 'package:presencee/theme/constant.dart';
-import 'package:flutter/material.dart';
 import '../auth/login_view.dart';
+import 'package:flutter/material.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/home/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({super.key});
@@ -11,6 +13,8 @@ class IntroductionScreen extends StatefulWidget {
 
 class _IntroductionScreenState extends State<IntroductionScreen> {
   bool _showFirst = true;
+  late SharedPreferences login;
+  late bool newUser;
 
   @override
   void initState() {
@@ -22,22 +26,47 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     await Future.delayed(Duration(milliseconds: 800));
     setState(() {
       _showFirst = false;
+
     });
     await Future.delayed(Duration(milliseconds: 3200));
-    Navigator.pushAndRemoveUntil(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
-        transitionDuration: Duration(milliseconds: 1550),
-      ),
-      (route) => false,
-    );
+    checkLogin();
+  }
+
+  void checkLogin() async {
+    login = await SharedPreferences.getInstance();
+    newUser = login.getBool('login') ?? true;
+    if (!newUser) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 1550),
+        ),
+        (route) => false,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 1550),
+        ),
+        (route) => false,
+      );
+      
+    }
   }
 
   @override

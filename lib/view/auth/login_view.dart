@@ -1,7 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
-import '../pages/customers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../pages/customers_view.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
 
@@ -18,12 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
   bool isButtonActive = false;
-
-  showHide() {
-    setState(() {
-      _secureText = !_secureText;
-    });
-  }
+  late SharedPreferences login;
+  late bool newUser;
 
   @override
   void initState() {
@@ -47,6 +44,20 @@ class _LoginPageState extends State<LoginPage> {
     emailController.dispose();
     passController.dispose();
     super.dispose();
+  }
+
+  showHide() {
+    setState(() {
+      _secureText = !_secureText;
+    });
+  }
+
+  void loginCheck() async {
+    login = await SharedPreferences.getInstance();
+    newUser = login.getBool('login') ?? true;
+    if (newUser) {
+      login.setBool('login', false);
+    }
   }
 
   @override
@@ -161,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppTheme.primaryTheme_2,
+                          backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
@@ -170,12 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: isButtonActive
                             ? () {
                                 if (formKey.currentState!.validate()) {
+                                  loginCheck();
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              HomePage(),
+                                      pageBuilder: (context, animation1, animation2) => HomePage(),
                                       transitionsBuilder: (context, animation1,
                                           animation2, child) {
                                         return FadeTransition(
@@ -183,8 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                                           child: child,
                                         );
                                       },
-                                      transitionDuration:
-                                          const Duration(milliseconds: 1200),
+                                      transitionDuration: const Duration(milliseconds: 1200),
                                     ),
                                     (route) => false,
                                   );
@@ -206,9 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        const CustomerService(),
+                                pageBuilder: (context, animation1, animation2) => const CustomerService(),
                                 transitionsBuilder:
                                     (context, animation1, animation2, child) {
                                   return SlideTransition(

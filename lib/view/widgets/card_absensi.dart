@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
+import '../pages/presence_view.dart';
 
 // ignore: must_be_immutable
 class CardAbsensi extends StatelessWidget {
@@ -19,8 +20,23 @@ class CardAbsensi extends StatelessWidget {
         splashColor: AppTheme.primaryTheme.withOpacity(0.2),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         onTap: () {
-          // Navigator.push(
-          //     context, MaterialPageRoute(builder: (context) => """DetailMatkul()"""));
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: child,
+                );
+              },
+              pageBuilder: (context, animation, secondaryAnimation) => const PresenceView(),
+            ),
+          );
         },
         title: Text(
           Matkul!,
@@ -58,7 +74,25 @@ class CardAbsensi extends StatelessWidget {
           height: 22,
           child: ElevatedButton(
             onPressed: () {
-              //logika absensi
+              // Navigator.pushNamed(context, '/presence');
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var tween = Tween<double>(begin: 0.0, end: 1.0);
+                    var curvedAnimation = CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.ease,
+                    );
+                    return FadeTransition(
+                      opacity: tween.animate(curvedAnimation),
+                      child: child,
+                    );
+                  },
+                  // pageBuilder: (context, animation, secondaryAnimation) => PresencePage(),
+                  pageBuilder: (context, animation, secondaryAnimation) => const PresenceView(),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               primary: isTodayPresent ? AppTheme.primaryTheme : AppTheme.primaryTheme_3,

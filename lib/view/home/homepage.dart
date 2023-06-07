@@ -1,7 +1,9 @@
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/view/pages/profile_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/schedule_view.dart';
 import '../pages/history_view.dart';
 
@@ -53,16 +55,17 @@ class _HomePageState extends State<HomePage> {
           showUnselectedLabels: false,
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(PhosphorIcons.book_open_bold),
+              icon: SvgPicture.asset('lib/assets/icons/book-open-text-bold.svg', height: 24, color: AppTheme.gray_2),
+              activeIcon: SvgPicture.asset('lib/assets/icons/book-open-text-bold.svg', height: 24, color: AppTheme.primaryTheme),
               label: 'Jadwal',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(PhosphorIcons.clock_counter_clockwise_bold),
               label: 'Riwayat',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(PhosphorIcons.user_bold),
               label: 'Profil',
             ),
