@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:presencee/view_model/user_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/customers_view.dart';
 import '../home/homePage.dart';
@@ -46,6 +48,30 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  // void userLogin() async {
+  //   if (await context
+  //       .read<UserViewModel>()
+  //       .userLogin(emailController.text, passController.text)) {
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context)
+  //           .showSnackBar(const SnackBar(content: Text('Login successfull')));
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         PageRouteBuilder(
+  //           pageBuilder: (context, animation1, animation2) => HomePage(),
+  //           transitionsBuilder: (context, animation1, animation2, child) {
+  //             return FadeTransition(
+  //               opacity: animation1,
+  //               child: child,
+  //             );
+  //           },
+  //           transitionDuration: const Duration(milliseconds: 1200),
+  //         ),
+  //         (route) => false,
+  //       );
+  //     }
+  //   }
+  // }
   showHide() {
     setState(() {
       _secureText = !_secureText;
@@ -103,14 +129,14 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                       validator: (value) {
-                        final emailRegex =
-                            RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        // final emailRegex =
+                        // RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                        } else if (!emailRegex.hasMatch(value)) {
-                          return 'Invalid email format';
+                          // } else if (!emailRegex.hasMatch(value)) {
+                          // return 'Invalid email format';
                         }
                         return null;
                       },
@@ -143,7 +169,9 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             },
                             icon: Icon(
-                              _secureText ? Icons.visibility_off_outlined : Icons.visibility,
+                              _secureText
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility,
                             ),
                           ),
                         ),
@@ -179,24 +207,55 @@ class _LoginPageState extends State<LoginPage> {
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
                         onPressed: isButtonActive
-                            ? () {
+                            ? () async {
                                 if (formKey.currentState!.validate()) {
+                                  await Provider.of<UserViewModel>(context,
+                                          listen: false)
+                                      .userLogin(emailController.text,
+                                          passController.text);
+                                  if (mounted) {
+                                    UserViewModel userViewModel =
+                                        Provider.of<UserViewModel>(context,
+                                            listen: false);
+                                    if (userViewModel.user != null) {
+                                      print(userViewModel.user?.message);
+                                      print(userViewModel.user?.token);
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (context, animation1,
+                                                  animation2) =>
+                                              HomePage(),
+                                          transitionsBuilder: (context,
+                                              animation1, animation2, child) {
+                                            return FadeTransition(
+                                              opacity: animation1,
+                                              child: child,
+                                            );
+                                          },
+                                          transitionDuration: const Duration(
+                                              milliseconds: 1200),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    }
+                                  }
                                   loginCheck();
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation1, animation2) => HomePage(),
-                                      transitionsBuilder: (context, animation1,
-                                          animation2, child) {
-                                        return FadeTransition(
-                                          opacity: animation1,
-                                          child: child,
-                                        );
-                                      },
-                                      transitionDuration: const Duration(milliseconds: 1200),
-                                    ),
-                                    (route) => false,
-                                  );
+                                  // Navigator.pushAndRemoveUntil(
+                                  //   context,
+                                  //   PageRouteBuilder(
+                                  //     pageBuilder: (context, animation1, animation2) => HomePage(),
+                                  //     transitionsBuilder: (context, animation1,
+                                  //         animation2, child) {
+                                  //       return FadeTransition(
+                                  //         opacity: animation1,
+                                  //         child: child,
+                                  //       );
+                                  //     },
+                                  //     transitionDuration: const Duration(milliseconds: 1200),
+                                  //   ),
+                                  //   (route) => false,
+                                  // );
                                 }
                               }
                             : null,
@@ -215,7 +274,9 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               PageRouteBuilder(
-                                pageBuilder: (context, animation1, animation2) => const CustomerService(),
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                        const CustomerService(),
                                 transitionsBuilder:
                                     (context, animation1, animation2, child) {
                                   return SlideTransition(

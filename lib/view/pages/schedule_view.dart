@@ -14,13 +14,14 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected = true;    // Set initial selection state of "Hari ini" button
-  bool isAllSelected = false;     // Set initial selection state of "Semua" button
+  bool isTodaySelected =
+      true; // Set initial selection state of "Hari ini" button
+  bool isAllSelected = false; // Set initial selection state of "Semua" button
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
     });
   }
@@ -30,7 +31,10 @@ class _SchedulePageState extends State<SchedulePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const TodayWidgets(presensi: false, back: false,),
+          const TodayWidgets(
+            presensi: false,
+            back: false,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
@@ -63,7 +67,7 @@ class _SchedulePageState extends State<SchedulePage> {
         );
       },
     ); */
-     if (isTodaySelected) {
+    if (isTodaySelected) {
       return CardAbsensi(
         Matkul: 'Bahasa Indonesia (MU22)',
         hari: 'Senin',
@@ -95,7 +99,8 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 22,
             width: 57,
             decoration: BoxDecoration(
-              color: isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              color:
+                  isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(

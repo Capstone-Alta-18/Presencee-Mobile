@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/profile_view.dart';
@@ -50,12 +51,12 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                 children: [
                   const SizedBox(height: 24),
                   ListView.builder(
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       itemCount: manager.kehadiran.length,
                       shrinkWrap: true,
                       itemBuilder: ((context, index) {
                         return Padding(
-                          padding: EdgeInsets.only(bottom: 20),
+                          padding: const EdgeInsets.only(bottom: 20),
                           child: Card(
                             elevation: 2,
                             shape: RoundedRectangleBorder(
@@ -77,7 +78,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                                     ),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
-                                      var begin = Offset(1.0, 0.0);
+                                      var begin = const Offset(1.0, 0.0);
                                       var end = Offset.zero;
                                       var curve = Curves.ease;
                                       var tween = Tween(begin: begin, end: end)
@@ -116,7 +117,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
         ),
       ),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -131,12 +132,12 @@ class _SemesterHistoryState extends State<SemesterHistory> {
         ),
         child: BottomNavigationBar(
           selectedItemColor: AppTheme.primaryTheme,
-          selectedLabelStyle: TextStyle(
+          selectedLabelStyle: const TextStyle(
             color: AppTheme.primaryTheme,
             fontSize: 12,
             fontWeight: FontWeight.w700,
           ),
-          unselectedIconTheme: IconThemeData(color: AppTheme.gray_2),
+          unselectedIconTheme: const IconThemeData(color: AppTheme.gray_2),
           showSelectedLabels: true,
           showUnselectedLabels: false,
           currentIndex: _selectedIndex,

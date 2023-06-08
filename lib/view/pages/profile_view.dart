@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:presencee/view/pages/customers_view.dart';
 
 import 'help_center_view.dart';
 import 'mahasiswa_Viewmodel.dart';
@@ -50,8 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
               style: AppTextStyle.poppinsTextStyle(
                 fontsWeight: FontWeight.w500,
                 color: AppTheme.white,
-                ),
               ),
+            ),
           ));
           image = photo;
         }
@@ -63,148 +62,149 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> bottomSheet() async {
     return showModalBottomSheet(
-      backgroundColor: AppTheme.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      context: context,
-      builder: (context) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
-          height: 180,
-          child: Column(
-            children: [
-              const SizedBox(height: 15),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Ganti foto profil",
-                    style: AppTextStyle.poppinsTextStyle(
-                      fontSize: 22,
-                      fontsWeight: FontWeight.w500,
+        backgroundColor: AppTheme.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+            height: 180,
+            child: Column(
+              children: [
+                const SizedBox(height: 15),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Ganti foto profil",
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 22,
+                        fontsWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 20)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await getImage(ImageSource.camera);
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 20)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await getImage(ImageSource.camera);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.camera_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
                         ),
-                        child: const Icon(
-                          PhosphorIcons.camera_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Kamera",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Kamera",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 20)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await getImage(ImageSource.gallery);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.image_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.only(left: 20)),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await getImage(ImageSource.gallery);
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: const CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Galeri",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
                         ),
-                        child: const Icon(
-                          PhosphorIcons.image_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
-                        ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Galeri",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.only(left: 20)),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          setState(() {
-                            if (image != null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: AppTheme.primaryTheme,
-                                  content: Text(
-                                    'Foto Profil kamu sudah di hapus !',
-                                    style: AppTextStyle.poppinsTextStyle(
-                                      fontsWeight: FontWeight.w500,
-                                      color: AppTheme.white,
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 20)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            setState(() {
+                              if (image != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: AppTheme.primaryTheme,
+                                    content: Text(
+                                      'Foto Profil kamu sudah di hapus !',
+                                      style: AppTextStyle.poppinsTextStyle(
+                                        fontsWeight: FontWeight.w500,
+                                        color: AppTheme.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                              image = null;
-                            }
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: const CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
+                                );
+                                image = null;
+                              }
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.trash_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
                         ),
-                        child: const Icon(
-                          PhosphorIcons.trash_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Hapus",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Hapus",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      }
-    );
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   Future<void> isLogout(BuildContext context) async {
@@ -229,13 +229,13 @@ class _ProfilePageState extends State<ProfilePage> {
     } else if (dataMahas.state == Status.error) {
       return Center(
         child: Text(
-          'Failed to load data... Please Check Your Internet Connection!', 
+          'Failed to load data... Please Check Your Internet Connection!',
           style: AppTextStyle.poppinsTextStyle(
             fontsWeight: FontWeight.w500,
             fontSize: 16,
           ),
         ),
-      ); 
+      );
     }
 
     return Scaffold(
@@ -255,89 +255,90 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               image != null
-                ? Container(
-                    margin: const EdgeInsets.all(21),
-                    height: 130,
-                    width: 130,
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundColor: AppTheme.white,
-                          child: InkWell(
-                            onTap: () {
+                  ? Container(
+                      margin: const EdgeInsets.all(21),
+                      height: 130,
+                      width: 130,
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 70,
+                            backgroundColor: AppTheme.white,
+                            child: InkWell(
+                              onTap: () {
+                                bottomSheet();
+                              },
+                              child: ClipPath(
+                                clipper: const ShapeBorderClipper(
+                                  shape: CircleBorder(),
+                                ),
+                                child: Image.file(
+                                  File(image!.path),
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: InkWell(
+                              onTap: () => bottomSheet(),
+                              child: const CircleAvatar(
+                                backgroundColor: AppTheme.primaryTheme,
+                                child: Icon(
+                                  PhosphorIcons.pencil_bold,
+                                  weight: 29.0,
+                                  size: 32,
+                                  color: AppTheme.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      margin: const EdgeInsets.all(21),
+                      height: 130,
+                      width: 130,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
                               bottomSheet();
                             },
-                            child: ClipPath(
-                              clipper: const ShapeBorderClipper(
-                                shape: CircleBorder(),
-                              ),
-                              child: Image.file(
-                                File(image!.path),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.white,
+                              side: const BorderSide(
+                                  color: AppTheme.primaryTheme),
+                              elevation: 0,
+                              shape: const CircleBorder(),
+                              fixedSize: const Size(130, 130),
+                            ),
+                            child: const Icon(
+                              PhosphorIcons.camera_fill,
+                              size: 70,
+                              color: AppTheme.black_3,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: InkWell(
+                              onTap: () => bottomSheet(),
+                              child: const CircleAvatar(
+                                backgroundColor: AppTheme.primaryTheme,
+                                child: Icon(
+                                  PhosphorIcons.pencil,
+                                  color: AppTheme.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: InkWell(
-                            onTap: () => bottomSheet(),
-                            child: const CircleAvatar(
-                              backgroundColor: AppTheme.primaryTheme,
-                              child: Icon(
-                                PhosphorIcons.pencil_bold,
-                                weight: 29.0,
-                                size: 32,
-                                color: AppTheme.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  )
-                : Container(
-                    margin: const EdgeInsets.all(21),
-                    height: 130,
-                    width: 130,
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            bottomSheet();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.white,
-                            side: const BorderSide(color: AppTheme.primaryTheme),
-                            elevation: 0,
-                            shape: const CircleBorder(),
-                            fixedSize: const Size(130, 130),
-                          ),
-                          child: const Icon(
-                            PhosphorIcons.camera_fill,
-                            size: 70,
-                            color: AppTheme.black_3,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: InkWell(
-                            onTap: () => bottomSheet(),
-                            child: const CircleAvatar(
-                              backgroundColor: AppTheme.primaryTheme,
-                              child: Icon(
-                                PhosphorIcons.pencil,
-                                color: AppTheme.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
             ],
           ),
           Column(
@@ -369,11 +370,38 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildTextField('Email', dataMahas.mahasiswaSingle.email.toString() == 'null' ? emailController : TextEditingController(text: dataMahas.mahasiswaSingle.email.toString())),
-                _buildTextField('No. Telp', dataMahas.mahasiswaSingle.phone.toString() == 'null' ? telponController : TextEditingController(text: dataMahas.mahasiswaSingle.phone.toString())),
-                _buildTextField('Jurusan', dataMahas.mahasiswaSingle.jurusan.toString() == 'null' ? jurusanController : TextEditingController(text: dataMahas.mahasiswaSingle.jurusan.toString())),
-                _buildTextField('Tahun', dataMahas.mahasiswaSingle.tahunMasuk == 'null' ? tahunController : TextEditingController(text: dataMahas.mahasiswaSingle.tahunMasuk.toString())),
-                _buildTextField('IPK', dataMahas.mahasiswaSingle.ipk.toString() == 'null' ? ipkController : TextEditingController(text: dataMahas.mahasiswaSingle.ipk.toString())),
+                _buildTextField(
+                    'Email',
+                    dataMahas.mahasiswaSingle.email.toString() == 'null'
+                        ? emailController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.email.toString())),
+                _buildTextField(
+                    'No. Telp',
+                    dataMahas.mahasiswaSingle.phone.toString() == 'null'
+                        ? telponController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.phone.toString())),
+                _buildTextField(
+                    'Jurusan',
+                    dataMahas.mahasiswaSingle.jurusan.toString() == 'null'
+                        ? jurusanController
+                        : TextEditingController(
+                            text:
+                                dataMahas.mahasiswaSingle.jurusan.toString())),
+                _buildTextField(
+                    'Tahun',
+                    dataMahas.mahasiswaSingle.tahunMasuk == 'null'
+                        ? tahunController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.tahunMasuk
+                                .toString())),
+                _buildTextField(
+                    'IPK',
+                    dataMahas.mahasiswaSingle.ipk.toString() == 'null'
+                        ? ipkController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.ipk.toString())),
               ],
             ),
           ),
@@ -384,9 +412,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => const PusatBantuanPage(),
-                      transitionsBuilder: (context, animation1, animation2, child) {
-                        return FadeTransition(opacity: animation1, child: child);
+                      pageBuilder: (context, animation1, animation2) =>
+                          const PusatBantuanPage(),
+                      transitionsBuilder:
+                          (context, animation1, animation2, child) {
+                        return FadeTransition(
+                            opacity: animation1, child: child);
                       },
                       transitionDuration: const Duration(milliseconds: 300),
                     ),
@@ -408,7 +439,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     builder: (BuildContext context) {
                       return ClipRRect(
-                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
                         child: Container(
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -432,7 +466,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: <Widget>[
                                     TextButton(
                                       onPressed: () {
@@ -457,7 +492,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         isLogout(context);
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        side: const BorderSide(color: AppTheme.primaryTheme),
+                                        side: const BorderSide(
+                                            color: AppTheme.primaryTheme),
                                         foregroundColor: AppTheme.primaryTheme,
                                         fixedSize: const Size(150, 40),
                                       ),
@@ -521,7 +557,8 @@ class _ProfilePageState extends State<ProfilePage> {
               controller: controllers,
               textAlign: TextAlign.left,
               decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.primaryTheme_4),
