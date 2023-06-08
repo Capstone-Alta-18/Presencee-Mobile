@@ -9,7 +9,6 @@ import 'package:presencee/view/splashscreen/splashView.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +28,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => KehadiranViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => UserViewModel(),
         ),
       ],
       child: MaterialApp(

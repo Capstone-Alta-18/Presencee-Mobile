@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetPresence extends StatefulWidget {
   const BottomSheetPresence({super.key});
@@ -13,11 +15,11 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
   bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return Positioned(      // backdrop filter https://stackoverflow.com/questions/66288473/how-to-implement-blurred-background-for-modal-bottome-sheet-in-flutter
       bottom: 0,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        curve: Curves.easeIn,
+        curve: Curves.fastOutSlowIn,
         height: _isExpanded == true
             ? MediaQuery.of(context).size.height / 1.6
             : MediaQuery.of(context).size.height / 3.8,
@@ -45,24 +47,25 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                 }
               },
               child: Container(
-                  width: double.infinity,
-                  height: 30,
-                  decoration: const BoxDecoration(
-                    // color: AppTheme.gray,
-                    color: Colors.transparent,
-                  ),
-                  child: Align(
+                width: double.infinity,
+                height: 30,
+                decoration: const BoxDecoration(
+                  // color: AppTheme.gray,
+                  color: Colors.transparent,
+                ),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
                     alignment: Alignment.topCenter,
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      width: 94,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        color: AppTheme.black_5,
-                        borderRadius: BorderRadius.circular(19),
-                      ),
+                    width: 94,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: AppTheme.black_5,
+                      borderRadius: BorderRadius.circular(19),
                     ),
-                  )),
+                  ),
+                )
+              ),
             ),
             // const SizedBox(height: 20),
             Expanded(
@@ -125,17 +128,17 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                       padding: const EdgeInsets.symmetric(horizontal: 90),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppTheme.primaryTheme_2,
+                          backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
                         onPressed: () {
+                          var manager = Provider.of<KehadiranViewModel>(context);
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
+                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                 var tween = Tween<double>(begin: 0.0, end: 1.0);
                                 var curvedAnimation = CurvedAnimation(
                                   parent: animation,
@@ -146,9 +149,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                                   child: child,
                                 );
                               },
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const CourseHistory(),
+                              pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager,selectedIndex: index,),
                             ),
                           );
                         },
@@ -174,7 +175,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                       ),
                     );
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 },
               ),

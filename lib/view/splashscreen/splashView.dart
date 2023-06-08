@@ -23,54 +23,49 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   }
 
   void _changeView() async {
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(Duration(milliseconds: 800));
     setState(() {
       _showFirst = false;
+
     });
-    await Future.delayed(const Duration(milliseconds: 3200));
+    await Future.delayed(Duration(milliseconds: 3200));
     checkLogin();
   }
 
   void checkLogin() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    final token = sharedPreferences.getString('token');
-    if (token == null) {
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const LoginPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 1550),
-          ),
-          (route) => false,
-        );
-      }
+    login = await SharedPreferences.getInstance();
+    newUser = login.getBool('login') ?? true;
+    if (!newUser) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 1550),
+        ),
+        (route) => false,
+      );
     } else {
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 1550),
-          ),
-          (route) => false,
-        );
-      }
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: Duration(milliseconds: 1550),
+        ),
+        (route) => false,
+      );
+      
     }
   }
 
@@ -79,8 +74,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 900),
       alignment: Alignment.center,
-      crossFadeState:
-          _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState: _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstChild: const First(),
       secondChild: const Second(),
     );
@@ -93,16 +87,17 @@ class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        color: AppTheme.primaryTheme,
-        child: Center(
-          child: Image.asset(
-            "lib/assets/images/logo_w.png",
-            width: 200.0,
-            height: 200.0,
-          ),
-        ));
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      color: AppTheme.primaryTheme,
+      child: Center(
+        child: Image.asset(
+          "lib/assets/images/logo_w.png",
+          width: 200.0,
+          height: 200.0,
+        ),
+      )
+    );
   }
 }
 

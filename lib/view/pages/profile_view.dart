@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:presencee/view_model/user_view_model.dart';
-
 import 'help_center_view.dart';
 import 'mahasiswa_Viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> isLogout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    await prefs.clear();
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
@@ -220,9 +218,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
 
     if (dataMahas.state == Status.initial) {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        dataMahas.getOneMahasiswa(oneId: 2);
-      });
+      dataMahas.getOneMahasiswa(oneId: 2);
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -321,14 +317,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               shape: const CircleBorder(),
                               fixedSize: const Size(130, 130),
                             ),
-                            // child: Image.network(
-                            //   'https://img.favpng.com/8/9/5/vector-graphics-clip-art-avatar-computer-icons-image-png-favpng-maGsu9iBZTCk9dTVfC8FyHqDe.jpg',
-                            //   // fit: BoxFit.fill,
-                            // ),
                             child: const Icon(
-                              // PhosphorIcons.camera_fill,
-                              Icons.person,
-                              size: 100,
+                              PhosphorIcons.camera_fill,
+                              size: 70,
                               color: AppTheme.black_3,
                             ),
                           ),
@@ -497,24 +488,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () async {
+                                      onPressed: () {
                                         isLogout(context);
-                                        // await Provider.of<UserViewModel>(
-                                        //         context,
-                                        //         listen: false)
-                                        //     .userLogout();
-
-                                        // if (mounted) {
-                                        //   // print(Provider.of<UserViewModel>(
-                                        //   //         context,
-                                        //   //         listen: false)
-                                        //   //     .user
-                                        //   //     .token);
-                                        //   Navigator.pushNamedAndRemoveUntil(
-                                        //       context,
-                                        //       '/login',
-                                        //       (route) => false);
-                                        // }
                                       },
                                       style: ElevatedButton.styleFrom(
                                         side: const BorderSide(

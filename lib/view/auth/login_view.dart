@@ -240,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                                       );
                                     }
                                   }
-                                  // loginCheck();
+                                  loginCheck();
                                   // Navigator.pushAndRemoveUntil(
                                   //   context,
                                   //   PageRouteBuilder(

@@ -4,9 +4,10 @@ import 'package:presencee/model/user_model.dart';
 
 class UserAPI {
   static const String url = "$baseURL/v1/users/login";
-  final Dio dio = Dio();
 
   Future<User> userLogin(String email, String password) async {
+    final Dio dio = Dio();
+
     try {
       var response = await dio.post(url,
           // options: Options(headers: {
@@ -32,33 +33,4 @@ class UserAPI {
       throw Exception('Failed to connect to the server: $e');
     }
   }
-
-  // Future<User> getUserDetail(int userId) async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   try {
-  //     var response = await dio.get('$baseURL/v1/users',
-  //         queryParameters: {'user_id': userId},
-  //         options: Options(headers: {
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //           'Authorization': 'Bearer ${sharedPreferences.get('token')}'
-  //         }));
-  //     if (response.statusCode == 200) {
-  //       return User.fromJson(response.data);
-  //     } else {
-  //       throw Exception('Failed to get user detail');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Failed to connect to the server: $e');
-  //   }
-  // }
-
-  // Future<bool> logout() async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   return await sharedPreferences.remove('token');
-  // }
-
-  // Future<String> getToken() async {
-  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  //   return sharedPreferences.getString('token') ?? '';
-  // }
 }

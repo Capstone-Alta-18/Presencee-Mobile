@@ -34,7 +34,7 @@ class KehadiranSemester extends StatelessWidget {
                             const SemesterHistory(),
                         transitionsBuilder:
                             (context, animation, secondaryAnimation, child) {
-                          var begin = const Offset(1.0, 0.0);
+                          var begin = Offset(1.0, 0.0);
                           var end = Offset.zero;
                           var curve = Curves.ease;
                           var tween = Tween(begin: begin, end: end)
@@ -53,7 +53,7 @@ class KehadiranSemester extends StatelessWidget {
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.white,
                       fontSize: 14,
-                      fontsWeight: FontWeight.w400,
+                      fontsWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
                   ),
