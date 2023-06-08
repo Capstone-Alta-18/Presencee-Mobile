@@ -49,6 +49,8 @@ dependencies:
   percent_indicator: ^4.2.3
   shared_preferences: ^2.1.1
   flutter_phosphor_icons: ^0.0.1+6
+  local_auth: ^2.1.6
+  lottie: ^2.4.0
   
 
 dev_dependencies:
@@ -78,6 +80,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/fonts/
     - lib/assets/icons/
+    - lib/assets/animation/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

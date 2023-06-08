@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../pages/customers_view.dart';
+import '../pages/helps/customer_view.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
 
@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
   bool isButtonActive = false;
+  bool isLoading = true;
   late SharedPreferences login;
   late bool newUser;
 
@@ -103,8 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                       validator: (value) {
-                        final emailRegex =
-                            RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        final emailRegex = RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
@@ -163,8 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password must be filled';
-                        }
-                        return null;
+                        } return null;
                       },
                     ),
                     const SizedBox(height: 64),
@@ -182,53 +181,45 @@ class _LoginPageState extends State<LoginPage> {
                             ? () {
                                 if (formKey.currentState!.validate()) {
                                   loginCheck();
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation1, animation2) => HomePage(),
-                                      transitionsBuilder: (context, animation1,
-                                          animation2, child) {
-                                        return FadeTransition(
-                                          opacity: animation1,
-                                          child: child,
-                                        );
-                                      },
-                                      transitionDuration: const Duration(milliseconds: 1200),
-                                    ),
-                                    (route) => false,
-                                  );
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
                                 }
                               }
                             : null,
-                        child: Text(
-                          "Login",
-                          style: AppTextStyle.poppinsTextStyle(
-                            fontSize: 14,
-                            color: AppTheme.white,
-                          ),
-                        ),
+                        child: isLoading 
+                            ? Text(
+                                "Login",
+                                style: AppTextStyle.poppinsTextStyle(
+                                  fontSize: 14,
+                                  fontsWeight: FontWeight.w500,
+                                  color: AppTheme.white,
+                                ),
+                              )
+                            : const CircularProgressIndicator(
+                                color: AppTheme.white,
+                              ),
                       ),
                     ),
                     Center(
                       child: TextButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation1, animation2) => const CustomerService(),
-                                transitionsBuilder:
-                                    (context, animation1, animation2, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1, 0),
-                                      end: Offset.zero,
-                                    ).animate(animation1),
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration:
-                                    const Duration(milliseconds: 490),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) => const CustomerService(),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(1, 0),
+                                    end: Offset.zero,
+                                  ).animate(animation1),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 490),
+                            ),
+                          );
                         },
                         child: const Text(
                           "Lupa Password?",

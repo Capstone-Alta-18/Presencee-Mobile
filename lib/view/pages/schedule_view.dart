@@ -49,20 +49,6 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
-    // final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
-
-    /* return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: mahasiswaList.mahasiswass.length,
-      itemBuilder: (context, index) {
-        return CardAbsensi(
-          Matkul: mahasiswaList.mahasiswass[index].name,
-          hari: 'Senin',
-          jam: '09.00 - 10.00',
-        );
-      },
-    ); */
      if (isTodaySelected) {
       return CardAbsensi(
         Matkul: 'Bahasa Indonesia (MU22)',

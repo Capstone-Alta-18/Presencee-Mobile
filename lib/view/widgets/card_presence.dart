@@ -13,15 +13,15 @@ class CardPresence extends StatefulWidget {
 
 class _CardPresenceState extends State<CardPresence> {
   int? _selectedValue;
-  File? _image;
-  String? _location;
+  File? image;
+  String? location;
 
   Future<void> _getImage() async {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(source: ImageSource.camera);
     setState(() {
       if (pickedImage != null) {
-        _image = File(pickedImage.path);
+        image = File(pickedImage.path);
         _getLocation();
       } else {
         debugPrint('No image selected.');
@@ -59,7 +59,7 @@ class _CardPresenceState extends State<CardPresence> {
     );
 
     setState(() {
-      _location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
+      location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
     });
   }
 

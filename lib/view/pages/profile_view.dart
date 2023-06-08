@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:presencee/view/pages/customers_view.dart';
+import 'package:presencee/view/pages/helps/customer_view.dart';
 
-import 'help_center_view.dart';
+import 'helps/help_center_view.dart';
 import 'mahasiswa_Viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -161,7 +161,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             if (image != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  backgroundColor: AppTheme.primaryTheme,
+                                  duration: const Duration(seconds: 1),
+                                  backgroundColor: AppTheme.error,
                                   content: Text(
                                     'Foto Profil kamu sudah di hapus !',
                                     style: AppTextStyle.poppinsTextStyle(
@@ -209,9 +210,97 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> isLogout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    dispose();
     await prefs.clear();
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
+
+  void alertLogout() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      builder: (BuildContext context) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    "Apakah Anda yakin ingin keluar akun?",
+                    style: AppTextStyle.poppinsTextStyle(
+                      fontSize: 16,
+                      fontsWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 30.0, left: 16.0, right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () => isLogout(context),
+                        style: ElevatedButton.styleFrom(
+                          side: const BorderSide(color: AppTheme.primaryTheme),
+                          foregroundColor: AppTheme.primaryTheme,
+                          fixedSize: const Size(150, 40),
+                        ),
+                        child: Text(
+                          'Logout',
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.primaryTheme,
+                          foregroundColor: AppTheme.white,
+                          fixedSize: const Size(150, 40),
+                        ),
+                        child: Text(
+                          'Cancel',
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                            color: AppTheme.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    telponController.dispose();
+    jurusanController.dispose();
+    tahunController.dispose();
+    ipkController.dispose();
+    super.dispose();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -249,6 +338,15 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () => alertLogout(),
+            icon: const Icon(
+              PhosphorIcons.sign_out_bold,
+              size: 24,
+            ),
+          ),
+        ],
       ),
       body: ListView(
         children: [
@@ -261,34 +359,31 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: 130,
                     child: Stack(
                       children: [
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundColor: AppTheme.white,
-                          child: InkWell(
-                            onTap: () {
-                              bottomSheet();
-                            },
-                            child: ClipPath(
-                              clipper: const ShapeBorderClipper(
-                                shape: CircleBorder(),
-                              ),
-                              child: Image.file(
-                                File(image!.path),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
+                        SizedBox(
+                          height: 130,
+                          width: 130,
+                          child: FloatingActionButton(
+                            onPressed: () => bottomSheet(),
+                            backgroundColor: AppTheme.white,
+                            elevation: 0,
+                            child: CircleAvatar(
+                              radius: 65,
+                              backgroundImage: FileImage(File(image!.path)),
                             ),
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: InkWell(
-                            onTap: () => bottomSheet(),
-                            child: const CircleAvatar(
-                              backgroundColor: AppTheme.primaryTheme,
-                              child: Icon(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppTheme.primaryTheme,
+                            ),
+                            child: IconButton(
+                              color: AppTheme.white,
+                              onPressed: () => bottomSheet(),
+                              icon: const Icon(
                                 PhosphorIcons.pencil_bold,
-                                weight: 29.0,
                                 size: 32,
                                 color: AppTheme.white,
                               ),
@@ -306,31 +401,34 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Stack(
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            bottomSheet();
-                          },
+                          onPressed: () => bottomSheet(),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.white,
                             side: const BorderSide(color: AppTheme.primaryTheme),
                             elevation: 0,
                             shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
                             fixedSize: const Size(130, 130),
                           ),
                           child: const Icon(
-                            PhosphorIcons.camera_fill,
-                            size: 70,
-                            color: AppTheme.black_3,
+                            PhosphorIcons.user,
+                            color: AppTheme.primaryTheme,
+                            size: 72,
                           ),
                         ),
                         Align(
                           alignment: Alignment.bottomRight,
-                          child: InkWell(
-                            onTap: () => bottomSheet(),
-                            child: const CircleAvatar(
-                              backgroundColor: AppTheme.primaryTheme,
-                              child: Icon(
-                                PhosphorIcons.pencil,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppTheme.primaryTheme,
+                            ),
+                            child: IconButton(
+                              color: AppTheme.white,
+                              onPressed: () => bottomSheet(),
+                              icon: const Icon(
+                                PhosphorIcons.pencil_bold,
                                 color: AppTheme.white,
+                                size: 32,
                               ),
                             ),
                           ),
@@ -350,6 +448,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   fontsWeight: FontWeight.w500,
                   color: AppTheme.black,
                 ),
+                textAlign: TextAlign.center,
               ),
               const Padding(padding: EdgeInsets.only(bottom: 8)),
               Text(
@@ -385,9 +484,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) => const PusatBantuanPage(),
-                      transitionsBuilder: (context, animation1, animation2, child) {
-                        return FadeTransition(opacity: animation1, child: child);
-                      },
+                      transitionsBuilder: (context, animation1, animation2, child) => FadeTransition(opacity: animation1, child: child),
                       transitionDuration: const Duration(milliseconds: 300),
                     ),
                   );
@@ -400,86 +497,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: const Text('Pusat Bantuan'),
               ),
               OutlinedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    builder: (BuildContext context) {
-                      return ClipRRect(
-                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  // 'Are you sure you want to logout?',
-                                  "Apakah Anda yakin ingin keluar akun?",
-                                  style: AppTextStyle.poppinsTextStyle(
-                                    fontSize: 16,
-                                    fontsWeight: FontWeight.w600,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppTheme.primaryTheme,
-                                        foregroundColor: AppTheme.white,
-                                        fixedSize: const Size(150, 40),
-                                      ),
-                                      child: Text(
-                                        'Cancel',
-                                        style: AppTextStyle.poppinsTextStyle(
-                                          fontSize: 16,
-                                          fontsWeight: FontWeight.w500,
-                                          color: AppTheme.white,
-                                        ),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        isLogout(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        side: const BorderSide(color: AppTheme.primaryTheme),
-                                        foregroundColor: AppTheme.primaryTheme,
-                                        fixedSize: const Size(150, 40),
-                                      ),
-                                      child: Text(
-                                        'Logout',
-                                        style: AppTextStyle.poppinsTextStyle(
-                                          fontSize: 16,
-                                          fontsWeight: FontWeight.w500,
-                                          color: AppTheme.primaryTheme,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+                onPressed: () => alertLogout(),
                 style: ElevatedButton.styleFrom(
                   side: const BorderSide(color: AppTheme.primaryTheme),
                   foregroundColor: AppTheme.primaryTheme,

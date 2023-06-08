@@ -3,11 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/view/pages/profile_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/schedule_view.dart';
 import '../pages/history_view.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -35,15 +36,24 @@ class _HomePageState extends State<HomePage> {
         children: _pages,
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(    // need rounded corner bottom navbar
+        height: 76,
+        decoration: const BoxDecoration(
+          color: AppTheme.white,
           boxShadow: [
             BoxShadow(
               color: AppTheme.gray_2,
-              blurRadius: 10,
+              blurRadius: 20,
+              offset: Offset(0, -1),
             ),
           ],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
         child: BottomNavigationBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
           selectedItemColor: AppTheme.primaryTheme,
           selectedLabelStyle: AppTextStyle.poppinsTextStyle(
             color: AppTheme.primaryTheme,

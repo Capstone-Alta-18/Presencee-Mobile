@@ -9,7 +9,8 @@ class CardMatkul extends StatelessWidget {
   final bool semester;
   final int selectedIndex;
   final KehadiranViewModel manager;
-  CardMatkul({
+
+  const CardMatkul({
     super.key,
     required this.semester,
     required this.selectedIndex,
@@ -19,9 +20,9 @@ class CardMatkul extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color cardColor(int selectedIndex){
-      if(manager.kehadiran[selectedIndex].kodeMatkul.toString() == "MU"){
+      if (manager.kehadiran[selectedIndex].kodeMatkul.toString() == "MU"){
         return AppTheme.greenCard;
-      }else{
+      } else {
         return AppTheme.purpleCard;
       }
     }
