@@ -20,18 +20,18 @@ class UserViewModel extends ChangeNotifier {
 
   DataState get state => _state;
 
-  // getMahasiswa() async {
-  //   _state = DataState.loading;
-  //   notifyListeners();
-  //   try {
-  //     final mahasiswas = await MahasiswaApi.getMahasiswa();
-  //     _mahasiswas = mahasiswas;
-  //     _state = DataState.loaded;
-  //   } catch (e) {
-  //     _state = DataState.error;
-  //   }
-  //   notifyListeners();
-  // }
+  /* getMahasiswa() async {
+    _state = DataState.loading;
+    notifyListeners();
+    try {
+      final mahasiswas = await MahasiswaApi.getMahasiswa();
+      _mahasiswas = mahasiswas;
+      _state = DataState.loaded;
+    } catch (e) {
+      _state = DataState.error;
+    }
+    notifyListeners();
+  } */
   Future<void> userLogin(String email, String password) async {
     _state = DataState.loading;
     notifyListeners();

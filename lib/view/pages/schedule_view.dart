@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
-import 'mahasiswa_Viewmodel.dart';
+import '../../provider/mahasiswa_ViewModel.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -14,8 +14,7 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected =
-      true; // Set initial selection state of "Hari ini" button
+  bool isTodaySelected = true; // Set initial selection state of "Hari ini" button
   bool isAllSelected = false; // Set initial selection state of "Semua" button
 
   @override
@@ -53,21 +52,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
-    // final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
-
-    /* return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: mahasiswaList.mahasiswass.length,
-      itemBuilder: (context, index) {
-        return CardAbsensi(
-          Matkul: mahasiswaList.mahasiswass[index].name,
-          hari: 'Senin',
-          jam: '09.00 - 10.00',
-        );
-      },
-    ); */
-    if (isTodaySelected) {
+     if (isTodaySelected) {
       return CardAbsensi(
         Matkul: 'Bahasa Indonesia (MU22)',
         hari: 'Senin',
@@ -99,8 +84,7 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 22,
             width: 57,
             decoration: BoxDecoration(
-              color:
-                  isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              color: isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(
@@ -114,7 +98,7 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 10),
         GestureDetector(
           onTap: () {
             setState(() {

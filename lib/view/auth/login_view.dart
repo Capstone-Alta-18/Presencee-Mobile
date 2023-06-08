@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:presencee/view_model/user_view_model.dart';
+import 'package:presencee/provider/user_ViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../pages/customers_view.dart';
+import '../pages/helps/customer_view.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
 
@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
   bool isButtonActive = false;
+  bool isLoading = true;
   late SharedPreferences login;
   late bool newUser;
 
@@ -29,14 +30,12 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(() {
       setState(() {
-        isButtonActive =
-            emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
     passController.addListener(() {
       setState(() {
-        isButtonActive =
-            emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
   }
@@ -48,30 +47,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // void userLogin() async {
-  //   if (await context
-  //       .read<UserViewModel>()
-  //       .userLogin(emailController.text, passController.text)) {
-  //     if (mounted) {
-  //       ScaffoldMessenger.of(context)
-  //           .showSnackBar(const SnackBar(content: Text('Login successfull')));
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         PageRouteBuilder(
-  //           pageBuilder: (context, animation1, animation2) => HomePage(),
-  //           transitionsBuilder: (context, animation1, animation2, child) {
-  //             return FadeTransition(
-  //               opacity: animation1,
-  //               child: child,
-  //             );
-  //           },
-  //           transitionDuration: const Duration(milliseconds: 1200),
-  //         ),
-  //         (route) => false,
-  //       );
-  //     }
-  //   }
-  // }
   showHide() {
     setState(() {
       _secureText = !_secureText;
@@ -191,8 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password must be filled';
-                        }
-                        return null;
+                        } return null;
                       },
                     ),
                     const SizedBox(height: 64),
@@ -209,87 +183,52 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: isButtonActive
                             ? () async {
                                 if (formKey.currentState!.validate()) {
-                                  await Provider.of<UserViewModel>(context,
-                                          listen: false)
-                                      .userLogin(emailController.text,
-                                          passController.text);
+                                  await Provider.of<UserViewModel>(context,listen: false).userLogin(emailController.text,passController.text);
                                   if (mounted) {
-                                    UserViewModel userViewModel =
-                                        Provider.of<UserViewModel>(context,
-                                            listen: false);
+                                    UserViewModel userViewModel = Provider.of<UserViewModel>(context,listen: false);
                                     if (userViewModel.user != null) {
-                                      print(userViewModel.user?.message);
-                                      print(userViewModel.user?.token);
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation1,
-                                                  animation2) =>
-                                              HomePage(),
-                                          transitionsBuilder: (context,
-                                              animation1, animation2, child) {
-                                            return FadeTransition(
-                                              opacity: animation1,
-                                              child: child,
-                                            );
-                                          },
-                                          transitionDuration: const Duration(
-                                              milliseconds: 1200),
-                                        ),
-                                        (route) => false,
-                                      );
+                                      debugPrint(userViewModel.user?.message);
+                                      debugPrint(userViewModel.user?.token);
+                                      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
                                     }
                                   }
-                                  // loginCheck();
-                                  // Navigator.pushAndRemoveUntil(
-                                  //   context,
-                                  //   PageRouteBuilder(
-                                  //     pageBuilder: (context, animation1, animation2) => HomePage(),
-                                  //     transitionsBuilder: (context, animation1,
-                                  //         animation2, child) {
-                                  //       return FadeTransition(
-                                  //         opacity: animation1,
-                                  //         child: child,
-                                  //       );
-                                  //     },
-                                  //     transitionDuration: const Duration(milliseconds: 1200),
-                                  //   ),
-                                  //   (route) => false,
-                                  // );
+                                  loginCheck();
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
                                 }
-                              }
-                            : null,
-                        child: Text(
-                          "Login",
-                          style: AppTextStyle.poppinsTextStyle(
-                            fontSize: 14,
-                            color: AppTheme.white,
-                          ),
-                        ),
+                              } : null,
+                        child: isLoading 
+                          ? Text(
+                              "Login",
+                              style: AppTextStyle.poppinsTextStyle(
+                                fontSize: 14,
+                                fontsWeight: FontWeight.w500,
+                                color: AppTheme.white,
+                              ),
+                            ) 
+                          : const CircularProgressIndicator(color: AppTheme.white),
                       ),
                     ),
                     Center(
                       child: TextButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation1, animation2) =>
-                                        const CustomerService(),
-                                transitionsBuilder:
-                                    (context, animation1, animation2, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1, 0),
-                                      end: Offset.zero,
-                                    ).animate(animation1),
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration:
-                                    const Duration(milliseconds: 490),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) => const CustomerService(),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(1, 0),
+                                    end: Offset.zero,
+                                  ).animate(animation1),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 490),
+                            ),
+                          );
                         },
                         child: const Text(
                           "Lupa Password?",

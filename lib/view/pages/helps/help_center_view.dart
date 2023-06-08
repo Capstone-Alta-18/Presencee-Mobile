@@ -1,6 +1,6 @@
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter/material.dart';
-import '../../theme/constant.dart';
+import '../../../theme/constant.dart';
 import 'maintenance_view.dart';
 
 class PusatBantuanPage extends StatelessWidget {
@@ -12,9 +12,7 @@ class PusatBantuanPage extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(PhosphorIcons.x, color: AppTheme.primaryTheme),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         iconTheme: const IconThemeData(color: AppTheme.primaryTheme),
         elevation: 0,

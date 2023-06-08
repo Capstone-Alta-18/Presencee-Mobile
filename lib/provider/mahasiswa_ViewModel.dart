@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../model/API/mahasiswa_api.dart';
-import '../../model/mahasiswa_model.dart';
+import '../model/API/mahasiswa_api.dart';
+import '../model/mahasiswa_model.dart';
 
 enum Status {
   initial,

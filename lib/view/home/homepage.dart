@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:presencee/theme/constant.dart';
@@ -7,6 +8,8 @@ import '../pages/schedule_view.dart';
 import '../pages/history_view.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -29,21 +32,37 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
+      body: PageTransitionSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+          return FadeThroughTransition(
+            animation: primaryAnimation,
+            secondaryAnimation: secondaryAnimation,
+            fillColor: Colors.transparent,
+            child: child,
+          );
+        },
+        child: _pages[_selectedIndex],
       ),
       bottomNavigationBar: Container(
+        height: 76,
         decoration: const BoxDecoration(
-          // need rounded corner bottom navbar
+          color: AppTheme.white,
           boxShadow: [
             BoxShadow(
               color: AppTheme.gray_2,
-              blurRadius: 10,
+              blurRadius: 20,
+              offset: Offset(0, -1),
             ),
           ],
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
         ),
         child: BottomNavigationBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
           selectedItemColor: AppTheme.primaryTheme,
           selectedLabelStyle: AppTextStyle.poppinsTextStyle(
             color: AppTheme.primaryTheme,

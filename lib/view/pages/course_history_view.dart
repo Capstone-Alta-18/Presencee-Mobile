@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
 import 'package:presencee/view/widgets/list_history.dart';
+import '../../provider/kehadiran_viewModel.dart';
 import '../../theme/constant.dart';
 
 class CourseHistory extends StatefulWidget {
-  const CourseHistory({Key? key}) : super(key: key);
+  final KehadiranViewModel manager;
+  final int selectedIndex;
+  const CourseHistory({Key? key,required this.manager,required this.selectedIndex}) : super(key: key);
 
   @override
   State<CourseHistory> createState() => _CourseHistoryState();
