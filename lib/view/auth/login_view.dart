@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import '../pages/customers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../pages/customers_view.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
 
@@ -20,12 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
   bool isButtonActive = false;
-
-  showHide() {
-    setState(() {
-      _secureText = !_secureText;
-    });
-  }
+  late SharedPreferences login;
+  late bool newUser;
 
   @override
   void initState() {
@@ -75,6 +73,19 @@ class _LoginPageState extends State<LoginPage> {
   //     }
   //   }
   // }
+  showHide() {
+    setState(() {
+      _secureText = !_secureText;
+    });
+  }
+
+  void loginCheck() async {
+    login = await SharedPreferences.getInstance();
+    newUser = login.getBool('login') ?? true;
+    if (newUser) {
+      login.setBool('login', false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppTheme.primaryTheme_2,
+                          backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
@@ -230,6 +241,22 @@ class _LoginPageState extends State<LoginPage> {
                                       );
                                     }
                                   }
+                                  loginCheck();
+                                  // Navigator.pushAndRemoveUntil(
+                                  //   context,
+                                  //   PageRouteBuilder(
+                                  //     pageBuilder: (context, animation1, animation2) => HomePage(),
+                                  //     transitionsBuilder: (context, animation1,
+                                  //         animation2, child) {
+                                  //       return FadeTransition(
+                                  //         opacity: animation1,
+                                  //         child: child,
+                                  //       );
+                                  //     },
+                                  //     transitionDuration: const Duration(milliseconds: 1200),
+                                  //   ),
+                                  //   (route) => false,
+                                  // );
                                 }
                               }
                             : null,
