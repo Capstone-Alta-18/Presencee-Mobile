@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:provider/provider.dart';
+import '../../provider/kehadiran_viewModel.dart';
 
 class CardMatkul extends StatefulWidget {
   final bool semester;
@@ -60,7 +60,7 @@ class _CardMatkulState extends State<CardMatkul> {
             height: 164,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: manager.kehadiran.length,
+              itemCount: 5,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return AnimationConfiguration.staggeredList(
@@ -75,6 +75,7 @@ class _CardMatkulState extends State<CardMatkul> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         child: InkWell(
                           onTap: () {
+                            var manager = Provider.of<KehadiranViewModel>(context);
                             Navigator.push(
                               context,
                               PageRouteBuilder(
@@ -89,7 +90,7 @@ class _CardMatkulState extends State<CardMatkul> {
                                     child: child,
                                   );
                                 },
-                                pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager,selectedIndex: index,),
+                                pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager, selectedIndex: index),
                               ),
                             );
                           },
@@ -214,7 +215,7 @@ class _CardMatkulState extends State<CardMatkul> {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.of(context).pushNamed('/course_history');
+                  Navigator.of(context).pushNamed('/course_history');
                 },
                 icon: const Icon(
                   PhosphorIcons.caret_right,

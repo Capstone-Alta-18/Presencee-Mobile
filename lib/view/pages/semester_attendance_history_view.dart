@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/pages/profile_view.dart';
-import 'package:presencee/view/pages/schedule_view.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'course_history_view.dart';
-import 'history_view.dart';
 
 class SemesterHistory extends StatefulWidget {
   const SemesterHistory({super.key});
@@ -20,7 +15,7 @@ class SemesterHistory extends StatefulWidget {
 }
 
 class _SemesterHistoryState extends State<SemesterHistory> {
-  int _selectedIndex = 1;
+  /* int _selectedIndex = 1;
 
   final List<Widget> _pages = [
     const SchedulePage(),
@@ -32,7 +27,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
     setState(() {
       _selectedIndex = index;
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {

@@ -31,7 +31,7 @@ class KehadiranSemester extends StatelessWidget {
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.white,
                       fontSize: 14,
-                      fontsWeight: FontWeight.w500,
+                      fontsWeight: FontWeight.w400,
                     ),
                     textAlign: TextAlign.center,
                   ),

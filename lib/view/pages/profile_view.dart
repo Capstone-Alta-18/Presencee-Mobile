@@ -4,6 +4,10 @@ import 'package:presencee/view/widgets/State_Status_widget.dart';
 
 import 'helps/help_center_view.dart';
 import '../../provider/mahasiswa_ViewModel.dart';
+/* import 'package:presencee/view_model/user_view_model.dart';
+
+import 'help_center_view.dart';
+import 'mahasiswa_Viewmodel.dart'; */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -213,6 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     dispose();
     await prefs.clear();
+    await prefs.remove('token');
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
