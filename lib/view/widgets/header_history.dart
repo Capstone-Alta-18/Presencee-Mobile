@@ -22,7 +22,11 @@ class HeaderHistory extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(PhosphorIcons.x,color: AppTheme.white, size: 30,),
+                    icon: const Icon(
+                      PhosphorIcons.x,
+                      color: AppTheme.white,
+                      size: 30,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 38),
@@ -30,8 +34,8 @@ class HeaderHistory extends StatelessWidget {
                       'Riwayat Kehadiran',
                       style: AppTextStyle.poppinsTextStyle(
                         color: AppTheme.white,
-                        fontsWeight: FontWeight.w600,
-                        fontSize: 24,
+                        fontsWeight: FontWeight.w500,
+                        fontSize: 20,
                       ),
                     ),
                   ),
@@ -51,10 +55,10 @@ class HeaderHistory extends StatelessWidget {
               ),
               unselectedLabelStyle: AppTextStyle.poppinsTextStyle(
                 color: const Color(0xFFECADAB),
-                fontsWeight: FontWeight.w400,
+                fontsWeight: FontWeight.w500,
                 fontSize: 14,
               ),
-              tabs: [
+              tabs: const [
                 Text("LIST"),
                 Text("DIAGRAM"),
               ],
