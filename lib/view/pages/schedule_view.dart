@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
-import 'mahasiswa_Viewmodel.dart';
+import '../../provider/mahasiswa_ViewModel.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -14,13 +14,13 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected = true;    // Set initial selection state of "Hari ini" button
-  bool isAllSelected = false;     // Set initial selection state of "Semua" button
+  bool isTodaySelected = true; // Set initial selection state of "Hari ini" button
+  bool isAllSelected = false; // Set initial selection state of "Semua" button
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
     });
   }
@@ -30,7 +30,10 @@ class _SchedulePageState extends State<SchedulePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const TodayWidgets(presensi: false, back: false,),
+          const TodayWidgets(
+            presensi: false,
+            back: false,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
@@ -95,7 +98,7 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 10),
         GestureDetector(
           onTap: () {
             setState(() {

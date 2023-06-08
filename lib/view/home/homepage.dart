@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:presencee/theme/constant.dart';
@@ -31,9 +32,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
+      body: PageTransitionSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, primaryAnimation, secondaryAnimation) {
+          return FadeThroughTransition(
+            animation: primaryAnimation,
+            secondaryAnimation: secondaryAnimation,
+            fillColor: Colors.transparent,
+            child: child,
+          );
+        },
+        child: _pages[_selectedIndex],
       ),
       bottomNavigationBar: Container(
         height: 76,
@@ -67,8 +76,12 @@ class _HomePageState extends State<HomePage> {
           onTap: _onItemTapped,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: SvgPicture.asset('lib/assets/icons/book-open-text-bold.svg', height: 24, color: AppTheme.gray_2),
-              activeIcon: SvgPicture.asset('lib/assets/icons/book-open-text-bold.svg', height: 24, color: AppTheme.primaryTheme),
+              icon: SvgPicture.asset('lib/assets/icons/book-open-text-bold.svg',
+                  height: 24, color: AppTheme.gray_2),
+              activeIcon: SvgPicture.asset(
+                  'lib/assets/icons/book-open-text-bold.svg',
+                  height: 24,
+                  color: AppTheme.primaryTheme),
               label: 'Jadwal',
             ),
             const BottomNavigationBarItem(

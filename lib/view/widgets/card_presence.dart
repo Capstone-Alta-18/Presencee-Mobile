@@ -225,8 +225,7 @@ class _CardPresenceState extends State<CardPresence> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: AppTheme.primaryTheme_2,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: 
-                                                BorderRadius.circular(2),
+                                            borderRadius: BorderRadius.circular(2),
                                           ),
                                         ),
                                         onPressed: () {},
@@ -286,12 +285,10 @@ class _CardPresenceState extends State<CardPresence> {
                           content: SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/fingerprint');
-                                  },
+                                  onPressed: () => Navigator.pushNamed(context, '/schedule/presence/fingerprint'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
@@ -309,9 +306,7 @@ class _CardPresenceState extends State<CardPresence> {
                                 ),
                                 const SizedBox(width: 8),
                                 ElevatedButton(
-                                  onPressed: () {
-                                    _getImage();
-                                  },
+                                  onPressed: () => _getImage(),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(

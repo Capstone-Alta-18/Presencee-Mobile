@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:presencee/view/pages/helps/customer_view.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:presencee/view/widgets/State_Status_widget.dart';
 
 import 'helps/help_center_view.dart';
-import 'mahasiswa_Viewmodel.dart';
+import '../../provider/mahasiswa_ViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaViewModel>(context, listen: false);
+      Provider.of<MahasiswaViewModel>(context, listen: false).getOneMahasiswa(oneId: 2);
     });
   }
 
@@ -50,8 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
               style: AppTextStyle.poppinsTextStyle(
                 fontsWeight: FontWeight.w500,
                 color: AppTheme.white,
-                ),
               ),
+            ),
           ));
           image = photo;
         }
@@ -150,55 +151,55 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                     ],
-                  ),
+                ),
                   const Padding(padding: EdgeInsets.only(left: 20)),
                   Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          setState(() {
-                            if (image != null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  duration: const Duration(seconds: 1),
-                                  backgroundColor: AppTheme.error,
-                                  content: Text(
-                                    'Foto Profil kamu sudah di hapus !',
-                                    style: AppTextStyle.poppinsTextStyle(
-                                      fontsWeight: FontWeight.w500,
-                                      color: AppTheme.white,
-                                    ),
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        setState(() {
+                          if (image != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: AppTheme.error,
+                                content: Text(
+                                  'Foto Profil kamu sudah di hapus !',
+                                  style: AppTextStyle.poppinsTextStyle(
+                                    fontsWeight: FontWeight.w500,
+                                    color: AppTheme.white,
                                   ),
                                 ),
-                              );
-                              image = null;
-                            }
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: const CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
-                        ),
-                        child: const Icon(
-                          PhosphorIcons.trash_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
-                        ),
+                              ),
+                            );
+                          }
+                          image = null;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        side: const BorderSide(color: AppTheme.gray_2),
+                        elevation: 0,
+                        shape: const CircleBorder(),
+                        backgroundColor: AppTheme.white,
+                        fixedSize: const Size(60, 60),
                       ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Hapus",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
+                      child: const Icon(
+                        PhosphorIcons.trash_fill,
+                        size: 30,
+                        color: AppTheme.primaryTheme,
                       ),
-                    ],
-                  ),
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 8)),
+                    Text(
+                      "Hapus",
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 16,
+                        fontsWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
                 ],
               ),
             ],
@@ -300,31 +301,17 @@ class _ProfilePageState extends State<ProfilePage> {
     ipkController.dispose();
     super.dispose();
   }
-  
 
   @override
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
 
     if (dataMahas.state == Status.initial) {
-      dataMahas.getOneMahasiswa(oneId: 2);
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const ProfilesLoading();
     } else if (dataMahas.state == Status.loading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const ProfilesLoading();
     } else if (dataMahas.state == Status.error) {
-      return Center(
-        child: Text(
-          'Failed to load data... Please Check Your Internet Connection!', 
-          style: AppTextStyle.poppinsTextStyle(
-            fontsWeight: FontWeight.w500,
-            fontSize: 16,
-          ),
-        ),
-      ); 
+      return const ProfileError();
     }
 
     return Scaffold(
@@ -468,11 +455,38 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildTextField('Email', dataMahas.mahasiswaSingle.email.toString() == 'null' ? emailController : TextEditingController(text: dataMahas.mahasiswaSingle.email.toString())),
-                _buildTextField('No. Telp', dataMahas.mahasiswaSingle.phone.toString() == 'null' ? telponController : TextEditingController(text: dataMahas.mahasiswaSingle.phone.toString())),
-                _buildTextField('Jurusan', dataMahas.mahasiswaSingle.jurusan.toString() == 'null' ? jurusanController : TextEditingController(text: dataMahas.mahasiswaSingle.jurusan.toString())),
-                _buildTextField('Tahun', dataMahas.mahasiswaSingle.tahunMasuk == 'null' ? tahunController : TextEditingController(text: dataMahas.mahasiswaSingle.tahunMasuk.toString())),
-                _buildTextField('IPK', dataMahas.mahasiswaSingle.ipk.toString() == 'null' ? ipkController : TextEditingController(text: dataMahas.mahasiswaSingle.ipk.toString())),
+                _buildTextField(
+                    'Email',
+                    dataMahas.mahasiswaSingle.email.toString() == 'null'
+                        ? emailController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.email.toString())),
+                _buildTextField(
+                    'No. Telp',
+                    dataMahas.mahasiswaSingle.phone.toString() == 'null'
+                        ? telponController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.phone.toString())),
+                _buildTextField(
+                    'Jurusan',
+                    dataMahas.mahasiswaSingle.jurusan.toString() == 'null'
+                        ? jurusanController
+                        : TextEditingController(
+                            text:
+                                dataMahas.mahasiswaSingle.jurusan.toString())),
+                _buildTextField(
+                    'Tahun',
+                    dataMahas.mahasiswaSingle.tahunMasuk == 'null'
+                        ? tahunController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.tahunMasuk
+                                .toString())),
+                _buildTextField(
+                    'IPK',
+                    dataMahas.mahasiswaSingle.ipk.toString() == 'null'
+                        ? ipkController
+                        : TextEditingController(
+                            text: dataMahas.mahasiswaSingle.ipk.toString())),
               ],
             ),
           ),
@@ -539,7 +553,8 @@ class _ProfilePageState extends State<ProfilePage> {
               controller: controllers,
               textAlign: TextAlign.left,
               decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 border: OutlineInputBorder(),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppTheme.primaryTheme_4),

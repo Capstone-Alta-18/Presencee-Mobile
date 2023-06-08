@@ -41,7 +41,7 @@ class _HistoryPageState extends State<HistoryPage> {
               child: PersentaseKehadiran(diagram: false,manager: manager,selectedIndex: 0,),
             ),
             const KehadiranSemester(),
-            CardMatkul(semester: false,selectedIndex: 0,manager: manager,),
+            CardMatkul(semester: false,selectedIndex: 0),
             const RingkasanKehadiran(),
             BarChartWidget(),
             const SizedBox(height: 50),

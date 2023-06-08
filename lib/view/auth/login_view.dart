@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:presencee/provider/user_ViewModel.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/helps/customer_view.dart';
 import '../home/homePage.dart';
@@ -28,14 +30,12 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(() {
       setState(() {
-        isButtonActive =
-            emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
     passController.addListener(() {
       setState(() {
-        isButtonActive =
-            emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
   }
@@ -104,13 +104,14 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                       validator: (value) {
-                        final emailRegex = RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        // final emailRegex =
+                        // RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                        } else if (!emailRegex.hasMatch(value)) {
-                          return 'Invalid email format';
+                          // } else if (!emailRegex.hasMatch(value)) {
+                          // return 'Invalid email format';
                         }
                         return null;
                       },
@@ -143,7 +144,9 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             },
                             icon: Icon(
-                              _secureText ? Icons.visibility_off_outlined : Icons.visibility,
+                              _secureText
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility,
                             ),
                           ),
                         ),
@@ -178,25 +181,31 @@ class _LoginPageState extends State<LoginPage> {
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
                         onPressed: isButtonActive
-                            ? () {
+                            ? () async {
                                 if (formKey.currentState!.validate()) {
+                                  await Provider.of<UserViewModel>(context,listen: false).userLogin(emailController.text,passController.text);
+                                  if (mounted) {
+                                    UserViewModel userViewModel = Provider.of<UserViewModel>(context,listen: false);
+                                    if (userViewModel.user != null) {
+                                      debugPrint(userViewModel.user?.message);
+                                      debugPrint(userViewModel.user?.token);
+                                      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                                    }
+                                  }
                                   loginCheck();
                                   Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
                                 }
-                              }
-                            : null,
+                              } : null,
                         child: isLoading 
-                            ? Text(
-                                "Login",
-                                style: AppTextStyle.poppinsTextStyle(
-                                  fontSize: 14,
-                                  fontsWeight: FontWeight.w500,
-                                  color: AppTheme.white,
-                                ),
-                              )
-                            : const CircularProgressIndicator(
+                          ? Text(
+                              "Login",
+                              style: AppTextStyle.poppinsTextStyle(
+                                fontSize: 14,
+                                fontsWeight: FontWeight.w500,
                                 color: AppTheme.white,
                               ),
+                            ) 
+                          : const CircularProgressIndicator(color: AppTheme.white),
                       ),
                     ),
                     Center(

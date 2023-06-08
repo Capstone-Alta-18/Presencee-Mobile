@@ -1,18 +1,19 @@
+import 'package:presencee/provider/user_ViewModel.dart';
+import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
 import 'package:presencee/view/pages/history_view.dart';
-import 'package:presencee/view/pages/mahasiswa_Viewmodel.dart';
+import 'package:presencee/provider/mahasiswa_ViewModel.dart';
 import 'package:presencee/view/pages/fingerprint_view.dart';
 import 'package:presencee/view/pages/presence_view.dart';
 import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view/pages/schedule_view.dart';
-import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/splashscreen/splashView.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/widgets/bottomsheet_fingerprint.dart';
 import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => MahasiswaViewModel()),
         ChangeNotifierProvider(create: (context) => KehadiranViewModel()),
+        ChangeNotifierProvider(create: (context) => UserViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (_) => const IntroductionScreen(),
           '/login': (_) => const LoginPage(),
-          '/home': (_) => HomePage(),
+          '/home': (_) => const HomePage(),
           '/schedule': (_) => const SchedulePage(),
           '/history': (_) => const HistoryPage(),
           '/profiles': (_) => const ProfilePage(),
@@ -85,7 +87,37 @@ class MyApp extends StatelessWidget {
               },
               transitionDuration: const Duration(milliseconds: 500),
             );
-          } 
+          } else if (settings.name == '/schedule/presence') {
+            return PageRouteBuilder(
+              transitionsBuilder: (_, a, sA, c) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: a,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: c,
+                );
+              },
+              pageBuilder: (_, __, ___) => const PresenceView(),
+            );
+          } else if (settings.name == '/schedule/presence/fingerprint') {
+            return PageRouteBuilder(
+              transitionsBuilder: (_, a, sA, c) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: a,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: c,
+                );
+              },
+              pageBuilder: (_, __, ___) => const FingerprintView(),
+            );
+          }
           return null;
         },
       ),

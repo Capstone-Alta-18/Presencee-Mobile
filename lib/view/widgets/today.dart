@@ -140,15 +140,16 @@ class TodayWidgets extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
-                        icon: const Icon(
-                          PhosphorIcons.x,
-                          color: AppTheme.white,
-                          size: 28,
-                        ))
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        PhosphorIcons.x,
+                        color: AppTheme.white,
+                        size: 28,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 27),
