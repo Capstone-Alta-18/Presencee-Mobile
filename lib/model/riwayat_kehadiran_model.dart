@@ -19,7 +19,7 @@ class RiwayatKehadiran {
     if (json['kehadiran'] != null) {
       kehadiran = <Kehadiran>[];
       json['kehadiran'].forEach((v) {
-        kehadiran!.add(new Kehadiran.fromJson(v));
+        kehadiran!.add(Kehadiran.fromJson(v));
       });
     }
     id = json['id'];

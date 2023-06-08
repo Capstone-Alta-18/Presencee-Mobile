@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:presencee/model/riwayat_kehadiran_model.dart';
 
@@ -18,7 +17,8 @@ class KehadiranApi {
       if (response.statusCode == 200) {
         final datas = response.data;
         // log('datas: $datas');
-        List<RiwayatKehadiran> kehadiran = List<RiwayatKehadiran>.from(datas.map((model) => RiwayatKehadiran.fromJson(model)));
+        List<RiwayatKehadiran> kehadiran = List<RiwayatKehadiran>.from(
+            datas.map((model) => RiwayatKehadiran.fromJson(model)));
         // log('kehadiran: $kehadiran');
         return kehadiran;
       } else {
@@ -28,5 +28,4 @@ class KehadiranApi {
       throw Exception('Failed to load kehadiran: $e');
     }
   }
-  
 }

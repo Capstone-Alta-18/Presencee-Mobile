@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/model/API/user_api.dart';
 import 'package:presencee/model/user_model.dart';
-import '../../model/API/mahasiswa_api.dart';
-import '../../model/mahasiswa_model.dart';
 
 enum DataState {
   initial,

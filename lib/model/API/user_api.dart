@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/model/user_model.dart';
