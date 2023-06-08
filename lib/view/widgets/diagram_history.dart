@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/provider/kehadiran_viewModel.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 
 class DiagramHistory extends StatelessWidget {
-  final int selectedIndex;
-  final KehadiranViewModel manager;
-  const DiagramHistory({super.key,required this.selectedIndex,required this.manager});
+  const DiagramHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +11,9 @@ class DiagramHistory extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 27),
-        Center(
+        const Center(
           child: PersentaseKehadiran(
             diagram: true,
-            manager: manager,
-            selectedIndex: selectedIndex,
           ),
         ),
         Padding(
@@ -46,22 +41,18 @@ class DiagramHistory extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '10 dari 16',
-                        style: AppTextStyle.poppinsTextStyle(
-                          color: AppTheme.black,
-                          fontsWeight: FontWeight.w600,
-                          fontSize: 20,
-                        )
-                      ),
-                      Text(
-                        'pertemuan',
-                        style: AppTextStyle.poppinsTextStyle(
-                          color: AppTheme.black,
-                          fontsWeight: FontWeight.w600,
-                          fontSize: 20,
-                        )
-                      ),
+                      Text('10 dari 16',
+                          style: AppTextStyle.poppinsTextStyle(
+                            color: AppTheme.black,
+                            fontsWeight: FontWeight.w600,
+                            fontSize: 20,
+                          )),
+                      Text('pertemuan',
+                          style: AppTextStyle.poppinsTextStyle(
+                            color: AppTheme.black,
+                            fontsWeight: FontWeight.w600,
+                            fontSize: 20,
+                          )),
                     ],
                   ),
                 ),
@@ -80,31 +71,27 @@ class DiagramHistory extends StatelessWidget {
                       offset: Offset(0, 4),
                       blurRadius: 4,
                     )
-                  ], 
+                  ],
                 ),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(top: 12, left: 24, right: 24, bottom: 12),
+                  padding: const EdgeInsets.only(
+                      top: 12, left: 24, right: 24, bottom: 12),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text('Hadir',
+                              style: AppTextStyle.poppinsTextStyle(
+                                  color: AppTheme.black,
+                                  fontsWeight: FontWeight.w400,
+                                  fontSize: 16)),
                           Text(
-                            'Hadir',
+                            '9',
                             style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.black,
-                              fontsWeight: FontWeight.w400,
-                              fontSize: 16
-                            )
-                          ),
-                          Text(
-                            manager.kehadiran[selectedIndex].kehadiran![0].hadir.toString(),
-                            style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.black,
-                              fontsWeight: FontWeight.w400,
-                              fontSize: 16
-                            ),
+                                color: AppTheme.black,
+                                fontsWeight: FontWeight.w400,
+                                fontSize: 16),
                           ),
                         ],
                       ),
@@ -120,7 +107,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            manager.kehadiran[selectedIndex].kehadiran![0].alpa.toString(),
+                            '0',
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -135,18 +122,16 @@ class DiagramHistory extends StatelessWidget {
                           Text(
                             'Sakit',
                             style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.black,
-                              fontsWeight: FontWeight.w400,
-                              fontSize: 16
-                            ),
+                                color: AppTheme.black,
+                                fontsWeight: FontWeight.w400,
+                                fontSize: 16),
                           ),
                           Text(
-                            manager.kehadiran[selectedIndex].kehadiran![0].sakit.toString(),
+                            '1',
                             style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.black,
-                              fontsWeight: FontWeight.w400,
-                              fontSize: 16
-                            ),
+                                color: AppTheme.black,
+                                fontsWeight: FontWeight.w400,
+                                fontSize: 16),
                           ),
                         ],
                       ),
@@ -162,7 +147,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            manager.kehadiran[selectedIndex].kehadiran![0].izin.toString(),
+                            '0',
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -176,21 +161,19 @@ class DiagramHistory extends StatelessWidget {
                         children: [
                           Text(
                             'Dispensasi',
-                            style: 
-                              AppTextStyle.poppinsTextStyle(
-                                color: AppTheme.black,
-                                fontsWeight: FontWeight.w400,
-                                fontSize: 16,
-                              ),
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
                           Text(
-                            manager.kehadiran[selectedIndex].kehadiran![0].dispensasi.toString(),
-                            style: 
-                              AppTextStyle.poppinsTextStyle(
-                                color: AppTheme.black,
-                                fontsWeight: FontWeight.w400,
-                                fontSize: 16,
-                              ),
+                            '0',
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.black,
+                              fontsWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
