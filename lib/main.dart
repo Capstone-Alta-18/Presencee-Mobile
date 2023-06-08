@@ -8,6 +8,7 @@ import 'package:presencee/view/splashscreen/splashView.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -21,39 +22,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => MahasiswaViewModel(),
-        ),
-      ],
-      child: MaterialApp(
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('id', 'ID'),
-        ],
-        debugShowCheckedModeBanner: false,
-        theme: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(
-            primary: AppTheme.primaryTheme,
-            secondary: AppTheme.primaryTheme,
-            // tertiary: primaryTheme,
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => MahasiswaViewModel(),
           ),
-        ),
-        initialRoute: '/',
-        routes: {
-        '/': (context) => const IntroductionScreen(),
-        '/login': (context) => const LoginPage(),
-        '/home': (context) => HomePage(),
-        '/semester_history' : (context) => const SemesterHistory(),
-        '/course_history' : (context) => const CourseHistory(),
-        '/presence': (context) => const PresenceView(),
-        '/fingerprint': (context) => const FingerprintView(),
-      }
-    ));
+          ChangeNotifierProvider(
+            create: (context) => UserViewModel(),
+          ),
+        ],
+        child: MaterialApp(
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('id', 'ID'),
+            ],
+            debugShowCheckedModeBanner: false,
+            theme: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: AppTheme.primaryTheme,
+                secondary: AppTheme.primaryTheme,
+                // tertiary: primaryTheme,
+              ),
+            ),
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const IntroductionScreen(),
+              '/login': (context) => const LoginPage(),
+              '/home': (context) => HomePage(),
+              '/semester_history': (context) => const SemesterHistory(),
+              '/course_history': (context) => const CourseHistory(),
+              '/presence': (context) => const PresenceView(),
+              '/fingerprint': (context) => const FingerprintView(),
+            }));
   }
 }
