@@ -14,7 +14,7 @@ final List<String> list = ['Terlama', 'Terbaru'];
 
 class _ListHistoryState extends State<ListHistory> {
   String dropdownValue = list.first;
-  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -39,12 +39,11 @@ class _ListHistoryState extends State<ListHistory> {
                 ),
               ),
               buttonStyleData: const ButtonStyleData(
-                /* decoration: BoxDecoration(
+                  /* decoration: BoxDecoration(
                   border: Border.all(color: AppTheme.primaryTheme),
                 ), */
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(horizontal: 16)
-              ),
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: 16)),
               underline: Container(),
               value: dropdownValue,
               onChanged: (value) {
@@ -115,7 +114,7 @@ class _ListHistoryState extends State<ListHistory> {
                         decoration: BoxDecoration(
                           color: AppTheme.primaryTheme_2,
                           borderRadius: BorderRadius.circular(10),
-                          ),
+                        ),
                         child: Center(
                           child: Text(
                             'Terkonfirmasi',
@@ -134,12 +133,11 @@ class _ListHistoryState extends State<ListHistory> {
             },
             separatorBuilder: (context, index) {
               return const SizedBox(
-                height: 24,
-                child: Divider(
-                  thickness: 0.8,
-                  color: AppTheme.gray_2,
-                )
-              );
+                  height: 24,
+                  child: Divider(
+                    thickness: 0.8,
+                    color: AppTheme.gray_2,
+                  ));
             },
           ),
         ],

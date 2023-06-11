@@ -19,25 +19,7 @@ class CardAbsensi extends StatelessWidget {
       child: ListTile(
         splashColor: AppTheme.primaryTheme.withOpacity(0.2),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        onTap: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                var tween = Tween<double>(begin: 0.0, end: 1.0);
-                var curvedAnimation = CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.ease,
-                );
-                return FadeTransition(
-                  opacity: tween.animate(curvedAnimation),
-                  child: child,
-                );
-              },
-              pageBuilder: (context, animation, secondaryAnimation) => const PresenceView(),
-            ),
-          );
-        },
+        onTap: () => Navigator.of(context).pushNamed('/schedule/presence'),
         title: Text(
           Matkul!,
           style: AppTextStyle.poppinsTextStyle(
@@ -70,34 +52,14 @@ class CardAbsensi extends StatelessWidget {
           ],
         ),
         trailing: Container(
-          margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.02),
-          height: 22,
+          margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.005),
+          height: 30,
           child: ElevatedButton(
-            onPressed: () {
-              // Navigator.pushNamed(context, '/presence');
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    var tween = Tween<double>(begin: 0.0, end: 1.0);
-                    var curvedAnimation = CurvedAnimation(
-                      parent: animation,
-                      curve: Curves.ease,
-                    );
-                    return FadeTransition(
-                      opacity: tween.animate(curvedAnimation),
-                      child: child,
-                    );
-                  },
-                  // pageBuilder: (context, animation, secondaryAnimation) => PresencePage(),
-                  pageBuilder: (context, animation, secondaryAnimation) => const PresenceView(),
-                ),
-              );
-            },
+            onPressed: () => Navigator.of(context).pushNamed('/schedule/presence'),
             style: ElevatedButton.styleFrom(
-              primary: isTodayPresent ? AppTheme.primaryTheme : AppTheme.primaryTheme_3,
+              backgroundColor: isTodayPresent ? AppTheme.primaryTheme : AppTheme.primaryTheme_3,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
             child: Text(

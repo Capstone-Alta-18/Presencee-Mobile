@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:presencee/theme/constant.dart';
 
 class CustomerService extends StatelessWidget {
@@ -37,12 +38,17 @@ class CustomerService extends StatelessWidget {
               height: 70,
             ),
             Flexible(
-              flex: 2,
-              child: Image.asset(
+              flex: 3,
+              child: Lottie.asset(
+                'lib/assets/animation/help_center.json',
+                width: double.infinity,
+                height: 512,
+              ),
+              /* child: Image.asset(
                 'lib/assets/images/customers.png',
                 width: double.infinity,
                 height: 259,
-              )
+              ) */
             ),
             const SizedBox(
               height: 30,
@@ -55,7 +61,7 @@ class CustomerService extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    /* Text(
                       'Lupa Password?',
                       style: AppTextStyle.poppinsTextStyle(
                         fontSize: 20,
@@ -64,7 +70,7 @@ class CustomerService extends StatelessWidget {
                     ),
                     const SizedBox(
                       height: 20,
-                    ),
+                    ), */
                     Text(
                       'Silahkan menghubungi CS Kampus',
                       style: AppTextStyle.poppinsTextStyle(

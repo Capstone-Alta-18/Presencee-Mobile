@@ -17,15 +17,17 @@ class HistoryPage extends StatelessWidget {
           children: [
             const Header(
               title: 'Riwayat Kehadiran',
-              subtitle: 'Semester 2022/2', back: false,
+              subtitle: 'Semester 2022/2',
+              back: false,
             ),
             Container(
               margin: const EdgeInsets.only(top: 75, left: 95, right: 95),
-              child: const PersentaseKehadiran(diagram: false,),
+              child: const PersentaseKehadiran(
+                diagram: false,
+              ),
             ),
             const KehadiranSemester(),
-            const SizedBox(height: 20),
-            const CardMatkul(semester: false),
+            CardMatkul(semester: false,selectedIndex: 0),
             const RingkasanKehadiran(),
             BarChartWidget(),
             const SizedBox(height: 50),

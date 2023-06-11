@@ -61,7 +61,7 @@ class FingerprintBottomsheet extends StatelessWidget {
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 12,
               ),
             ),
             const SizedBox(height: 2),

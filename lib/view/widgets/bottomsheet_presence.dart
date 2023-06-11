@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/kehadiran_viewModel.dart';
 
 class BottomSheetPresence extends StatefulWidget {
   const BottomSheetPresence({super.key});
@@ -45,25 +48,24 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                 }
               },
               child: Container(
-                width: double.infinity,
-                height: 30,
-                decoration: const BoxDecoration(
-                  // color: AppTheme.gray,
-                  color: Colors.transparent,
-                ),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    width: 94,
-                    height: 7,
-                    decoration: BoxDecoration(
-                      color: AppTheme.black_5,
-                      borderRadius: BorderRadius.circular(19),
-                    ),
+                  width: double.infinity,
+                  height: 30,
+                  decoration: const BoxDecoration(
+                    // color: AppTheme.gray,
+                    color: Colors.transparent,
                   ),
-                )
-              ),
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      width: 94,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: AppTheme.black_5,
+                        borderRadius: BorderRadius.circular(19),
+                      ),
+                    ),
+                  )),
             ),
             // const SizedBox(height: 20),
             Expanded(
@@ -132,10 +134,12 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                           ),
                         ),
                         onPressed: () {
+                          var manager = Provider.of<KehadiranViewModel>(context);
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
                                 var tween = Tween<double>(begin: 0.0, end: 1.0);
                                 var curvedAnimation = CurvedAnimation(
                                   parent: animation,
@@ -146,7 +150,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                                   child: child,
                                 );
                               },
-                              pageBuilder: (context, animation, secondaryAnimation) => const CourseHistory(),
+                              pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager, selectedIndex: index),
                             ),
                           );
                         },

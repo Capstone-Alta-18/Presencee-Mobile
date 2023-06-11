@@ -1,7 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
-import '../pages/customers.dart';
+import 'package:presencee/provider/user_ViewModel.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../pages/helps/customer_view.dart';
 import '../home/homePage.dart';
 import 'dart:math' as math;
 
@@ -18,26 +21,21 @@ class _LoginPageState extends State<LoginPage> {
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
   bool isButtonActive = false;
-
-  showHide() {
-    setState(() {
-      _secureText = !_secureText;
-    });
-  }
+  bool isLoading = true;
+  late SharedPreferences login;
+  late bool newUser;
 
   @override
   void initState() {
     super.initState();
     emailController.addListener(() {
       setState(() {
-        isButtonActive =
-            emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
     passController.addListener(() {
       setState(() {
-        isButtonActive =
-            emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
   }
@@ -47,6 +45,20 @@ class _LoginPageState extends State<LoginPage> {
     emailController.dispose();
     passController.dispose();
     super.dispose();
+  }
+
+  showHide() {
+    setState(() {
+      _secureText = !_secureText;
+    });
+  }
+
+  void loginCheck() async {
+    login = await SharedPreferences.getInstance();
+    newUser = login.getBool('login') ?? true;
+    if (newUser) {
+      login.setBool('login', false);
+    }
   }
 
   @override
@@ -92,14 +104,14 @@ class _LoginPageState extends State<LoginPage> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 12),
                       ),
                       validator: (value) {
-                        final emailRegex =
-                            RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        // final emailRegex =
+                        // RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                        } else if (!emailRegex.hasMatch(value)) {
-                          return 'Invalid email format';
+                          // } else if (!emailRegex.hasMatch(value)) {
+                          // return 'Invalid email format';
                         }
                         return null;
                       },
@@ -132,7 +144,9 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             },
                             icon: Icon(
-                              _secureText ? Icons.visibility_off_outlined : Icons.visibility,
+                              _secureText
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility,
                             ),
                           ),
                         ),
@@ -152,8 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password must be filled';
-                        }
-                        return null;
+                        } return null;
                       },
                     ),
                     const SizedBox(height: 64),
@@ -161,65 +174,61 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: AppTheme.primaryTheme_2,
+                          backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
                         onPressed: isButtonActive
-                            ? () {
+                            ? () async {
                                 if (formKey.currentState!.validate()) {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (context, animation1, animation2) =>
-                                              HomePage(),
-                                      transitionsBuilder: (context, animation1,
-                                          animation2, child) {
-                                        return FadeTransition(
-                                          opacity: animation1,
-                                          child: child,
-                                        );
-                                      },
-                                      transitionDuration:
-                                          const Duration(milliseconds: 1200),
-                                    ),
-                                    (route) => false,
-                                  );
+                                  await Provider.of<UserViewModel>(context,listen: false).userLogin(emailController.text,passController.text);
+                                  if (mounted) {
+                                    UserViewModel userViewModel = Provider.of<UserViewModel>(context,listen: false);
+                                    if (userViewModel.user != null) {
+                                      debugPrint(userViewModel.user?.message);
+                                      debugPrint(userViewModel.user?.token);
+                                      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                                    }
+                                  }
+                                  loginCheck();
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
                                 }
-                              }
-                            : null,
-                        child: Text(
-                          "Login",
-                          style: AppTextStyle.poppinsTextStyle(
-                            fontSize: 14,
-                            color: AppTheme.white,
-                          ),
-                        ),
+                              } : null,
+                        child: isLoading 
+                          ? Text(
+                              "Login",
+                              style: AppTextStyle.poppinsTextStyle(
+                                fontSize: 14,
+                                fontsWeight: FontWeight.w500,
+                                color: AppTheme.white,
+                              ),
+                            ) 
+                          : const CircularProgressIndicator(color: AppTheme.white),
                       ),
                     ),
                     Center(
                       child: TextButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder: (context, animation1, animation2) => const CustomerService(),
-                                transitionsBuilder:
-                                    (context, animation1, animation2, child) {
-                                  return SlideTransition(
-                                    position: Tween<Offset>(
-                                      begin: const Offset(1, 0),
-                                      end: Offset.zero,
-                                    ).animate(animation1),
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration:
-                                    const Duration(milliseconds: 490),
-                              ));
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) => const CustomerService(),
+                              transitionsBuilder:
+                                  (context, animation1, animation2, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(1, 0),
+                                    end: Offset.zero,
+                                  ).animate(animation1),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 490),
+                            ),
+                          );
                         },
                         child: const Text(
                           "Lupa Password?",

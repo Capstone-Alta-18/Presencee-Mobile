@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
-import 'mahasiswa_Viewmodel.dart';
+import '../../provider/mahasiswa_ViewModel.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -14,13 +14,15 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected = true;    // Set initial selection state of "Hari ini" button
-  bool isAllSelected = false;     // Set initial selection state of "Semua" button
+  bool isTodaySelected = true; // Set initial selection state of "Hari ini" button
+  bool isAllSelected = false; // Set initial selection state of "Semua" button
 
   @override
   void initState() {
     super.initState();
-    Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+    });
   }
 
   @override
@@ -28,7 +30,10 @@ class _SchedulePageState extends State<SchedulePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const TodayWidgets(presensi: false, back: false,),
+          const TodayWidgets(
+            presensi: false,
+            back: false,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
@@ -47,18 +52,14 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
-    // final mahasiswaList = Provider.of<MahasiswaViewModel>(context);
-
-    if (isTodaySelected) {
+     if (isTodaySelected) {
       return CardAbsensi(
         Matkul: 'Bahasa Indonesia (MU22)',
-        // Matkul: mahasiswaList.mahasiswas[0].status.toString(),
         hari: 'Senin',
         jam: '09.00 - 10.00',
       );
     } else if (isAllSelected) {
       return CardAbsensi(
-        //filtering hari nya belum
         Matkul: 'Matematika (MTK22)',
         hari: 'Selasa',
         jam: '09.00 - 10.00',
@@ -97,7 +98,7 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
           ),
         ),
-        const SizedBox(width: 5),
+        const SizedBox(width: 10),
         GestureDetector(
           onTap: () {
             setState(() {
