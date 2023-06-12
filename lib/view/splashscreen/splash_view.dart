@@ -61,16 +61,17 @@ class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        color: AppTheme.primaryTheme,
-        child: Center(
-          child: Image.asset(
-            "lib/assets/images/logo_w.png",
-            width: 200.0,
-            height: 200.0,
-          ),
-        ));
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      color: AppTheme.primaryTheme,
+      child: Center(
+        child: Image.asset(
+          "lib/assets/images/logo_w.png",
+          width: 200.0,
+          height: 200.0,
+        ),
+      ),
+    );
   }
 }
 

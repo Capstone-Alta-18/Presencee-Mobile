@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:presencee/viewModels/kehadiran_view_model.dart';
-import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
-import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'course_history_view.dart';
 
 class SemesterHistory extends StatefulWidget {

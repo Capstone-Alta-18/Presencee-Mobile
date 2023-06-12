@@ -1,20 +1,20 @@
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:presencee/view/splashscreen/splash_view.dart';
 import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
-import 'package:presencee/viewModels/kehadiran_view_model.dart';
-import 'package:presencee/view/splashscreen/splashView.dart';
-import 'package:presencee/viewModels/mahasiswa_view_model.dart';
 import 'package:presencee/view/pages/fingerprint_view.dart';
 import 'package:presencee/view/pages/presence_view.dart';
 import 'package:presencee/view/pages/schedule_view.dart';
-import 'package:presencee/viewModels/user_view_model.dart';
 import 'package:presencee/view/pages/history_view.dart';
 import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
+import 'view_model/kehadiran_view_model.dart';
+import 'view_model/mahasiswa_view_model.dart';
+import 'view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -150,8 +150,8 @@ class MyApp extends StatelessWidget {
             );
           } else if (settings.name == '/profiles/underMaintenance') {
             return PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const PusatBantuanPage(),
-              transitionsBuilder: (context, animation1, animation2, child) => FadeTransition(opacity: animation1, child: child),
+              pageBuilder: (_, __, ___) => const PusatBantuanPage(),
+              transitionsBuilder: (_, __, ___, c) => FadeTransition(opacity: __, child: c),
               transitionDuration: const Duration(milliseconds: 300),
             );
           }

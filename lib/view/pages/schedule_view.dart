@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
-import '../../viewModels/mahasiswa_view_model.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});

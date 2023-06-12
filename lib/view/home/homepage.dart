@@ -1,9 +1,9 @@
-import 'package:animations/animations.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:presencee/theme/constant.dart';
-import 'package:flutter/material.dart';
 import 'package:presencee/view/pages/profile_view.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:animations/animations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../pages/schedule_view.dart';
 import '../pages/history_view.dart';
 

@@ -5,8 +5,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/widgets/State_Status_widget.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
-import '../../viewModels/kehadiran_view_model.dart';
 
 class CardMatkul extends StatefulWidget {
   final bool semester;

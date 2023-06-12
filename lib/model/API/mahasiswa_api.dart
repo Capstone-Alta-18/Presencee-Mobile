@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/model/mahasiswa_model.dart';
 
-class MahasiswaAll {
+class MahasiswaAPI {
   static const String url = "$baseURL/v1/mahasiswa";
 
   static Future<List<Mahasiswas>> getMahasiswa() async {
@@ -30,10 +30,6 @@ class MahasiswaAll {
       throw Exception('Failed to load mahasiswa: $e');
     }
   }
-}
-
-class MahasiswaOne {
-  static const String url = "$baseURL/v1/mahasiswa";
 
   static Future<Mahasiswas> getOneMahasiswa({required int oneId}) async {
     final dio = Dio();

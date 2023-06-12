@@ -41,9 +41,20 @@ class UserViewModel extends ChangeNotifier {
       await sharedPreferences.setString('token', user?.token ?? '');
       print("token : ${sharedPreferences.get('token')}");
       _state = DataState.loaded;
+      // Fluttertoast.showToast(
+      //   msg: 'Login successfully',
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.green,
+      // );
       notifyListeners();
     } catch (e) {
       _state = DataState.error;
+      // Fluttertoast.showToast(
+      //   msg: 'Login failed',
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.red,
+      // );
+      notifyListeners();
     }
   }
 

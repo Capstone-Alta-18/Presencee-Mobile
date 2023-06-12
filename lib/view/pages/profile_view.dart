@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'helps/help_center_view.dart';
-import '../../viewModels/mahasiswa_view_model.dart';
+import '../../view_model/mahasiswa_view_model.dart';
+/* import 'package:presencee/view_model/user_view_model.dart';
+
+import 'help_center_view.dart';
+import 'mahasiswa_Viewmodel.dart'; */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaViewModel>(context, listen: false).getOneMahasiswa(oneId: 2);
+      Provider.of<MahasiswaViewModel>(context, listen: false)
+          .getOneMahasiswa(oneId: 2);
     });
   }
 
@@ -62,149 +67,150 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> bottomSheet() async {
     return showModalBottomSheet(
-      backgroundColor: AppTheme.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      context: context,
-      builder: (context) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
-          height: 180,
-          child: Column(
-            children: [
-              const SizedBox(height: 15),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Ganti foto profil",
-                    style: AppTextStyle.poppinsTextStyle(
-                      fontSize: 22,
-                      fontsWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 20)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await getImage(ImageSource.camera);
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
-                        ),
-                        child: const Icon(
-                          PhosphorIcons.camera_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
-                        ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Kamera",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.only(left: 20)),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await getImage(ImageSource.gallery);
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: const CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
-                        ),
-                        child: const Icon(
-                          PhosphorIcons.image_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
-                        ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Galeri",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                ),
-                  const Padding(padding: EdgeInsets.only(left: 20)),
-                  Column(
+        backgroundColor: AppTheme.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+            height: 180,
+            child: Column(
+              children: [
+                const SizedBox(height: 15),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() {
-                          if (image != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 1),
-                                backgroundColor: AppTheme.error,
-                                content: Text(
-                                  'Foto Profil kamu sudah di hapus !',
-                                  style: AppTextStyle.poppinsTextStyle(
-                                    fontsWeight: FontWeight.w500,
-                                    color: AppTheme.white,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          image = null;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        side: const BorderSide(color: AppTheme.gray_2),
-                        elevation: 0,
-                        shape: const CircleBorder(),
-                        backgroundColor: AppTheme.white,
-                        fixedSize: const Size(60, 60),
-                      ),
-                      child: const Icon(
-                        PhosphorIcons.trash_fill,
-                        size: 30,
-                        color: AppTheme.primaryTheme,
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 8)),
                     Text(
-                      "Hapus",
+                      "Ganti foto profil",
                       style: AppTextStyle.poppinsTextStyle(
-                        fontSize: 16,
+                        fontSize: 22,
                         fontsWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
-                ],
-              ),
-            ],
-          ),
-        );
-      }
-    );
+                const Padding(padding: EdgeInsets.only(top: 20)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await getImage(ImageSource.camera);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.camera_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Kamera",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 20)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await getImage(ImageSource.gallery);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.image_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Galeri",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 20)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            setState(() {
+                              if (image != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: const Duration(seconds: 1),
+                                    backgroundColor: AppTheme.error,
+                                    content: Text(
+                                      'Foto Profil kamu sudah di hapus !',
+                                      style: AppTextStyle.poppinsTextStyle(
+                                        fontsWeight: FontWeight.w500,
+                                        color: AppTheme.white,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              image = null;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.trash_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Hapus",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   Future<void> isLogout(BuildContext context) async {
@@ -223,7 +229,10 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       builder: (BuildContext context) {
         return ClipRRect(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
           child: Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -244,7 +253,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30.0, left: 16.0, right: 16.0),
+                  padding: const EdgeInsets.only(
+                      bottom: 30.0, left: 16.0, right: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -339,89 +349,90 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               image != null
-                ? Container(
-                    margin: const EdgeInsets.all(21),
-                    height: 130,
-                    width: 130,
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 130,
-                          width: 130,
-                          child: FloatingActionButton(
+                  ? Container(
+                      margin: const EdgeInsets.all(21),
+                      height: 130,
+                      width: 130,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            width: 130,
+                            child: FloatingActionButton(
+                              onPressed: () => bottomSheet(),
+                              backgroundColor: AppTheme.white,
+                              elevation: 0,
+                              child: CircleAvatar(
+                                radius: 65,
+                                backgroundImage: FileImage(File(image!.path)),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.primaryTheme,
+                              ),
+                              child: IconButton(
+                                color: AppTheme.white,
+                                onPressed: () => bottomSheet(),
+                                icon: const Icon(
+                                  PhosphorIcons.pencil_bold,
+                                  size: 32,
+                                  color: AppTheme.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      margin: const EdgeInsets.all(21),
+                      height: 130,
+                      width: 130,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          ElevatedButton(
                             onPressed: () => bottomSheet(),
-                            backgroundColor: AppTheme.white,
-                            elevation: 0,
-                            child: CircleAvatar(
-                              radius: 65,
-                              backgroundImage: FileImage(File(image!.path)),
+                            style: ElevatedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: AppTheme.primaryTheme),
+                              elevation: 0,
+                              shape: const CircleBorder(),
+                              backgroundColor: AppTheme.white,
+                              fixedSize: const Size(130, 130),
+                            ),
+                            child: const Icon(
+                              PhosphorIcons.user,
+                              color: AppTheme.primaryTheme,
+                              size: 72,
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.primaryTheme,
-                            ),
-                            child: IconButton(
-                              color: AppTheme.white,
-                              onPressed: () => bottomSheet(),
-                              icon: const Icon(
-                                PhosphorIcons.pencil_bold,
-                                size: 32,
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.primaryTheme,
+                              ),
+                              child: IconButton(
                                 color: AppTheme.white,
+                                onPressed: () => bottomSheet(),
+                                icon: const Icon(
+                                  PhosphorIcons.pencil_bold,
+                                  color: AppTheme.white,
+                                  size: 32,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  )
-                : Container(
-                    margin: const EdgeInsets.all(21),
-                    height: 130,
-                    width: 130,
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => bottomSheet(),
-                          style: ElevatedButton.styleFrom(
-                            side: const BorderSide(color: AppTheme.primaryTheme),
-                            elevation: 0,
-                            shape: const CircleBorder(),
-                            backgroundColor: AppTheme.white,
-                            fixedSize: const Size(130, 130),
-                          ),
-                          child: const Icon(
-                            PhosphorIcons.user,
-                            color: AppTheme.primaryTheme,
-                            size: 72,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.primaryTheme,
-                            ),
-                            child: IconButton(
-                              color: AppTheme.white,
-                              onPressed: () => bottomSheet(),
-                              icon: const Icon(
-                                PhosphorIcons.pencil_bold,
-                                color: AppTheme.white,
-                                size: 32,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
             ],
           ),
           Column(
@@ -496,8 +507,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => const PusatBantuanPage(),
-                      transitionsBuilder: (context, animation1, animation2, child) => FadeTransition(opacity: animation1, child: child),
+                      pageBuilder: (context, animation1, animation2) =>
+                          const PusatBantuanPage(),
+                      transitionsBuilder:
+                          (context, animation1, animation2, child) =>
+                              FadeTransition(opacity: animation1, child: child),
                       transitionDuration: const Duration(milliseconds: 300),
                     ),
                   );

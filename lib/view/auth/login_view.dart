@@ -1,12 +1,13 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:presencee/viewModels/user_view_model.dart';
 import 'package:presencee/theme/constant.dart';
-import '../pages/helps/customer_view.dart';
+import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' as math;
+// import 'dart:math' as math;
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,12 +33,14 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(() {
       setState(() {
-        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive =
+            emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
     passController.addListener(() {
       setState(() {
-        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive =
+            emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
   }
@@ -55,12 +58,71 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void loginCheck() async {
-    login = await SharedPreferences.getInstance();
-    newUser = login.getBool('login') ?? true;
-    if (newUser) {
-      login.setBool('login', false);
+  void signIn() async {
+    showDialog(
+      context: context,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
+    );
+    await Provider.of<UserViewModel>(context, listen: false)
+        .userLogin(emailController.text, passController.text);
+    if (mounted) {
+      Navigator.pop(context);
+      UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
+      if (userViewModel.user != null) {
+        debugPrint(userViewModel.user?.message);
+        debugPrint(userViewModel.user?.token);
+        successMessage();
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+      } else {
+        setState(() {
+          isFailedLogin = true;
+          failedMessage();
+        });
+      }
     }
+  }
+
+  void successMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(milliseconds: 1200),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              PhosphorIcons.check,
+              color: AppTheme.white,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              'Login success',
+              textAlign: TextAlign.center,
+              style: AppTextStyle.poppinsTextStyle(
+                fontSize: 16,
+                color: AppTheme.white,
+              )
+            ),
+          ],
+        ),
+        backgroundColor: AppTheme.success,
+      ),
+    );
   }
 
   void failedMessage() {
@@ -76,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(width: 10),
             Text(
-              'Gagal masuk ke aplikasi',
+              'Login gagal',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: "Poppins",
@@ -111,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                height: 360,
+                height: 380,
                 margin: const EdgeInsets.symmetric(horizontal: 52),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       controller: emailController,
-                      textInputAction: TextInputAction.next,    
+                      textInputAction: TextInputAction.next,
                       autofocus: true,
                       decoration: InputDecoration(
                         hintText: "yourname@students.com",
@@ -134,13 +196,18 @@ class _LoginPageState extends State<LoginPage> {
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(2)),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
                         errorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: isFailedLogin == true ? AppTheme.error : AppTheme.greyText,
+                            color: isFailedLogin == true
+                                ? AppTheme.error
+                                : AppTheme.greyText,
                           ),
                         ),
-                        errorText: isFailedLogin == true ? 'Email yang dimasukin salah' : null,
+                        errorText: isFailedLogin == true
+                            ? 'Email yang dimasukin salah'
+                            : null,
                       ),
                       validator: (value) {
                         // final emailRegex =
@@ -176,7 +243,8 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password must be filled';
-                        } return null;
+                        }
+                        return null;
                       },
                       style: AppTextStyle.poppinsTextStyle(
                         fontSize: 14,
@@ -203,7 +271,9 @@ class _LoginPageState extends State<LoginPage> {
                         suffixIcon: IconButton(
                           onPressed: () => showHide(),
                           icon: Icon(
-                            _secureText ? PhosphorIcons.eye_closed_bold : PhosphorIcons.eye_bold,
+                            _secureText
+                                ? PhosphorIcons.eye_closed_bold
+                                : PhosphorIcons.eye_bold,
                           ),
                         ),
                         hintText: "input password",
@@ -213,14 +283,19 @@ class _LoginPageState extends State<LoginPage> {
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(2)),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(2),
                           borderSide: BorderSide(
-                            color: isFailedLogin == true ? AppTheme.error : AppTheme.greyText,
+                            color: isFailedLogin == true
+                                ? AppTheme.error
+                                : AppTheme.greyText,
                           ),
                         ),
-                        errorText: isFailedLogin == true ? 'kata sandi yang dimasukin salah' : null,
+                        errorText: isFailedLogin == true
+                            ? 'Kata sandi yang dimasukin salah'
+                            : null,
                       ),
                     ),
                     const SizedBox(height: 64),
@@ -237,21 +312,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: isButtonActive
                             ? () async {
                                 if (formKey.currentState!.validate()) {
-                                  await Provider.of<UserViewModel>(context, listen: false).userLogin(emailController.text, passController.text);
-                                  if (mounted) {
-                                    UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
-                                    if (userViewModel.user != null) {
-                                      debugPrint(userViewModel.user?.message);
-                                      debugPrint(userViewModel.user?.token);
-                                      // tokens.setString('token', userViewModel.user!.token);
-                                      Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
-                                    } else {
-                                      setState(() {
-                                        isFailedLogin = true;
-                                        failedMessage();
-                                      });
-                                    }
-                                  }
+                                  signIn();
                                 }
                               }
                             : null,

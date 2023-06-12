@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/widgets/attendance_subject_list.dart';
 
 class BottomContainer extends StatefulWidget {
   const BottomContainer({super.key});
@@ -20,7 +21,7 @@ class _BottomContainerState extends State<BottomContainer> {
       minChildSize: 0.25,
       maxChildSize: 0.55,
       builder: (context, scrollController) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+        filter: ColorFilter.mode(AppTheme.primaryTheme.withOpacity(0.0), BlendMode.srcOver),
         child: Container(
           decoration: const BoxDecoration(
             color: AppTheme.white,
@@ -44,52 +45,13 @@ class _BottomContainerState extends State<BottomContainer> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(top: 30),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => const Divider(),
-                  controller: scrollController,
-                  itemCount: 4,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Bahasa Indonesia (MU22)',
-                            style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.black,
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            "Masuk : ${dayWeek + (index * 7)} Februari 2021",
-                            style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.black_5,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                      trailing: Container(
-                        height: 25,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryTheme_2,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Terkonfirmasi',
-                            style: AppTextStyle.poppinsTextStyle(
-                              color: AppTheme.white,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                margin: const EdgeInsets.only(top: 36),
+                child: AttendanceSubsList(
+                  total: 17,
+                  mataKuliah: 'Bahasa Indonesia (MU22)', 
+                  tanggalHadir: "Masuk : $dayWeek Februari 2021", 
+                  statusHadir: "Terkonfirmasi", 
+                  scrollControllers: scrollController,
                 ),
               ),
             ],
