@@ -27,7 +27,7 @@ class HistoryPage extends StatelessWidget {
               ),
             ),
             const KehadiranSemester(),
-            CardMatkul(semester: false,selectedIndex: 0),
+            const CardMatkul(semester: false, selectedIndex: 0),
             const RingkasanKehadiran(),
             BarChartWidget(),
             const SizedBox(height: 50),

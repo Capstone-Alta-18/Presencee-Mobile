@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
-import '../pages/presence_view.dart';
 
 // ignore: must_be_immutable
 class CardAbsensi extends StatelessWidget {
-  CardAbsensi({super.key, required this.Matkul, required this.hari, required this.jam});
+  CardAbsensi({super.key, required this.matkul, required this.hari, required this.jam});
 
   bool isTodayPresent = true;
-  String? Matkul;
+  String? matkul;
   String? hari;
   String? jam;
 
@@ -21,7 +20,7 @@ class CardAbsensi extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         onTap: () => Navigator.of(context).pushNamed('/schedule/presence'),
         title: Text(
-          Matkul!,
+          matkul!,
           style: AppTextStyle.poppinsTextStyle(
             color: AppTheme.black,
             fontsWeight: FontWeight.w500,

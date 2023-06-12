@@ -1,10 +1,13 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-import 'package:presencee/provider/user_ViewModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:presencee/theme/constant.dart';
+import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'dart:math' as math;
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,24 +61,34 @@ class _LoginPageState extends State<LoginPage> {
   void signIn() async {
     showDialog(
       context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      },
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
     );
     await Provider.of<UserViewModel>(context, listen: false)
         .userLogin(emailController.text, passController.text);
     if (mounted) {
       Navigator.pop(context);
-      UserViewModel userViewModel =
-          Provider.of<UserViewModel>(context, listen: false);
+      UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
         debugPrint(userViewModel.user?.message);
         debugPrint(userViewModel.user?.token);
         successMessage();
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
       } else {
         setState(() {
           isFailedLogin = true;
@@ -87,25 +100,23 @@ class _LoginPageState extends State<LoginPage> {
 
   void successMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        duration: Duration(milliseconds: 1200),
+      SnackBar(
+        duration: const Duration(milliseconds: 1200),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               PhosphorIcons.check,
               color: AppTheme.white,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               'Login success',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
+              style: AppTextStyle.poppinsTextStyle(
                 fontSize: 16,
-              ),
+                color: AppTheme.white,
+              )
             ),
           ],
         ),
@@ -244,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                        // 2 opsi icon password
+                        // 2 opsi icon password 
                         /* suffixIcon: Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(math.pi),
@@ -316,8 +327,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed('//help'),
+                        onPressed: () => Navigator.of(context).pushNamed('//help'),
                         child: const Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,

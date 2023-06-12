@@ -1,20 +1,20 @@
-import 'package:presencee/provider/user_ViewModel.dart';
+import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
-import 'package:presencee/provider/kehadiran_viewModel.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:presencee/view/splashscreen/splash_view.dart';
+import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
-import 'package:presencee/view/pages/history_view.dart';
-import 'package:presencee/provider/mahasiswa_ViewModel.dart';
 import 'package:presencee/view/pages/fingerprint_view.dart';
 import 'package:presencee/view/pages/presence_view.dart';
-import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view/pages/schedule_view.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presencee/view/splashscreen/splashView.dart';
+import 'package:presencee/view/pages/history_view.dart';
+import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/widgets/bottomsheet_fingerprint.dart';
-import 'package:presencee/view/widgets/kehadiran_semester.dart';
+import 'view_model/kehadiran_view_model.dart';
+import 'view_model/mahasiswa_view_model.dart';
+import 'view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -64,13 +64,44 @@ class MyApp extends StatelessWidget {
           '/presence': (_) => const PresenceView(),
           '/fingerprint': (_) => const FingerprintView(),
           '/help': (_) => const CustomerService(),
+          '/underMaintenance': (_) => const PusatBantuanPage(),
         },
         onGenerateRoute: (settings) {
-          if (settings.name == '/home') {
+          if (settings.name == '//home') {
             return PageRouteBuilder(
+              transitionsBuilder: (_, __, ___, c) {
+                return FadeTransition(
+                  opacity: __,
+                  child: c,
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 1330),
               pageBuilder: (_, __, ___) => const HomePage(),
-              transitionsBuilder: (_, a, sA, c) => FadeTransition(opacity: a, child: c),
-              transitionDuration: const Duration(milliseconds: 1200),
+            );
+          } else if (settings.name == '//login') {
+            return PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const LoginPage(),
+              transitionsBuilder: (_, __, ___, c) {
+                return FadeTransition(
+                  opacity: __,
+                  child: c,
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 1330),
+            );
+          } else if (settings.name == '//help') {
+            return PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const CustomerService(),
+              transitionsBuilder: (_, __, ___, c) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1, 0),
+                    end: Offset.zero,
+                  ).animate(__),
+                  child: c,
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 450),
             );
           } else if (settings.name == '/history/semester_history') {
             return PageRouteBuilder(
@@ -116,6 +147,12 @@ class MyApp extends StatelessWidget {
                 );
               },
               pageBuilder: (_, __, ___) => const FingerprintView(),
+            );
+          } else if (settings.name == '/profiles/underMaintenance') {
+            return PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const PusatBantuanPage(),
+              transitionsBuilder: (_, __, ___, c) => FadeTransition(opacity: __, child: c),
+              transitionDuration: const Duration(milliseconds: 300),
             );
           }
           return null;
