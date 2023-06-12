@@ -3,7 +3,7 @@ import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/kehadiran_viewModel.dart';
+import '../../viewModels/kehadiran_view_model.dart';
 
 class BottomSheetPresence extends StatefulWidget {
   const BottomSheetPresence({super.key});

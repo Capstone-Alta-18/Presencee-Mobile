@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/bottomsheet_present.dart';
 import 'package:presencee/view/widgets/card_presence.dart';
 import 'package:presencee/view/widgets/today.dart';
-import '../widgets/bottomsheet_presence.dart';
 
 class PresenceView extends StatefulWidget {
   const PresenceView({super.key});

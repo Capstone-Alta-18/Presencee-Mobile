@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
 import 'package:presencee/view/widgets/list_history.dart';
-import '../../provider/kehadiran_viewModel.dart';
+import '../../viewModels/kehadiran_view_model.dart';
 import '../../theme/constant.dart';
 
 class CourseHistory extends StatefulWidget {

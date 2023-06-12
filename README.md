@@ -23,11 +23,11 @@
 Make sure you have the following requirements and packages installed:
 
 - Flutter (Channel Stable, version 3.10.1 )
+- Dart (Channel Stable, version 3.0.1 )
 - [Intl](https://pub.dev/packages/intl)
 - [Providers](https://pub.dev/packages/provider)
 - [Local_auth](https://pub.dev/packages/local_auth)
-- [Shimmer](https://pub.dev/packages/shimmer) _(not installed yet)_
-- [Cached_network_image](https://pub.dev/packages/cached_network_image) _(not installed yet)_
+- [Shimmer](https://pub.dev/packages/shimmer)
 
 ### Installation
 

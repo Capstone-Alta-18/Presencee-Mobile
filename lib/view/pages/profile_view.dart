@@ -1,19 +1,13 @@
 import 'dart:io';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:presencee/view/widgets/State_Status_widget.dart';
-
 import 'helps/help_center_view.dart';
-import '../../provider/mahasiswa_ViewModel.dart';
-/* import 'package:presencee/view_model/user_view_model.dart';
-
-import 'help_center_view.dart';
-import 'mahasiswa_Viewmodel.dart'; */
+import '../../viewModels/mahasiswa_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -218,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
     dispose();
     await prefs.clear();
     await prefs.remove('token');
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '//login', (route) => false);
   }
 
   void alertLogout() {
@@ -297,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  @override
+  /* @override
   void dispose() {
     emailController.dispose();
     telponController.dispose();
@@ -305,16 +299,16 @@ class _ProfilePageState extends State<ProfilePage> {
     tahunController.dispose();
     ipkController.dispose();
     super.dispose();
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
 
     if (dataMahas.state == Status.initial) {
-      return const ProfilesLoading();
+      return const ProfileLoading();
     } else if (dataMahas.state == Status.loading) {
-      return const ProfilesLoading();
+      return const ProfileLoading();
     } else if (dataMahas.state == Status.error) {
       return const ProfileError();
     }
@@ -462,33 +456,33 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 _buildTextField(
                     'Email',
-                    dataMahas.mahasiswaSingle.email.toString() == 'null'
+                    dataMahas.mahasiswaSingle.email.toString() == 'failed to fetch Email'
                         ? emailController
                         : TextEditingController(
                             text: dataMahas.mahasiswaSingle.email.toString())),
                 _buildTextField(
                     'No. Telp',
-                    dataMahas.mahasiswaSingle.phone.toString() == 'null'
+                    dataMahas.mahasiswaSingle.phone.toString() == 'failed to fetch phone'
                         ? telponController
                         : TextEditingController(
                             text: dataMahas.mahasiswaSingle.phone.toString())),
                 _buildTextField(
                     'Jurusan',
-                    dataMahas.mahasiswaSingle.jurusan.toString() == 'null'
+                    dataMahas.mahasiswaSingle.jurusan.toString() == 'failed to fetch Jurusan'
                         ? jurusanController
                         : TextEditingController(
                             text:
                                 dataMahas.mahasiswaSingle.jurusan.toString())),
                 _buildTextField(
                     'Tahun',
-                    dataMahas.mahasiswaSingle.tahunMasuk == 'null'
+                    dataMahas.mahasiswaSingle.tahunMasuk == '20??'
                         ? tahunController
                         : TextEditingController(
                             text: dataMahas.mahasiswaSingle.tahunMasuk
                                 .toString())),
                 _buildTextField(
                     'IPK',
-                    dataMahas.mahasiswaSingle.ipk.toString() == 'null'
+                    dataMahas.mahasiswaSingle.ipk.toString() == '0.0'
                         ? ipkController
                         : TextEditingController(
                             text: dataMahas.mahasiswaSingle.ipk.toString())),

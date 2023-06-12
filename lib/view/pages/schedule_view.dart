@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
-import '../../provider/mahasiswa_ViewModel.dart';
+import '../../viewModels/mahasiswa_view_model.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -54,13 +54,13 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget _buildJadwalAbsensi() {
      if (isTodaySelected) {
       return CardAbsensi(
-        Matkul: 'Bahasa Indonesia (MU22)',
+        matkul: 'Bahasa Indonesia (MU22)',
         hari: 'Senin',
         jam: '09.00 - 10.00',
       );
     } else if (isAllSelected) {
       return CardAbsensi(
-        Matkul: 'Matematika (MTK22)',
+        matkul: 'Matematika (MTK22)',
         hari: 'Selasa',
         jam: '09.00 - 10.00',
       );

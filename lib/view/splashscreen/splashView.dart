@@ -1,7 +1,5 @@
-import '../auth/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/home/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -36,40 +34,11 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     final token = sharedPreferences.getString('token');
     if (token == null) {
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const LoginPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 1550),
-          ),
-          (route) => false,
-        );
+        Navigator.of(context).pushNamedAndRemoveUntil('//login', (route) => false);
       }
     } else {
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 1550),
-          ),
-          (route) => false,
-        );
+        Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
       }
     }
   }
@@ -79,8 +48,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 900),
       alignment: Alignment.center,
-      crossFadeState:
-          _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState: _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstChild: const First(),
       secondChild: const Second(),
     );

@@ -17,7 +17,7 @@ class Header extends StatelessWidget {
     return back == false
         ? Container(
             height: 237,
-            width: double.maxFinite,
+            width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -57,7 +57,7 @@ class Header extends StatelessWidget {
           )
         : Container(
             height: 306,
-            width: double.maxFinite,
+            width: double.infinity,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -75,9 +75,7 @@ class Header extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     icon: const Icon(
                       PhosphorIcons.arrow_left,
                       color: AppTheme.white,

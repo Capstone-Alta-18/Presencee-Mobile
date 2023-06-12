@@ -37,10 +37,9 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       _user = await _userAPI.userLogin(email, password);
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       await sharedPreferences.setString('token', user?.token ?? '');
-      // print("token : ${sharedPreferences.get('token')}");
+      print("token : ${sharedPreferences.get('token')}");
       _state = DataState.loaded;
       notifyListeners();
     } catch (e) {
