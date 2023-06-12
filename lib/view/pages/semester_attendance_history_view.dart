@@ -21,9 +21,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
     if (manager.state == DataState.initial) {
-      return const Center(
-        child: LoadingsProgress(),
-      );
+      return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.loading) {
       return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.error) {

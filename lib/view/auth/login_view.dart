@@ -61,9 +61,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async {
     setState(() {
+      isFailedLogin = true;
       isLoading = true;
     });
-    /* showDialog(
+    showDialog(
       context: context,
       builder: (context) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -82,17 +83,17 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-    ); */
+    );
     await Provider.of<UserViewModel>(context, listen: false).userLogin(emailController.text, passController.text);
     if (mounted) {
-      // Navigator.pop(context);
+      Navigator.pop(context);
       UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
         isLoading = false;
         debugPrint(userViewModel.user?.message);
         debugPrint(userViewModel.user?.token);
-        successMessage();
         Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
+        successMessage();
       } else {
         setState(() {
           failedMessage();
@@ -105,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
   void successMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(milliseconds: 1200),
+        duration: const Duration(milliseconds: 1800),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
