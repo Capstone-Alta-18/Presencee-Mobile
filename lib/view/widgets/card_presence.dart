@@ -152,7 +152,7 @@ class _CardPresenceState extends State<CardPresence> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               title: Text(
-                                'Alasan Absen',
+                                'Keterangan Absen',
                                 style: AppTextStyle.poppinsTextStyle(
                                   color: AppTheme.black,
                                   fontSize: 24,
@@ -195,7 +195,7 @@ class _CardPresenceState extends State<CardPresence> {
                                   ),
                                   const SizedBox(height: 10),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
@@ -214,7 +214,7 @@ class _CardPresenceState extends State<CardPresence> {
                                         child: Text(
                                           'Batal',
                                           style: AppTextStyle.poppinsTextStyle(
-                                            color: AppTheme.black,
+                                            color: AppTheme.primaryTheme,
                                             fontSize: 14,
                                             fontsWeight: FontWeight.w400,
                                           ),

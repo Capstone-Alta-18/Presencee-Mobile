@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:presencee/theme/constant.dart';
 import '../../view_model/user_view_model.dart';
@@ -24,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode textSecondFocusNode = FocusNode();
   bool isFailedLogin = false;
   bool isButtonActive = false;
-  bool isLoading = true;
+  bool isLoading = false;
   late SharedPreferences login;
   late bool newUser;
 
@@ -59,6 +60,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void signIn() async {
+    setState(() {
+      isFailedLogin = true;
+      isLoading = true;
+    });
     showDialog(
       context: context,
       builder: (context) => BackdropFilter(
@@ -79,20 +84,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-    await Provider.of<UserViewModel>(context, listen: false)
-        .userLogin(emailController.text, passController.text);
+    await Provider.of<UserViewModel>(context, listen: false).userLogin(emailController.text, passController.text);
     if (mounted) {
       Navigator.pop(context);
       UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
+        isLoading = false;
         debugPrint(userViewModel.user?.message);
         debugPrint(userViewModel.user?.token);
+        Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
         successMessage();
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
       } else {
         setState(() {
-          isFailedLogin = true;
           failedMessage();
+          isLoading = false;
         });
       }
     }
@@ -101,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
   void successMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(milliseconds: 1200),
+        duration: const Duration(milliseconds: 1800),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -210,14 +215,13 @@ class _LoginPageState extends State<LoginPage> {
                             : null,
                       ),
                       validator: (value) {
-                        // final emailRegex =
-                        // RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        final emailRegex = RegExp(r"^[a-zA-Z0-9_.+-]+@gmail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                          // } else if (!emailRegex.hasMatch(value)) {
-                          // return 'Invalid email format';
+                          } else if (!emailRegex.hasMatch(value)) {
+                          return 'Invalid email format';
                         }
                         return null;
                       },
@@ -303,41 +307,52 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 40),
                           backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
-                        onPressed: isButtonActive
-                            ? () async {
-                                if (formKey.currentState!.validate()) {
-                                  signIn();
-                                }
+                        onPressed: isButtonActive && !isLoading ? () async {
+                              if (formKey.currentState!.validate()) {
+                                signIn();
                               }
-                            : null,
-                        child: Text(
-                          "Login",
-                          style: AppTextStyle.poppinsTextStyle(
-                            fontSize: 14,
-                            color: AppTheme.white,
-                          ),
-                        ),
+                            }
+                          : null,
+                          child: isLoading
+                            ? const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: SpinKitThreeBounce(
+                                    color: AppTheme.white,
+                                    size: 13.3,
+                                  ),
+                                ),
+                              ],
+                            )
+                            : Text(
+                                "Masuk",
+                                style: AppTextStyle.poppinsTextStyle(
+                                  fontSize: 14,
+                                  fontsWeight: FontWeight.w500,
+                                  color: AppTheme.white,
+                                ),
+                              ),
                       ),
                     ),
                     Center(
                       child: TextButton(
                         onPressed: () => Navigator.of(context).pushNamed('//help'),
-                        child: const Text(
+                        child: Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
+                          style: AppTextStyle.poppinsTextStyle(
                             fontSize: 14,
-                            color: AppTheme.primaryTheme_2,
+                            color: AppTheme.primaryTheme,
                           ),
                         ),
                       ),

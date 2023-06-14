@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:flutter/material.dart';
+import 'package:presencee/view/auth/local_auth_biometrics.dart';
+import 'package:presencee/view/widgets/alerted_success_attendance.dart';
 
 class FingerprintBottomsheet extends StatelessWidget {
   const FingerprintBottomsheet({super.key});
@@ -61,7 +63,7 @@ class FingerprintBottomsheet extends StatelessWidget {
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
-                fontSize: 12,
+                fontSize: 16,
               ),
             ),
             const SizedBox(height: 2),
@@ -70,7 +72,7 @@ class FingerprintBottomsheet extends StatelessWidget {
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_3,
                 fontsWeight: FontWeight.w400,
-                fontSize: 12,
+                fontSize: 14,
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 6),
@@ -82,21 +84,30 @@ class FingerprintBottomsheet extends StatelessWidget {
                 fontSize: 14,
               ),
             ),
-            const SizedBox(height: 30),
-            Container(
-              width: 60,
-              height: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(37),
-                border: Border.all(
-                  color: AppTheme.black_2,
-                  width: 3,
+            const SizedBox(height: 15),
+            SizedBox(
+              width: 70,
+              height: 90,
+              child: OutlinedButton(
+                onPressed: () {
+                  // AuthBiometrics.authenticate();
+                  // AllDialogsAttendance().successDialog(context);
+                  AllDialogsAttendance().failedDialog(context);
+                },
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+                  side: MaterialStateProperty.all<BorderSide>(const BorderSide(color: AppTheme.black_2, width: 3)),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
                 ),
-              ),
-              child: const Icon(
-                PhosphorIcons.fingerprint,
-                size: 50,
-                color: AppTheme.black_2,
+                child: const Icon(
+                  PhosphorIcons.fingerprint,
+                  size: 60,
+                  color: AppTheme.black_2,
+                ),
               ),
             ),
             const SizedBox(height: 24),

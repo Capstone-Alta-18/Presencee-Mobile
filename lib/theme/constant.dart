@@ -13,6 +13,7 @@ class AppTheme {
   static const Color error = Color(0xFFAE3838);
   static const Color disabled = Color(0xFFDBDBDB);
   static const Color warning = Color(0xFFF4E34B);
+  static const Color warningOrange = Color(0xFFFFA940);
 
   // White and Grays
   static const Color white = Color(0xFFFFFFFF);
