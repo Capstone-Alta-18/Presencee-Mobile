@@ -146,9 +146,14 @@ class ErrorSemesterHistoryCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Lottie.asset(
-                  'lib/assets/animation/Disconnect.json',
-                  width: 280,
+                AnimatedOpacity(
+                  opacity: 1,
+                  curve: Curves.easeIn,
+                  duration: const Duration(milliseconds: 1200),
+                  child: Lottie.asset(
+                    'lib/assets/animation/Disconnect.json',
+                    width: 280,
+                  ),
                 ),
                 Text(
                   'Terjadi kesalahan',

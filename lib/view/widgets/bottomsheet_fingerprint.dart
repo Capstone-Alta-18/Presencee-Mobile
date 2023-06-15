@@ -1,11 +1,101 @@
+import 'dart:developer';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:presencee/view/widgets/alerted_success_attendance.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+// import 'package:presencee/view/auth/local_auth_biometrics.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:presencee/view/auth/local_auth_biometrics.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
 
-class FingerprintBottomsheet extends StatelessWidget {
+class FingerprintBottomsheet extends StatefulWidget {
   const FingerprintBottomsheet({super.key});
+
+  @override
+  State<FingerprintBottomsheet> createState() => _FingerprintBottomsheetState();
+}
+
+class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
+  static final auth = LocalAuthentication();
+  
+
+  /* @override
+  void initState() {
+    AuthBiometrics.authenticate();
+    super.initState();
+  } */
+
+  static Future<bool> hasBiometrics(BuildContext context) async {
+    final isDeviceSupport = await auth.isDeviceSupported();
+    try {
+      bool canCheckBiometrics = await auth.canCheckBiometrics;
+      if (!canCheckBiometrics) {
+        SnackbarAlertDialog().customDialogs(
+          context, 
+          message: "Presensi Gagal",
+          icons: PhosphorIcons.x_circle_fill,
+          iconColor: AppTheme.error,
+          backgroundsColor: AppTheme.white,
+          durations: 1200
+        );
+      }
+      return canCheckBiometrics;
+    } on PlatformException catch (e) {
+      SnackbarAlertDialog().customDialogs(
+        context,
+        message: "Presensi Gagal, tidak ada sidik jari",
+        icons: PhosphorIcons.x_circle_fill,
+        iconColor: AppTheme.error,
+        backgroundsColor: AppTheme.white,
+        durations: 1200
+      );
+      return false;
+    }
+  }
+
+  Future<void> authenticate() async {
+    bool isAuthenticated = false;
+    bool canCheckBiometrics = await hasBiometrics(context);
+
+    if (canCheckBiometrics) {
+      isAuthenticated = await auth.authenticate(
+        localizedReason: 'Untuk absen silahkan masukan sidik jari anda',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+
+      if (isAuthenticated) {
+        SnackbarAlertDialog().customDialogs(
+          context, message: "Presensi Berhasil", 
+          icons: PhosphorIcons.check_circle, 
+          iconColor: AppTheme.success,
+          backgroundsColor: AppTheme.white,
+          durations: 900
+        );
+        await Future.delayed(const Duration(milliseconds: 350));
+        Navigator.pop(context);
+        Navigator.pop(context);
+      } else {
+        SnackbarAlertDialog().customDialogs(
+          context, 
+          message: "Presensi Gagal, tidak ada sidik jari", 
+          icons: PhosphorIcons.x_circle_fill, 
+          iconColor: AppTheme.error,
+          backgroundsColor: AppTheme.white,
+          durations: 1200
+        );
+      }
+    } else {
+      SnackbarAlertDialog().customDialogs(
+        context, 
+        message: "Presensi Gagal, kelas telah selesai",
+        icons: PhosphorIcons.x_circle_fill,
+        iconColor: AppTheme.error,
+        backgroundsColor: AppTheme.white,
+        durations: 1200);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +105,12 @@ class FingerprintBottomsheet extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height / 1.5,
         decoration: const BoxDecoration(
-            color: AppTheme.gray,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            )),
+          color: AppTheme.gray,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
         child: Column(
           children: [
             const SizedBox(height: 24),
@@ -89,14 +180,11 @@ class FingerprintBottomsheet extends StatelessWidget {
               width: 70,
               height: 90,
               child: OutlinedButton(
-                onPressed: () {
-                  // AuthBiometrics.authenticate();
-                  // AllDialogsAttendance().successDialog(context);
-                  AllDialogsAttendance().failedDialog(context);
-                },
+                onLongPress: () => authenticate(),
+                onPressed: () => authenticate(),
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
-                  side: MaterialStateProperty.all<BorderSide>(const BorderSide(color: AppTheme.black_2, width: 3)),
+                  side: MaterialStateProperty.all<BorderSide>(const BorderSide(color: AppTheme.gray_2, width: 3)),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -106,7 +194,7 @@ class FingerprintBottomsheet extends StatelessWidget {
                 child: const Icon(
                   PhosphorIcons.fingerprint,
                   size: 60,
-                  color: AppTheme.black_2,
+                  color: AppTheme.gray_2,
                 ),
               ),
             ),

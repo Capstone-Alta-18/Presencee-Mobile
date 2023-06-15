@@ -7,6 +7,8 @@ import 'package:presencee/theme/constant.dart';
 import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/alerted_success_attendance.dart';
 // import 'dart:math' as math;
 
 
@@ -93,70 +95,28 @@ class _LoginPageState extends State<LoginPage> {
         debugPrint(userViewModel.user?.message);
         debugPrint(userViewModel.user?.token);
         Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
-        successMessage();
+        SnackbarAlertDialog().customDialogs(
+          context, 
+          message: "Login Berhasil", 
+          icons: PhosphorIcons.check_circle_fill,
+          iconColor: AppTheme.success,
+          backgroundsColor: AppTheme.white,
+          durations: 1800
+        );
       } else {
         setState(() {
-          failedMessage();
+          SnackbarAlertDialog().customDialogs(
+            context,
+            message: "Login gagal",
+            icons: PhosphorIcons.x_circle_fill,
+            backgroundsColor: AppTheme.error,
+            iconColor: AppTheme.white,
+            durations: 1200
+          );
           isLoading = false;
         });
       }
     }
-  }
-
-  void successMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(milliseconds: 1800),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              PhosphorIcons.check,
-              color: AppTheme.white,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'Login success',
-              textAlign: TextAlign.center,
-              style: AppTextStyle.poppinsTextStyle(
-                fontSize: 16,
-                color: AppTheme.white,
-              )
-            ),
-          ],
-        ),
-        backgroundColor: AppTheme.success,
-      ),
-    );
-  }
-
-  void failedMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        duration: Duration(milliseconds: 1200),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              PhosphorIcons.x_circle_fill,
-              color: AppTheme.white,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'Login gagal',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppTheme.error,
-      ),
-    );
   }
 
   @override

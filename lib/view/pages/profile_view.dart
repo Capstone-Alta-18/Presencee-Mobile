@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'helps/help_center_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {
         if (photo != null) {
+          // https://stackoverflow.com/questions/57509972/flutter-dio-how-to-upload-image
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
             content: Text(
@@ -297,16 +297,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  /* @override
-  void dispose() {
-    emailController.dispose();
-    telponController.dispose();
-    jurusanController.dispose();
-    tahunController.dispose();
-    ipkController.dispose();
-    super.dispose();
-  } */
-
   @override
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
@@ -499,19 +489,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          const PusatBantuanPage(),
-                      transitionsBuilder:
-                          (context, animation1, animation2, child) =>
-                              FadeTransition(opacity: animation1, child: child),
-                      transitionDuration: const Duration(milliseconds: 300),
-                    ),
-                  );
-                },
+                onPressed: () => Navigator.pushNamed(context, '/profiles/underMaintenance'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryTheme_2,
                   foregroundColor: AppTheme.white,

@@ -14,8 +14,8 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected = true; // Set initial selection state of "Hari ini" button
-  bool isAllSelected = false; // Set initial selection state of "Semua" button
+  bool isTodaySelected = true;
+  bool isAllSelected = false;
 
   @override
   void initState() {

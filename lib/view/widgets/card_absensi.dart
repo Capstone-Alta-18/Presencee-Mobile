@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 
-// ignore: must_be_immutable
 class CardAbsensi extends StatelessWidget {
   CardAbsensi({super.key, required this.matkul, required this.hari, required this.jam});
 
