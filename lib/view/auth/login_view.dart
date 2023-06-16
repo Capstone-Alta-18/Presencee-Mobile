@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 // import 'dart:math' as math;
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -83,12 +82,14 @@ class _LoginPageState extends State<LoginPage> {
         .userLogin(emailController.text, passController.text);
     if (mounted) {
       Navigator.pop(context);
-      UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
+      UserViewModel userViewModel =
+          Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
         debugPrint(userViewModel.user?.message);
         debugPrint(userViewModel.user?.token);
-        successMessage();
-        Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+        // successMessage();
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//home', (route) => false);
       } else {
         setState(() {
           isFailedLogin = true;
@@ -110,14 +111,12 @@ class _LoginPageState extends State<LoginPage> {
               color: AppTheme.white,
             ),
             const SizedBox(width: 10),
-            Text(
-              'Login success',
-              textAlign: TextAlign.center,
-              style: AppTextStyle.poppinsTextStyle(
-                fontSize: 16,
-                color: AppTheme.white,
-              )
-            ),
+            Text('Login success',
+                textAlign: TextAlign.center,
+                style: AppTextStyle.poppinsTextStyle(
+                  fontSize: 16,
+                  color: AppTheme.white,
+                )),
           ],
         ),
         backgroundColor: AppTheme.success,
@@ -255,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                        // 2 opsi icon password 
+                        // 2 opsi icon password
                         /* suffixIcon: Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(math.pi),
@@ -327,7 +326,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).pushNamed('//help'),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('//help'),
                         child: const Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/pages/camera_view.dart';
 
 class CardPresence extends StatefulWidget {
   const CardPresence({super.key});
@@ -41,7 +42,8 @@ class _CardPresenceState extends State<CardPresence> {
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
-      debugPrint( 'Location permissions are permanently denied, we cannot request permissions.');
+      debugPrint(
+          'Location permissions are permanently denied, we cannot request permissions.');
       return;
     }
 
@@ -49,7 +51,8 @@ class _CardPresenceState extends State<CardPresence> {
       permission = await Geolocator.requestPermission();
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
-        debugPrint('Location permissions are denied (actual value: $permission).');
+        debugPrint(
+            'Location permissions are denied (actual value: $permission).');
         return;
       }
     }
@@ -146,7 +149,8 @@ class _CardPresenceState extends State<CardPresence> {
                       context: context,
                       builder: (BuildContext context) {
                         return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
+                          builder:
+                              (BuildContext context, StateSetter setState) {
                             return AlertDialog(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -204,7 +208,8 @@ class _CardPresenceState extends State<CardPresence> {
                                             color: AppTheme.primaryTheme_2,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(2),
+                                            borderRadius:
+                                                BorderRadius.circular(2),
                                           ),
                                         ),
                                         onPressed: () {
@@ -223,9 +228,11 @@ class _CardPresenceState extends State<CardPresence> {
                                       const SizedBox(width: 8),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppTheme.primaryTheme_2,
+                                          backgroundColor:
+                                              AppTheme.primaryTheme_2,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(2),
+                                            borderRadius:
+                                                BorderRadius.circular(2),
                                           ),
                                         ),
                                         onPressed: () {},
@@ -288,7 +295,8 @@ class _CardPresenceState extends State<CardPresence> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () => Navigator.pushNamed(context, '/schedule/presence/fingerprint'),
+                                  onPressed: () => Navigator.pushNamed(context,
+                                      '/schedule/presence/fingerprint'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
@@ -306,7 +314,25 @@ class _CardPresenceState extends State<CardPresence> {
                                 ),
                                 const SizedBox(width: 8),
                                 ElevatedButton(
-                                  onPressed: () => _getImage(),
+                                  // onPressed: () => _getImage(),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                CameraView()));
+                                    // _getImage();
+                                    // _getLocation();
+                                    // Stack(children: [
+                                    //   Positioned(
+                                    //     top: 0,
+                                    //     child: Text(
+                                    //       location ?? 'Location not available',
+                                    //       style: TextStyle(color: Colors.white),
+                                    //     ),
+                                    //   ),
+                                    // ]);
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(

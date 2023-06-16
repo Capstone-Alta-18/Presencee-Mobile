@@ -12,6 +12,7 @@ import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
 import 'view_model/kehadiran_view_model.dart';
 import 'view_model/mahasiswa_view_model.dart';
 import 'view_model/user_view_model.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MahasiswaViewModel()),
         ChangeNotifierProvider(create: (context) => KehadiranViewModel()),
         ChangeNotifierProvider(create: (context) => UserViewModel()),
+        ChangeNotifierProvider(create: (context) => AbsensiViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -110,7 +112,8 @@ class MyApp extends StatelessWidget {
                 var begin = const Offset(1.0, 0.0);
                 var end = Offset.zero;
                 var curve = Curves.ease;
-                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
                 return SlideTransition(
                   position: a.drive(tween),
                   child: c,
@@ -151,7 +154,8 @@ class MyApp extends StatelessWidget {
           } else if (settings.name == '/profiles/underMaintenance') {
             return PageRouteBuilder(
               pageBuilder: (_, __, ___) => const PusatBantuanPage(),
-              transitionsBuilder: (_, __, ___, c) => FadeTransition(opacity: __, child: c),
+              transitionsBuilder: (_, __, ___, c) =>
+                  FadeTransition(opacity: __, child: c),
               transitionDuration: const Duration(milliseconds: 300),
             );
           }

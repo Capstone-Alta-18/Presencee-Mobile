@@ -36,20 +36,21 @@ class MahasiswaAPI {
     try {
       final response = await dio.get('$url/$oneId',
           queryParameters: {
-            'id': oneId,
+            'ID': oneId,
           },
           options: Options(headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $apiToken'
           }));
       // log('response results = $response');
-
+      // print(response.data);
       if (response.statusCode == 200) {
-        final datas = response.data['mahasiswa'];
+        print(response.data['mahasiswa']);
+        // final datas = response.data['mahasiswa'];
         // log('datas: $datas');
         // List<Mahasiswas> siswaList = List<Mahasiswas>.from(datas.map((model) => Mahasiswas.fromJson(model)));
         // log('>> Data mahasiswa= $siswaList');
-        return Mahasiswas.fromJson(datas);
+        return Mahasiswas.fromJson(response.data['mahasiswa']);
       } else {
         throw Exception('Failed to load single mahasiswa...');
       }
