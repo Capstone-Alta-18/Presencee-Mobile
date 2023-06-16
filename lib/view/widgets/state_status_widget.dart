@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:presencee/theme/constant.dart';
@@ -31,18 +32,6 @@ class LoadingMatkulCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       LoadingsProgress(),
-                      // const SizedBox(height: 10),
-                      /* SizedBox(
-                        width: 100,
-                        child: Shimmer.fromColors(
-                          baseColor: AppTheme.gray,
-                          highlightColor: AppTheme.gray_2,
-                          child: Container(
-                            height: 10,
-                            color: AppTheme.gray,
-                          ),
-                        ),
-                      ), */
                     ],
                   ),
                 ),
@@ -72,32 +61,26 @@ class LoadingSemesterHistoryCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               children: [
-                ListView.builder(
-                  physics: const ScrollPhysics(),
-                  itemCount: 3,
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  itemBuilder: ((context, index) {
-                    return Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SizedBox(
-                        height: 128,
-                        child: Shimmer.fromColors(
-                          direction: ShimmerDirection.ltr,
-                          baseColor: AppTheme.gray,
-                          highlightColor: AppTheme.gray_2,
-                          child: Container(
-                            height: 128,
-                            color: AppTheme.gray,
-                          ),
+                Shimmer.fromColors(
+                  baseColor: AppTheme.gray,
+                  highlightColor: AppTheme.gray_2,
+                  child: ListView.builder(
+                    itemCount: 3,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    itemBuilder: ((context, index) {
+                      return Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                      ),
-                    );
-                  }),
-                ),
+                        child: const SizedBox(
+                          height: 128,
+                        ),
+                      );
+                    }),
+                  ),
+                )
               ],
             ),
           ),
@@ -163,9 +146,14 @@ class ErrorSemesterHistoryCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Lottie.asset(
-                  'lib/assets/animation/Disconnect.json',
-                  width: 280,
+                AnimatedOpacity(
+                  opacity: 1,
+                  curve: Curves.easeIn,
+                  duration: const Duration(milliseconds: 1200),
+                  child: Lottie.asset(
+                    'lib/assets/animation/Disconnect.json',
+                    width: 280,
+                  ),
                 ),
                 Text(
                   'Terjadi kesalahan',
@@ -198,7 +186,32 @@ class ErrorMatkulCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 18),
+      child: SizedBox(
+        width: double.infinity,
+        child: Center(
+          child: Column(
+            children: [
+              const Icon(
+                PhosphorIcons.wifi_x_bold,
+                color: AppTheme.gray_2,
+                size: 60,
+              ),
+              Text(
+                'Terjadi kesalahan mengambil data...',
+                style: AppTextStyle.poppinsTextStyle(
+                  fontsWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: AppTheme.gray_2,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          )
+        ),
+      ),
+    );
   }
 }
 

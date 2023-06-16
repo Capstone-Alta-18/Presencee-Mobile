@@ -4,7 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
-import 'package:presencee/view/widgets/State_Status_widget.dart';
+import 'package:presencee/view/widgets/state_status_widget.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -43,9 +43,7 @@ class _CardMatkulState extends State<CardMatkul> {
     } else if (manager.state == DataState.loading) {
       return const LoadingMatkulCard();
     } else if (manager.state == DataState.error) {
-      return const Center(
-        child: Text("Error"),
-      );
+      return const ErrorMatkulCards();
     }
 
     Color cardColor(int selectedIndex){

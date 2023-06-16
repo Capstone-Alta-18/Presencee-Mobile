@@ -1,9 +1,9 @@
-import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
+import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presencee/view/splashscreen/splash_view.dart';
 import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
+import 'package:presencee/view/splashscreen/splash_view.dart';
 import 'package:presencee/view/pages/fingerprint_view.dart';
 import 'package:presencee/view/pages/presence_view.dart';
 import 'package:presencee/view/pages/schedule_view.dart';

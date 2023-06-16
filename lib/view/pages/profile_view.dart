@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../view_model/mahasiswa_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
@@ -62,6 +63,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {
         if (photo != null) {
+          // https://stackoverflow.com/questions/57509972/flutter-dio-how-to-upload-image
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
             content: Text(
@@ -317,16 +319,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  /* @override
-  void dispose() {
-    emailController.dispose();
-    telponController.dispose();
-    jurusanController.dispose();
-    tahunController.dispose();
-    ipkController.dispose();
-    super.dispose();
-  } */
-
   @override
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
@@ -555,19 +547,8 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          const PusatBantuanPage(),
-                      transitionsBuilder:
-                          (context, animation1, animation2, child) =>
-                              FadeTransition(opacity: animation1, child: child),
-                      transitionDuration: const Duration(milliseconds: 300),
-                    ),
-                  );
-                },
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/profiles/underMaintenance'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryTheme_2,
                   foregroundColor: AppTheme.white,

@@ -1,11 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:presencee/theme/constant.dart';
 import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/alerted_success_attendance.dart';
 // import 'dart:math' as math;
 
 class LoginPage extends StatefulWidget {
@@ -23,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode textSecondFocusNode = FocusNode();
   bool isFailedLogin = false;
   bool isButtonActive = false;
-  bool isLoading = true;
+  bool isLoading = false;
   late SharedPreferences login;
   late bool newUser;
 
@@ -58,6 +61,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void signIn() async {
+    setState(() {
+      isFailedLogin = true;
+      isLoading = true;
+    });
     showDialog(
       context: context,
       builder: (context) => BackdropFilter(
@@ -85,72 +92,29 @@ class _LoginPageState extends State<LoginPage> {
       UserViewModel userViewModel =
           Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
+        isLoading = false;
         debugPrint(userViewModel.user?.message);
         debugPrint(userViewModel.user?.token);
-        // successMessage();
         Navigator.of(context)
             .pushNamedAndRemoveUntil('//home', (route) => false);
+        SnackbarAlertDialog().customDialogs(context,
+            message: "Login Berhasil",
+            icons: PhosphorIcons.check_circle_fill,
+            iconColor: AppTheme.success,
+            backgroundsColor: AppTheme.white,
+            durations: 1800);
       } else {
         setState(() {
-          isFailedLogin = true;
-          failedMessage();
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Login gagal",
+              icons: PhosphorIcons.x_circle_fill,
+              backgroundsColor: AppTheme.error,
+              iconColor: AppTheme.white,
+              durations: 1200);
+          isLoading = false;
         });
       }
     }
-  }
-
-  void successMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(milliseconds: 1200),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              PhosphorIcons.check,
-              color: AppTheme.white,
-            ),
-            const SizedBox(width: 10),
-            Text('Login success',
-                textAlign: TextAlign.center,
-                style: AppTextStyle.poppinsTextStyle(
-                  fontSize: 16,
-                  color: AppTheme.white,
-                )),
-          ],
-        ),
-        backgroundColor: AppTheme.success,
-      ),
-    );
-  }
-
-  void failedMessage() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        duration: Duration(milliseconds: 1200),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              PhosphorIcons.x_circle_fill,
-              color: AppTheme.white,
-            ),
-            SizedBox(width: 10),
-            Text(
-              'Login gagal',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.w400,
-                fontStyle: FontStyle.normal,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppTheme.error,
-      ),
-    );
   }
 
   @override
@@ -209,14 +173,14 @@ class _LoginPageState extends State<LoginPage> {
                             : null,
                       ),
                       validator: (value) {
-                        // final emailRegex =
-                        // RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        final emailRegex =
+                            RegExp(r"^[a-zA-Z0-9_.+-]+@gmail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                          // } else if (!emailRegex.hasMatch(value)) {
-                          // return 'Invalid email format';
+                        } else if (!emailRegex.hasMatch(value)) {
+                          return 'Invalid email format';
                         }
                         return null;
                       },
@@ -302,42 +266,54 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 40),
                           backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
-                        onPressed: isButtonActive
+                        onPressed: isButtonActive && !isLoading
                             ? () async {
                                 if (formKey.currentState!.validate()) {
                                   signIn();
                                 }
                               }
                             : null,
-                        child: Text(
-                          "Login",
-                          style: AppTextStyle.poppinsTextStyle(
-                            fontSize: 14,
-                            color: AppTheme.white,
-                          ),
-                        ),
+                        child: isLoading
+                            ? const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: SpinKitThreeBounce(
+                                      color: AppTheme.white,
+                                      size: 13.3,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "Masuk",
+                                style: AppTextStyle.poppinsTextStyle(
+                                  fontSize: 14,
+                                  fontsWeight: FontWeight.w500,
+                                  color: AppTheme.white,
+                                ),
+                              ),
                       ),
                     ),
                     Center(
                       child: TextButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed('//help'),
-                        child: const Text(
+                        child: Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
+                          style: AppTextStyle.poppinsTextStyle(
                             fontSize: 14,
-                            color: AppTheme.primaryTheme_2,
+                            color: AppTheme.primaryTheme,
                           ),
                         ),
                       ),
