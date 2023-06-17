@@ -29,18 +29,21 @@ class _PreviewScreenState extends State<PreviewScreen> {
           Provider.of<UploadImageViewModel>(context, listen: false).image?.url;
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
+      final idUser = sharedPreferences.getInt('id_user');
       final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+      // var f = DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now());
+      // print(f);
       if (mounted) {
         await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
-            userId: 404377324,
-            mahasiswaId: idMahasiswa ?? 0,
-            jadwalId: 2,
-            timeAttemp:
-                DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now()),
+            userId: idUser!,
+            mahasiswaId: idMahasiswa!,
+            jadwalId: 1,
+            timeAttemp: '2023-06-18T03:40:50+08:00',
+            // DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now()),
             matakuliah: 'Akuntansi',
             status: 'Hadir',
             location: widget.location,
-            image: url ?? '');
+            image: url!);
       }
     }
   }
@@ -175,7 +178,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Senin',
+                    'Abdul Jalil',
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -184,7 +187,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '07.00 - 09.00',
+                    'Senin 07.00 - 09.00',
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,

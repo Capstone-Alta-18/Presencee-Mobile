@@ -41,8 +41,8 @@ class TodayWidgets extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  // DateFormat('EEEE, d MMM yyyy', 'id').format(DateTime.now()),
-                  DateFormat('EEEE, d MMM yyyy', 'id').format(currentTime),
+                  // DateFormat('EEEE, d MMMM yyyy', 'id').format(DateTime.now()),
+                  DateFormat('EEEE, d MMMM yyyy', 'id').format(currentTime),
                   style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.white,
                       fontSize: 14,
@@ -101,7 +101,7 @@ class TodayWidgets extends StatelessWidget {
                     ),
                     const SizedBox(height: 27),
                     Text(
-                      DateFormat('EEEE, d MMM yyyy', 'id')
+                      DateFormat('EEEE, d MMMM yyyy', 'id')
                           .format(DateTime.now()),
                       style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.white,
@@ -160,7 +160,7 @@ class TodayWidgets extends StatelessWidget {
                     ),
                     const SizedBox(height: 27),
                     Text(
-                      DateFormat('EEEE, d MMM yyyy', 'id')
+                      DateFormat('EEEE, d MMMM yyyy', 'id')
                           .format(DateTime.now()),
                       style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.white,

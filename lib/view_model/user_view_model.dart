@@ -26,6 +26,7 @@ class UserViewModel extends ChangeNotifier {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       await sharedPreferences.setString('token', user?.token ?? '');
+      await sharedPreferences.setInt('id_user', user?.data?.id ?? 0);
       await sharedPreferences.setInt(
           'id_mahasiswa', user?.data?.mahasiswa?.id ?? 0);
       _state = DataState.loaded;

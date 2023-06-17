@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/model/absensi_model.dart';
@@ -41,9 +40,11 @@ class AbsensiAPI {
         print('ABSENSI : ${response.data}');
         return Absensi.fromJson(response.data);
       } else {
+        print('Gagal');
         throw Exception('Failed to create absen');
       }
     } catch (e) {
+      print('Ga konek $e');
       throw Exception('Failed to connect to the server: $e');
     }
   }

@@ -44,13 +44,15 @@ class _ProfilePageState extends State<ProfilePage> {
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
-      await Provider.of<MahasiswaViewModel>(context, listen: false)
-          .getOneMahasiswa(oneId: idMahasiswa ?? 0);
-      Future.delayed(const Duration(seconds: 5), () {
-        setState(() {
-          isLoading = false;
+      if (mounted) {
+        await Provider.of<MahasiswaViewModel>(context, listen: false)
+            .getOneMahasiswa(oneId: idMahasiswa ?? 0);
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            isLoading = false;
+          });
         });
-      });
+      }
     });
     super.initState();
   }
@@ -448,6 +450,8 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               isLoading
                   ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
                       child: Text(
                         'Nama',
                         style: AppTextStyle.poppinsTextStyle(
@@ -457,8 +461,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
                     )
                   : Text(
                       dataMahas.mahasiswaSingle.name.toString(),
@@ -472,6 +474,8 @@ class _ProfilePageState extends State<ProfilePage> {
               const Padding(padding: EdgeInsets.only(bottom: 8)),
               isLoading
                   ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
                       child: Text(
                         'NIM',
                         style: AppTextStyle.poppinsTextStyle(
@@ -480,8 +484,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: AppTheme.black_3,
                         ),
                       ),
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
                     )
                   : Text(
                       dataMahas.mahasiswaSingle.nim.toString(),
@@ -590,32 +592,26 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             width: 245,
             height: 40,
-            child: isLoading
-                ? Shimmer.fromColors(
-                    child: Container(
-                      color: Colors.white,
-                    ),
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                  )
-                : TextField(
-                    style: AppTextStyle.poppinsTextStyle(
-                      fontSize: 14,
-                      fontsWeight: FontWeight.w400,
-                      color: AppTheme.black,
-                    ),
-                    readOnly: true,
-                    controller: controllers,
-                    textAlign: TextAlign.left,
-                    decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      border: OutlineInputBorder(),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppTheme.primaryTheme_4),
-                      ),
-                    ),
-                  ),
+            child: TextField(
+              style: AppTextStyle.poppinsTextStyle(
+                fontSize: 14,
+                fontsWeight: FontWeight.w400,
+                color: AppTheme.black,
+              ),
+              readOnly: true,
+              controller: isLoading
+                  ? TextEditingController(text: 'Loading')
+                  : controllers,
+              textAlign: TextAlign.left,
+              decoration: const InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppTheme.primaryTheme_4),
+                ),
+              ),
+            ),
           ),
         ],
       ),

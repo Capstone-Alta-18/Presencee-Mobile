@@ -33,8 +33,9 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   void checkLogin() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('token');
-    final id = sharedPreferences.getInt('id_mahasiswa');
-    if (token == null || id == null) {
+    final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+    final idUser = sharedPreferences.getInt('id_user');
+    if (token == null || idMahasiswa == null || idUser == null) {
       if (mounted) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('//login', (route) => false);
