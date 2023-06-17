@@ -22,6 +22,7 @@ class AppTheme {
   static const Color gray_3 = Color(0xFFA4A4A4);
   static const Color gray_4 = Color(0xFFA4A4A4);
   static const Color gray_5 = Color(0xFF767676);
+  static const Color gray_6 = Color(0xFF6A6A6A);
   static const Color greyText = Color.fromRGBO(0, 0, 0, 0.247);
 
   // Black and grays
@@ -44,7 +45,8 @@ class AppTheme {
 class AppTextStyle {
   // Normal font poppins
   // defaul poppins customize font weight, size, and color
-  static TextStyle poppinsTextStyle({Color? color, double? fontSize, FontWeight? fontsWeight}) {
+  static TextStyle poppinsTextStyle(
+      {Color? color, double? fontSize, FontWeight? fontsWeight}) {
     return TextStyle(
       fontFamily: "Poppins",
       color: color,
