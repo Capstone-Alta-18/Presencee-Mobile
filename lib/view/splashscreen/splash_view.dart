@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,13 +33,17 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   void checkLogin() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('token');
-    if (token == null) {
+    final id = sharedPreferences.getInt('id_mahasiswa');
+    if (token == null || id == null) {
       if (mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil('//login', (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//login', (route) => false);
       }
     } else {
+      apiToken = token;
       if (mounted) {
-        Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//home', (route) => false);
       }
     }
   }
@@ -48,7 +53,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     return AnimatedCrossFade(
       duration: const Duration(milliseconds: 900),
       alignment: Alignment.center,
-      crossFadeState: _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState:
+          _showFirst ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstChild: const First(),
       secondChild: const Second(),
     );

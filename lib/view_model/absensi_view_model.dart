@@ -19,35 +19,22 @@ class AbsensiViewModel extends ChangeNotifier {
   Absensi? get absensi => _absensi;
   DataState get state => _state;
 
-  Future<void> createAbsen(
-    int user_id,
-    int mahasiswa_id,
-    int jadwal_id,
-    String time_attemp,
-    String matakuliah,
-    String status,
-    String location,
-    String image,
-  ) async {
+  Future<void> createAbsen({
+    required int userId,
+    required int mahasiswaId,
+    required int jadwalId,
+    required String timeAttemp,
+    required String matakuliah,
+    required String status,
+    required String location,
+    required String image,
+  }) async {
     _state = DataState.loading;
     notifyListeners();
     try {
-      _absensi = await absensiAPI.createAbsen(user_id, mahasiswa_id, jadwal_id,
-          time_attemp, matakuliah, status, location, image);
+      _absensi = await absensiAPI.createAbsen(userId, mahasiswaId, jadwalId,
+          timeAttemp, matakuliah, status, location, image);
 
-      _state = DataState.loaded;
-      notifyListeners();
-    } catch (e) {
-      _state = DataState.error;
-      notifyListeners();
-    }
-  }
-
-  Future<void> uploadImage(XFile image) async {
-    _state = DataState.loading;
-    notifyListeners();
-    try {
-      _absensi = await absensiAPI.uploadImage(image);
       _state = DataState.loaded;
       notifyListeners();
     } catch (e) {

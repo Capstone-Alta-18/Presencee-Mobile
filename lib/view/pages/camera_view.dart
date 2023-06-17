@@ -9,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/pages/preview_camera_view.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -27,8 +28,8 @@ class _CameraViewState extends State<CameraView> {
   String? address;
   XFile? imageFile;
   String? imageString;
-  String formatDateTime =
-      DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now());
+  // String formatDateTime =
+  //     DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now());
 
   @override
   void initState() {
@@ -80,22 +81,6 @@ class _CameraViewState extends State<CameraView> {
             'Location permissions are denied (actual value: $permission).');
         return;
       }
-    }
-
-    void _uploadImage() async {
-      await Provider.of<AbsensiViewModel>(context).uploadImage(imageFile!);
-    }
-
-    void _createAbsen() async {
-      await Provider.of<AbsensiViewModel>(context).createAbsen(
-          3281242031,
-          6,
-          1,
-          formatDateTime,
-          'Bahasa Indonesia',
-          'Hadir',
-          location.toString(),
-          imageString.toString());
     }
 
     Position position = await Geolocator.getCurrentPosition(
@@ -316,15 +301,20 @@ class _CameraViewState extends State<CameraView> {
   onCapture(context) async {
     try {
       // await cameraController!.takePicture().then((value) => print(value));
-      await cameraController!.takePicture().then((XFile? file) {
-        if (mounted) {
-          setState(() {
-            imageFile = file;
-            print(imageFile!.path);
-            List<int> imageBytes = File(imageFile!.path).readAsBytesSync();
-            imageString = base64Encode(imageBytes);
-          });
-        }
+      await cameraController!.takePicture().then((value) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => PreviewScreen(
+                  imgPath: value,
+                  location: location.toString(),
+                )));
+        // if (mounted) {
+        //   setState(() {
+        //     imageFile = file;
+        //     print(imageFile!.path);
+        //     List<int> imageBytes = File(imageFile!.path).readAsBytesSync();
+        //     imageString = base64Encode(imageBytes);
+        //   });
+        // }
       });
     } catch (e) {
       print('$e');

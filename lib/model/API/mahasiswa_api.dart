@@ -42,6 +42,8 @@ class MahasiswaAPI {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $apiToken'
           }));
+      print(apiToken);
+      print('asdasd');
       // log('response results = $response');
       // print(response.data);
       if (response.statusCode == 200) {

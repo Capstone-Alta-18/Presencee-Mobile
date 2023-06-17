@@ -1,3 +1,4 @@
+import 'package:presencee/model/upload_model.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,6 +14,7 @@ import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/upload_view_model.dart';
 import 'view_model/kehadiran_view_model.dart';
 import 'view_model/mahasiswa_view_model.dart';
 import 'view_model/user_view_model.dart';
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => KehadiranViewModel()),
         ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(create: (context) => AbsensiViewModel()),
+        ChangeNotifierProvider(create: (context) => UploadImageViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
