@@ -47,10 +47,30 @@ class MahasiswaViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateMahasiswa({required int idMahasiswa, required String image}) async {
+  updateMahasiswa(
+      {required int idMahasiswa,
+      required String name,
+      required String email,
+      required String nim,
+      required String image,
+      required String phone,
+      required String jurusan,
+      required String tahunMasuk,
+      required String ipk,
+      required int userId}) async {
     _state = Status.loading;
     try {
-      final mahasiswaStatus = await MahasiswaAPI.updateMahasiswa(idMahasiswa: idMahasiswa, image: image);
+      final mahasiswaStatus = await MahasiswaAPI.updateMahasiswa(
+          idMahasiswa: idMahasiswa,
+          name: name,
+          email: email,
+          nim: nim,
+          image: image,
+          phone: phone,
+          jurusan: jurusan,
+          tahunMasuk: tahunMasuk,
+          ipk: ipk,
+          userId: userId);
       _mahasiswaStatus = mahasiswaStatus;
       _state = Status.completed;
       notifyListeners();

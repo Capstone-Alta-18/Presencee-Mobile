@@ -59,19 +59,40 @@ class MahasiswaAPI {
     }
   }
 
-  static Future<MahasiswaStatus> updateMahasiswa({required int idMahasiswa, required String image}) async {
+  static Future<MahasiswaStatus> updateMahasiswa(
+      {required int idMahasiswa,
+      required String name,
+      required String email,
+      required String nim,
+      required String image,
+      required String phone,
+      required String jurusan,
+      required String tahunMasuk,
+      required String ipk,
+      required int userId}) async {
     final dio = Dio();
     try {
-      final response = await dio.put('$url/$idMahasiswa',
-          queryParameters: {
-            'id': idMahasiswa,
-          },
-          options: Options(headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $apiToken'
-          }),
-          data: {'image': image},
-          );
+      final response = await dio.put(
+        '$url/$idMahasiswa',
+        queryParameters: {
+          'id': idMahasiswa,
+        },
+        options: Options(headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $apiToken'
+        }),
+        data: {
+          'name': name,
+          'email': email,
+          'nim': nim,
+          'image': image,
+          'phone': phone,
+          'jurusan': jurusan,
+          'tahun_masuk': tahunMasuk,
+          'ipk': ipk,
+          'user_id': userId
+        },
+      );
       if (response.statusCode == 200) {
         print(response.data['status']);
         // final datas = response.data['mahasiswa'];
