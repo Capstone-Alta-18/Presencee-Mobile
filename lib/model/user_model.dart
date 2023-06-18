@@ -1,38 +1,57 @@
-// class UserModel {
-//   int? id;
-//   String? email;
-//   String? name;
-//   String? role;
-
-//   UserModel({this.id, this.email, this.name, this.role});
-
-//   UserModel.fromJson(Map<String, dynamic> json) {
-//     id = json['id'];
-//     email = json['email'];
-//     name = json['name'];
-//     role = json['role'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['id'] = this.id;
-//     data['email'] = this.email;
-//     data['name'] = this.name;
-//     data['role'] = this.role;
-//     return data;
-//   }
-// }
+import 'mahasiswa_model.dart';
 
 class User {
-  final String message;
-  final String token;
+  Data? data;
+  String? message;
+  String? token;
 
-  User({required this.message, required this.token});
+  User({this.data, this.message, this.token});
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      message: json['message'],
-      token: json['token'],
-    );
+  User.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    message = json['message'];
+    token = json['token'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    data['message'] = message;
+    data['token'] = token;
+    return data;
+  }
+}
+
+class Data {
+  int? id;
+  String? email;
+  String? name;
+  String? role;
+  Mahasiswas? mahasiswa;
+
+  Data({this.id, this.email, this.name, this.role, this.mahasiswa});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    email = json['email'];
+    name = json['name'];
+    role = json['role'];
+    mahasiswa = json['mahasiswa'] != null
+        ? Mahasiswas.fromJson(json['mahasiswa'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['email'] = email;
+    data['name'] = name;
+    data['role'] = role;
+    if (mahasiswa != null) {
+      data['mahasiswa'] = mahasiswa!.toJson();
+    }
+    return data;
   }
 }

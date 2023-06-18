@@ -1,5 +1,5 @@
 class Mahasiswas {
-  final int? iD;
+  final int? id;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
@@ -14,7 +14,7 @@ class Mahasiswas {
   final int? userId;
 
   Mahasiswas(
-      {this.iD,
+      {this.id,
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
@@ -30,7 +30,7 @@ class Mahasiswas {
 
   factory Mahasiswas.fromJson(Map<String, dynamic> json) {
     return Mahasiswas(
-        iD: json['ID'],
+        id: json['ID'],
         createdAt: json['CreatedAt'],
         updatedAt: json['UpdatedAt'],
         deletedAt: json['DeletedAt'],
@@ -47,7 +47,7 @@ class Mahasiswas {
 
   Map<String, dynamic> toJson() {
     return {
-      'ID': iD,
+      'ID': id,
       'CreatedAt': createdAt,
       'UpdatedAt': updatedAt,
       'DeletedAt': deletedAt,

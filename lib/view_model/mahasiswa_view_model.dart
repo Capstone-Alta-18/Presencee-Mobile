@@ -33,13 +33,14 @@ class MahasiswaViewModel extends ChangeNotifier {
 
   getOneMahasiswa({required int oneId}) async {
     _state = Status.loading;
-    notifyListeners();
     try {
       final mahasiswaSingle = await MahasiswaAPI.getOneMahasiswa(oneId: oneId);
       _siswaOne = mahasiswaSingle;
       _state = Status.completed;
+      notifyListeners();
     } catch (e) {
       _state = Status.error;
+      notifyListeners();
     }
     notifyListeners();
   }
