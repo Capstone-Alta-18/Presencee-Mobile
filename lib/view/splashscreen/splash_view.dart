@@ -1,7 +1,6 @@
-import '../auth/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/home/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -34,42 +33,18 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   void checkLogin() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final token = sharedPreferences.getString('token');
-    if (token == null) {
+    final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+    final idUser = sharedPreferences.getInt('id_user');
+    if (token == null || idMahasiswa == null || idUser == null) {
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const LoginPage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 1550),
-          ),
-          (route) => false,
-        );
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//login', (route) => false);
       }
     } else {
+      apiToken = token;
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => HomePage(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 1550),
-          ),
-          (route) => false,
-        );
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//home', (route) => false);
       }
     }
   }
@@ -93,16 +68,17 @@ class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        color: AppTheme.primaryTheme,
-        child: Center(
-          child: Image.asset(
-            "lib/assets/images/logo_w.png",
-            width: 200.0,
-            height: 200.0,
-          ),
-        ));
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      color: AppTheme.primaryTheme,
+      child: Center(
+        child: Image.asset(
+          "lib/assets/images/logo_w.png",
+          width: 200.0,
+          height: 200.0,
+        ),
+      ),
+    );
   }
 }
 

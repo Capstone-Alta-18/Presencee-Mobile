@@ -4,9 +4,9 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
-import 'package:presencee/view/widgets/State_Status_widget.dart';
+import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
-import '../../provider/kehadiran_viewModel.dart';
 
 class CardMatkul extends StatefulWidget {
   final bool semester;
@@ -43,9 +43,7 @@ class _CardMatkulState extends State<CardMatkul> {
     } else if (manager.state == DataState.loading) {
       return const LoadingMatkulCard();
     } else if (manager.state == DataState.error) {
-      return const Center(
-        child: Text("Error"),
-      );
+      return const ErrorMatkulCards();
     }
 
     Color cardColor(int selectedIndex){
@@ -75,7 +73,7 @@ class _CardMatkulState extends State<CardMatkul> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         child: InkWell(
                           onTap: () {
-                            var manager = Provider.of<KehadiranViewModel>(context);
+                            // var manager = Provider.of<KehadiranViewModel>(context, listen: false);
                             Navigator.push(
                               context,
                               PageRouteBuilder(

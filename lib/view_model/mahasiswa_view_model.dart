@@ -22,7 +22,7 @@ class MahasiswaViewModel extends ChangeNotifier {
     _state = Status.loading;
     notifyListeners();
     try {
-      final mahasiswass = await MahasiswaAll.getMahasiswa();
+      final mahasiswass = await MahasiswaAPI.getMahasiswa();
       _siswas = mahasiswass;
       _state = Status.completed;
     } catch (e) {
@@ -33,13 +33,14 @@ class MahasiswaViewModel extends ChangeNotifier {
 
   getOneMahasiswa({required int oneId}) async {
     _state = Status.loading;
-    notifyListeners();
     try {
-      final mahasiswaSingle = await MahasiswaOne.getOneMahasiswa(oneId: oneId);
+      final mahasiswaSingle = await MahasiswaAPI.getOneMahasiswa(oneId: oneId);
       _siswaOne = mahasiswaSingle;
       _state = Status.completed;
+      notifyListeners();
     } catch (e) {
       _state = Status.error;
+      notifyListeners();
     }
     notifyListeners();
   }

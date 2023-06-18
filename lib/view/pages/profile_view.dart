@@ -1,9 +1,13 @@
 import 'dart:io';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:presencee/view/widgets/State_Status_widget.dart';
+// import 'package:presencee/view_model/user_view_model.dart';
 
+import 'package:presencee/model/user_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
+import 'package:shimmer/shimmer.dart';
+
+import '../widgets/State_Status_widget.dart';
 import 'helps/help_center_view.dart';
-import '../../provider/mahasiswa_ViewModel.dart';
+import '../../view_model/mahasiswa_view_model.dart';
 /* import 'package:presencee/view_model/user_view_model.dart';
 
 import 'help_center_view.dart';
@@ -13,7 +17,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../view_model/mahasiswa_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,7 +31,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   XFile? image;
-
+  bool isLoading = true;
   final emailController = TextEditingController();
   final telponController = TextEditingController();
   final jurusanController = TextEditingController();
@@ -34,10 +40,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaViewModel>(context, listen: false).getOneMahasiswa(oneId: 2);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+      if (mounted) {
+        await Provider.of<MahasiswaViewModel>(context, listen: false)
+            .getOneMahasiswa(oneId: idMahasiswa ?? 0);
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
     });
+    super.initState();
   }
 
   Future getImage(ImageSource source) async {
@@ -48,6 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {
         if (photo != null) {
+          // https://stackoverflow.com/questions/57509972/flutter-dio-how-to-upload-image
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
             content: Text(
@@ -68,157 +86,159 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> bottomSheet() async {
     return showModalBottomSheet(
-      backgroundColor: AppTheme.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-      context: context,
-      builder: (context) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
-          height: 180,
-          child: Column(
-            children: [
-              const SizedBox(height: 15),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Ganti foto profil",
-                    style: AppTextStyle.poppinsTextStyle(
-                      fontSize: 22,
-                      fontsWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 20)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await getImage(ImageSource.camera);
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
-                        ),
-                        child: const Icon(
-                          PhosphorIcons.camera_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
-                        ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Kamera",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Padding(padding: EdgeInsets.only(left: 20)),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          await getImage(ImageSource.gallery);
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          side: const BorderSide(color: AppTheme.gray_2),
-                          elevation: 0,
-                          shape: const CircleBorder(),
-                          backgroundColor: AppTheme.white,
-                          fixedSize: const Size(60, 60),
-                        ),
-                        child: const Icon(
-                          PhosphorIcons.image_fill,
-                          size: 30,
-                          color: AppTheme.primaryTheme,
-                        ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 8)),
-                      Text(
-                        "Galeri",
-                        style: AppTextStyle.poppinsTextStyle(
-                          fontSize: 16,
-                          fontsWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                ),
-                  const Padding(padding: EdgeInsets.only(left: 20)),
-                  Column(
+        backgroundColor: AppTheme.white,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 42, vertical: 20),
+            height: 180,
+            child: Column(
+              children: [
+                const SizedBox(height: 15),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        setState(() {
-                          if (image != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: const Duration(seconds: 1),
-                                backgroundColor: AppTheme.error,
-                                content: Text(
-                                  'Foto Profil kamu sudah di hapus !',
-                                  style: AppTextStyle.poppinsTextStyle(
-                                    fontsWeight: FontWeight.w500,
-                                    color: AppTheme.white,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          image = null;
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        side: const BorderSide(color: AppTheme.gray_2),
-                        elevation: 0,
-                        shape: const CircleBorder(),
-                        backgroundColor: AppTheme.white,
-                        fixedSize: const Size(60, 60),
-                      ),
-                      child: const Icon(
-                        PhosphorIcons.trash_fill,
-                        size: 30,
-                        color: AppTheme.primaryTheme,
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 8)),
                     Text(
-                      "Hapus",
+                      "Ganti foto profil",
                       style: AppTextStyle.poppinsTextStyle(
-                        fontSize: 16,
+                        fontSize: 22,
                         fontsWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
-                ],
-              ),
-            ],
-          ),
-        );
-      }
-    );
+                const Padding(padding: EdgeInsets.only(top: 20)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await getImage(ImageSource.camera);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.camera_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Kamera",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 20)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await getImage(ImageSource.gallery);
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.image_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Galeri",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(left: 20)),
+                    Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            setState(() {
+                              if (image != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: const Duration(seconds: 1),
+                                    backgroundColor: AppTheme.error,
+                                    content: Text(
+                                      'Foto Profil kamu sudah di hapus !',
+                                      style: AppTextStyle.poppinsTextStyle(
+                                        fontsWeight: FontWeight.w500,
+                                        color: AppTheme.white,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              image = null;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            side: const BorderSide(color: AppTheme.gray_2),
+                            elevation: 0,
+                            shape: const CircleBorder(),
+                            backgroundColor: AppTheme.white,
+                            fixedSize: const Size(60, 60),
+                          ),
+                          child: const Icon(
+                            PhosphorIcons.trash_fill,
+                            size: 30,
+                            color: AppTheme.primaryTheme,
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 8)),
+                        Text(
+                          "Hapus",
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
-  Future<void> isLogout(BuildContext context) async {
+  void isLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    dispose();
     await prefs.clear();
     await prefs.remove('token');
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    if (mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '//login', (route) => false);
+    }
   }
 
   void alertLogout() {
@@ -229,7 +249,10 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       builder: (BuildContext context) {
         return ClipRRect(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20),),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
           child: Container(
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -250,12 +273,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30.0, left: 16.0, right: 16.0),
+                  padding: const EdgeInsets.only(
+                      bottom: 30.0, left: 16.0, right: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextButton(
-                        onPressed: () => isLogout(context),
+                        onPressed: () => isLogout(),
                         style: ElevatedButton.styleFrom(
                           side: const BorderSide(color: AppTheme.primaryTheme),
                           foregroundColor: AppTheme.primaryTheme,
@@ -298,26 +322,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  void dispose() {
-    emailController.dispose();
-    telponController.dispose();
-    jurusanController.dispose();
-    tahunController.dispose();
-    ipkController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
 
-    if (dataMahas.state == Status.initial) {
-      return const ProfilesLoading();
-    } else if (dataMahas.state == Status.loading) {
-      return const ProfilesLoading();
-    } else if (dataMahas.state == Status.error) {
-      return const ProfileError();
-    }
+    // if (dataMahas.state == Status.initial) {
+    //   return const ProfileLoading();
+    // } else if (dataMahas.state == Status.completed) {
+    //   return const ProfilePage();
+    // } else if (dataMahas.state == Status.error) {
+    //   return const ProfileError();
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -345,112 +359,140 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               image != null
-                ? Container(
-                    margin: const EdgeInsets.all(21),
-                    height: 130,
-                    width: 130,
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 130,
-                          width: 130,
-                          child: FloatingActionButton(
+                  ? Container(
+                      margin: const EdgeInsets.all(21),
+                      height: 130,
+                      width: 130,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            width: 130,
+                            child: FloatingActionButton(
+                              onPressed: () => bottomSheet(),
+                              backgroundColor: AppTheme.white,
+                              elevation: 0,
+                              child: CircleAvatar(
+                                radius: 65,
+                                backgroundImage: FileImage(File(image!.path)),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.primaryTheme,
+                              ),
+                              child: IconButton(
+                                color: AppTheme.white,
+                                onPressed: () => bottomSheet(),
+                                icon: const Icon(
+                                  PhosphorIcons.pencil_bold,
+                                  size: 32,
+                                  color: AppTheme.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      margin: const EdgeInsets.all(21),
+                      height: 130,
+                      width: 130,
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          ElevatedButton(
                             onPressed: () => bottomSheet(),
-                            backgroundColor: AppTheme.white,
-                            elevation: 0,
-                            child: CircleAvatar(
-                              radius: 65,
-                              backgroundImage: FileImage(File(image!.path)),
+                            style: ElevatedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: AppTheme.primaryTheme),
+                              elevation: 0,
+                              shape: const CircleBorder(),
+                              backgroundColor: AppTheme.white,
+                              fixedSize: const Size(130, 130),
+                            ),
+                            child: const Icon(
+                              PhosphorIcons.user,
+                              color: AppTheme.primaryTheme,
+                              size: 72,
                             ),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.primaryTheme,
-                            ),
-                            child: IconButton(
-                              color: AppTheme.white,
-                              onPressed: () => bottomSheet(),
-                              icon: const Icon(
-                                PhosphorIcons.pencil_bold,
-                                size: 32,
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppTheme.primaryTheme,
+                              ),
+                              child: IconButton(
                                 color: AppTheme.white,
+                                onPressed: () => bottomSheet(),
+                                icon: const Icon(
+                                  PhosphorIcons.pencil_bold,
+                                  color: AppTheme.white,
+                                  size: 32,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  )
-                : Container(
-                    margin: const EdgeInsets.all(21),
-                    height: 130,
-                    width: 130,
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => bottomSheet(),
-                          style: ElevatedButton.styleFrom(
-                            side: const BorderSide(color: AppTheme.primaryTheme),
-                            elevation: 0,
-                            shape: const CircleBorder(),
-                            backgroundColor: AppTheme.white,
-                            fixedSize: const Size(130, 130),
-                          ),
-                          child: const Icon(
-                            PhosphorIcons.user,
-                            color: AppTheme.primaryTheme,
-                            size: 72,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppTheme.primaryTheme,
-                            ),
-                            child: IconButton(
-                              color: AppTheme.white,
-                              onPressed: () => bottomSheet(),
-                              icon: const Icon(
-                                PhosphorIcons.pencil_bold,
-                                color: AppTheme.white,
-                                size: 32,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                dataMahas.mahasiswaSingle.name.toString(),
-                style: AppTextStyle.poppinsTextStyle(
-                  fontSize: 24,
-                  fontsWeight: FontWeight.w500,
-                  color: AppTheme.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              isLoading
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Text(
+                        'Nama',
+                        style: AppTextStyle.poppinsTextStyle(
+                          fontSize: 24,
+                          fontsWeight: FontWeight.w500,
+                          color: AppTheme.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : Text(
+                      dataMahas.mahasiswaSingle.name.toString(),
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 24,
+                        fontsWeight: FontWeight.w500,
+                        color: AppTheme.black,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
               const Padding(padding: EdgeInsets.only(bottom: 8)),
-              Text(
-                dataMahas.mahasiswaSingle.nim.toString(),
-                style: AppTextStyle.poppinsTextStyle(
-                  fontSize: 16,
-                  fontsWeight: FontWeight.w400,
-                  color: AppTheme.black_3,
-                ),
-              ),
+              isLoading
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Text(
+                        'NIM',
+                        style: AppTextStyle.poppinsTextStyle(
+                          fontSize: 16,
+                          fontsWeight: FontWeight.w400,
+                          color: AppTheme.black_3,
+                        ),
+                      ),
+                    )
+                  : Text(
+                      dataMahas.mahasiswaSingle.nim.toString(),
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 16,
+                        fontsWeight: FontWeight.w400,
+                        color: AppTheme.black_3,
+                      ),
+                    ),
             ],
           ),
           const Padding(padding: EdgeInsets.only(bottom: 20)),
@@ -461,53 +503,54 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTextField(
-                    'Email',
-                    dataMahas.mahasiswaSingle.email.toString() == 'null'
-                        ? emailController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.email.toString())),
+                  'Email',
+                  dataMahas.mahasiswaSingle.email == null
+                      ? emailController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.email.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'No. Telp',
-                    dataMahas.mahasiswaSingle.phone.toString() == 'null'
-                        ? telponController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.phone.toString())),
+                  'No. Telp',
+                  dataMahas.mahasiswaSingle.phone == null
+                      ? telponController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.phone.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'Jurusan',
-                    dataMahas.mahasiswaSingle.jurusan.toString() == 'null'
-                        ? jurusanController
-                        : TextEditingController(
-                            text:
-                                dataMahas.mahasiswaSingle.jurusan.toString())),
+                  'Jurusan',
+                  dataMahas.mahasiswaSingle.jurusan == null
+                      ? jurusanController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.jurusan.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'Tahun',
-                    dataMahas.mahasiswaSingle.tahunMasuk == 'null'
-                        ? tahunController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.tahunMasuk
-                                .toString())),
+                  'Tahun',
+                  dataMahas.mahasiswaSingle.tahunMasuk == null
+                      ? tahunController
+                      : TextEditingController(
+                          text:
+                              dataMahas.mahasiswaSingle.tahunMasuk.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'IPK',
-                    dataMahas.mahasiswaSingle.ipk.toString() == 'null'
-                        ? ipkController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.ipk.toString())),
+                  'IPK',
+                  dataMahas.mahasiswaSingle.ipk == null
+                      ? ipkController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.ipk.toString()),
+                  isLoading,
+                ),
               ],
             ),
           ),
           Column(
             children: [
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) => const PusatBantuanPage(),
-                      transitionsBuilder: (context, animation1, animation2, child) => FadeTransition(opacity: animation1, child: child),
-                      transitionDuration: const Duration(milliseconds: 300),
-                    ),
-                  );
-                },
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/profiles/underMaintenance'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryTheme_2,
                   foregroundColor: AppTheme.white,
@@ -532,7 +575,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controllers) {
+  Widget _buildTextField(
+      String label, TextEditingController controllers, bool isLoading) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Row(
@@ -555,7 +599,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: AppTheme.black,
               ),
               readOnly: true,
-              controller: controllers,
+              controller: isLoading
+                  ? TextEditingController(text: 'Loading')
+                  : controllers,
               textAlign: TextAlign.left,
               decoration: const InputDecoration(
                 contentPadding:

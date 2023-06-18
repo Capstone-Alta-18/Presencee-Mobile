@@ -1,12 +1,15 @@
-import 'package:flutter/services.dart';
-import 'package:presencee/theme/constant.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:presencee/provider/user_ViewModel.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../pages/helps/customer_view.dart';
-import '../home/homePage.dart';
-import 'dart:math' as math;
+import 'package:presencee/theme/constant.dart';
+import '../../view_model/user_view_model.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/alerted_success_attendance.dart';
+// import 'dart:math' as math;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,8 +23,10 @@ class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late final emailController = TextEditingController();
   late final passController = TextEditingController();
+  FocusNode textSecondFocusNode = FocusNode();
+  bool isFailedLogin = false;
   bool isButtonActive = false;
-  bool isLoading = true;
+  bool isLoading = false;
   late SharedPreferences login;
   late bool newUser;
 
@@ -30,12 +35,14 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     emailController.addListener(() {
       setState(() {
-        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive =
+            emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
     passController.addListener(() {
       setState(() {
-        isButtonActive = emailController.text.isNotEmpty && passController.text.isNotEmpty;
+        isButtonActive =
+            emailController.text.isNotEmpty && passController.text.isNotEmpty;
       });
     });
   }
@@ -53,11 +60,60 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void loginCheck() async {
-    login = await SharedPreferences.getInstance();
-    newUser = login.getBool('login') ?? true;
-    if (newUser) {
-      login.setBool('login', false);
+  void signIn() async {
+    setState(() {
+      isFailedLogin = true;
+      isLoading = true;
+    });
+    showDialog(
+      context: context,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
+    );
+    await Provider.of<UserViewModel>(context, listen: false)
+        .userLogin(emailController.text, passController.text);
+    if (mounted) {
+      Navigator.pop(context);
+      UserViewModel userViewModel =
+          Provider.of<UserViewModel>(context, listen: false);
+      if (userViewModel.user != null) {
+        isLoading = false;
+        debugPrint(userViewModel.user?.message);
+        debugPrint(userViewModel.user?.token);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//home', (route) => false);
+        SnackbarAlertDialog().customDialogs(context,
+            message: "Login Berhasil",
+            icons: PhosphorIcons.check_circle_fill,
+            iconColor: AppTheme.success,
+            backgroundsColor: AppTheme.white,
+            durations: 1800);
+      } else {
+        setState(() {
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Login gagal",
+              icons: PhosphorIcons.x_circle_fill,
+              backgroundsColor: AppTheme.error,
+              iconColor: AppTheme.white,
+              durations: 1200);
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -80,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                height: 330,
+                height: 380,
                 margin: const EdgeInsets.symmetric(horizontal: 52),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,25 +149,38 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextFormField(
                       controller: emailController,
-                      decoration: const InputDecoration(
+                      textInputAction: TextInputAction.next,
+                      autofocus: true,
+                      decoration: InputDecoration(
                         hintText: "yourname@students.com",
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: AppTheme.greyText,
                         ),
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(2)),
                         ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 12),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: isFailedLogin == true
+                                ? AppTheme.error
+                                : AppTheme.greyText,
+                          ),
+                        ),
+                        errorText: isFailedLogin == true
+                            ? 'Email yang dimasukin salah'
+                            : null,
                       ),
                       validator: (value) {
-                        // final emailRegex =
-                        // RegExp(r"^[a-zA-Z0-9_.+-]+@mail\.com$");
+                        final emailRegex =
+                            RegExp(r"^[a-zA-Z0-9_.+-]+@gmail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                          // } else if (!emailRegex.hasMatch(value)) {
-                          // return 'Invalid email format';
+                        } else if (!emailRegex.hasMatch(value)) {
+                          return 'Invalid email format';
                         }
                         return null;
                       },
@@ -129,25 +198,45 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       controller: passController,
                       obscureText: _secureText,
+                      textInputAction: TextInputAction.done,
                       inputFormatters: [
                         FilteringTextInputFormatter.deny(RegExp(r"\s")),
                         LengthLimitingTextInputFormatter(20)
                       ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password must be filled';
+                        }
+                        return null;
+                      },
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontSize: 14,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          isFailedLogin = false;
+                        });
+                      },
                       decoration: InputDecoration(
-                        suffixIcon: Transform(
+                        // 2 opsi icon password
+                        /* suffixIcon: Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(math.pi),
                           child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _secureText = !_secureText;
-                              });
-                            },
+                            onPressed: () => showHide(),
                             icon: Icon(
                               _secureText
                                   ? Icons.visibility_off_outlined
                                   : Icons.visibility,
                             ),
+                          ),
+                        ), */
+                        suffixIcon: IconButton(
+                          onPressed: () => showHide(),
+                          icon: Icon(
+                            _secureText
+                                ? PhosphorIcons.eye_closed_bold
+                                : PhosphorIcons.eye_bold,
                           ),
                         ),
                         hintText: "input password",
@@ -159,87 +248,72 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 12),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(2),
+                          borderSide: BorderSide(
+                            color: isFailedLogin == true
+                                ? AppTheme.error
+                                : AppTheme.greyText,
+                          ),
+                        ),
+                        errorText: isFailedLogin == true
+                            ? 'Kata sandi yang dimasukin salah'
+                            : null,
                       ),
-                      style: AppTextStyle.poppinsTextStyle(
-                        fontSize: 14,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Password must be filled';
-                        } return null;
-                      },
                     ),
                     const SizedBox(height: 64),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 40),
                           backgroundColor: AppTheme.primaryTheme_2,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(2),
                           ),
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
-                        onPressed: isButtonActive
+                        onPressed: isButtonActive && !isLoading
                             ? () async {
                                 if (formKey.currentState!.validate()) {
-                                  await Provider.of<UserViewModel>(context,listen: false).userLogin(emailController.text,passController.text);
-                                  if (mounted) {
-                                    UserViewModel userViewModel = Provider.of<UserViewModel>(context,listen: false);
-                                    if (userViewModel.user != null) {
-                                      debugPrint(userViewModel.user?.message);
-                                      debugPrint(userViewModel.user?.token);
-                                      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
-                                    }
-                                  }
-                                  loginCheck();
-                                  Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                                  signIn();
                                 }
-                              } : null,
-                        child: isLoading 
-                          ? Text(
-                              "Login",
-                              style: AppTextStyle.poppinsTextStyle(
-                                fontSize: 14,
-                                fontsWeight: FontWeight.w500,
-                                color: AppTheme.white,
+                              }
+                            : null,
+                        child: isLoading
+                            ? const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: SpinKitThreeBounce(
+                                      color: AppTheme.white,
+                                      size: 13.3,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "Masuk",
+                                style: AppTextStyle.poppinsTextStyle(
+                                  fontSize: 14,
+                                  fontsWeight: FontWeight.w500,
+                                  color: AppTheme.white,
+                                ),
                               ),
-                            ) 
-                          : const CircularProgressIndicator(color: AppTheme.white),
                       ),
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) => const CustomerService(),
-                              transitionsBuilder:
-                                  (context, animation1, animation2, child) {
-                                return SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(1, 0),
-                                    end: Offset.zero,
-                                  ).animate(animation1),
-                                  child: child,
-                                );
-                              },
-                              transitionDuration:
-                                  const Duration(milliseconds: 490),
-                            ),
-                          );
-                        },
-                        child: const Text(
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('//help'),
+                        child: Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
+                          style: AppTextStyle.poppinsTextStyle(
                             fontSize: 14,
-                            color: AppTheme.primaryTheme_2,
+                            color: AppTheme.primaryTheme,
                           ),
                         ),
                       ),

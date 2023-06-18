@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/model/mahasiswa_model.dart';
 
-class MahasiswaAll {
+class MahasiswaAPI {
   static const String url = "$baseURL/v1/mahasiswa";
 
   static Future<List<Mahasiswas>> getMahasiswa() async {
@@ -30,30 +30,29 @@ class MahasiswaAll {
       throw Exception('Failed to load mahasiswa: $e');
     }
   }
-}
-
-class MahasiswaOne {
-  static const String url = "$baseURL/v1/mahasiswa";
 
   static Future<Mahasiswas> getOneMahasiswa({required int oneId}) async {
     final dio = Dio();
     try {
       final response = await dio.get('$url/$oneId',
           queryParameters: {
-            'id': oneId,
+            'ID': oneId,
           },
           options: Options(headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $apiToken'
           }));
+      print(apiToken);
+      print('asdasd');
       // log('response results = $response');
-
+      // print(response.data);
       if (response.statusCode == 200) {
-        final datas = response.data['mahasiswa'];
+        print(response.data['mahasiswa']);
+        // final datas = response.data['mahasiswa'];
         // log('datas: $datas');
         // List<Mahasiswas> siswaList = List<Mahasiswas>.from(datas.map((model) => Mahasiswas.fromJson(model)));
         // log('>> Data mahasiswa= $siswaList');
-        return Mahasiswas.fromJson(datas);
+        return Mahasiswas.fromJson(response.data['mahasiswa']);
       } else {
         throw Exception('Failed to load single mahasiswa...');
       }
