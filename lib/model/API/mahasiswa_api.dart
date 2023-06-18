@@ -42,8 +42,6 @@ class MahasiswaAPI {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $apiToken'
           }));
-      print(apiToken);
-      print('asdasd');
       // log('response results = $response');
       // print(response.data);
       if (response.statusCode == 200) {
@@ -58,6 +56,34 @@ class MahasiswaAPI {
       }
     } catch (e) {
       throw Exception('Failed to load single mahasiswa: $e');
+    }
+  }
+
+  static Future<MahasiswaStatus> updateMahasiswa({required int idMahasiswa, required String image}) async {
+    final dio = Dio();
+    try {
+      final response = await dio.put('$url/$idMahasiswa',
+          queryParameters: {
+            'id': idMahasiswa,
+          },
+          options: Options(headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $apiToken'
+          }),
+          data: {'image': image},
+          );
+      if (response.statusCode == 200) {
+        print(response.data['status']);
+        // final datas = response.data['mahasiswa'];
+        // log('datas: $datas');
+        // List<Mahasiswas> siswaList = List<Mahasiswas>.from(datas.map((model) => Mahasiswas.fromJson(model)));
+        // log('>> Data mahasiswa= $siswaList');
+        return MahasiswaStatus.fromJson(response.data['status']);
+      } else {
+        throw Exception('Failed to update mahasiswa...');
+      }
+    } catch (e) {
+      throw Exception('Failed to update mahasiswa: $e');
     }
   }
 }

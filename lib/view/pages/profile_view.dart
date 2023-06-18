@@ -2,6 +2,7 @@ import 'dart:io';
 // import 'package:presencee/view_model/user_view_model.dart';
 
 import 'package:presencee/model/user_model.dart';
+import 'package:presencee/view_model/upload_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -61,12 +62,22 @@ class _ProfilePageState extends State<ProfilePage> {
     // final imagesData = Provider.of<MahasiswaViewModel>(context, listen: false);
     try {
       ImagePicker picker = ImagePicker();
-      var photo = await picker.pickImage(source: source);
-
-      setState(() {
-        if (photo != null) {
-          // https://stackoverflow.com/questions/57509972/flutter-dio-how-to-upload-image
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      XFile? photo = await picker.pickImage(source: source);
+      if (photo != null) {
+        await Provider.of<UploadImageViewModel>(context, listen: false)
+            .uploadImage(photo);
+        if (mounted) {
+          final url = Provider.of<UploadImageViewModel>(context, listen: false)
+              .image
+              ?.url;
+          SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+          await Provider.of<MahasiswaViewModel>(context, listen: false)
+              .updateMahasiswa(idMahasiswa: idMahasiswa!, image: url!);
+              await Provider.of<MahasiswaViewModel>(context, listen: false)
+            .getOneMahasiswa(oneId: idMahasiswa);
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
             content: Text(
               'Foto profil kamu sudah disematkan !',
@@ -76,9 +87,25 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ));
-          image = photo;
         }
-      });
+      }
+
+      // setState(() {
+      //   if (photo != null) {
+      //     // https://stackoverflow.com/questions/57509972/flutter-dio-how-to-upload-image
+      //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //       backgroundColor: AppTheme.primaryTheme,
+      //       content: Text(
+      //         'Foto profil kamu sudah disematkan !',
+      //         style: AppTextStyle.poppinsTextStyle(
+      //           fontsWeight: FontWeight.w500,
+      //           color: AppTheme.white,
+      //         ),
+      //       ),
+      //     ));
+      //     // image = photo;
+      //   }
+      // });
     } on PlatformException catch (e) {
       debugPrint('Failed to pick Image : $e');
     }
@@ -359,6 +386,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             children: [
               image != null
+                  // dataMahas.mahasiswaSingle.image == null
                   ? Container(
                       margin: const EdgeInsets.all(21),
                       height: 130,
@@ -375,6 +403,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircleAvatar(
                                 radius: 65,
                                 backgroundImage: FileImage(File(image!.path)),
+                                // backgroundImage: NetworkImage(dataMahas.mahasiswaSingle.image ?? ''),
                               ),
                             ),
                           ),
