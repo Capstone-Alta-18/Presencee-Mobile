@@ -3,12 +3,17 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/widgets/alerted_success_attendance.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class PreviewScreen extends StatefulWidget {
   final XFile imgPath;
@@ -21,29 +26,90 @@ class PreviewScreen extends StatefulWidget {
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
+  bool isLoading = false;
+  Future<String> getTimeZone() async {
+    String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    return timeZoneName;
+  }
+
+  Future<String> convertTimeZone() async {
+    tz.initializeTimeZones();
+    String timeZoneName = await getTimeZone();
+    tz.Location location = tz.getLocation(timeZoneName);
+    tz.TZDateTime now = tz.TZDateTime.now(location);
+    String offset = now.timeZoneOffset.toString().split('.').first;
+    return offset;
+  }
+
   void uploadImage() async {
-    await Provider.of<UploadImageViewModel>(context, listen: false)
-        .uploadImage(widget.imgPath);
+    setState(() {
+      isLoading = true;
+    });
+    var timezone = await convertTimeZone();
+    var now = DateTime.now().toString().split(' ');
+    var tm = timezone.toString().split(':');
     if (mounted) {
-      final url =
-          Provider.of<UploadImageViewModel>(context, listen: false).image?.url;
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      final idUser = sharedPreferences.getInt('id_user');
-      final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
-      // var f = DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now());
-      // print(f);
+      await Provider.of<UploadImageViewModel>(context, listen: false)
+          .uploadImage(widget.imgPath);
       if (mounted) {
-        await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
-            userId: idUser!,
-            mahasiswaId: idMahasiswa!,
-            jadwalId: 1,
-            timeAttemp: '2023-06-18T03:40:50+08:00',
-            // DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now()),
-            matakuliah: 'Akuntansi',
-            status: 'Hadir',
-            location: widget.location,
-            image: url!);
+        final url = Provider.of<UploadImageViewModel>(context, listen: false)
+            .image
+            ?.url;
+        SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        final idUser = sharedPreferences.getInt('id_user');
+        final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+        if (mounted) {
+          await Provider.of<AbsensiViewModel>(context, listen: false)
+              .createAbsen(
+                  userId: idUser!,
+                  mahasiswaId: idMahasiswa!,
+                  jadwalId: 1,
+                  // timeAttemp: '2023-06-18T03:40:50+08:00',
+                  timeAttemp:
+                      "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
+                  matakuliah: 'Akuntansi',
+                  status: 'Hadir',
+                  location: widget.location,
+                  image: url!);
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+            if (Provider.of<AbsensiViewModel>(context, listen: false)
+                    .absensi
+                    ?.message ==
+                'success creating absen') {
+              SnackbarAlertDialog().customDialogs(context,
+                  message: "Presensi berhasil",
+                  icons: PhosphorIcons.check_circle_fill,
+                  iconColor: AppTheme.success,
+                  backgroundsColor: AppTheme.white,
+                  durations: 1800);
+            } else if (Provider.of<AbsensiViewModel>(context, listen: false)
+                        .absensi
+                        ?.message ==
+                    'missing or malformed jwt' ||
+                Provider.of<AbsensiViewModel>(context, listen: false)
+                        .absensi
+                        ?.message ==
+                    'invalid or expired jwt') {
+              SnackbarAlertDialog().customDialogs(context,
+                  message: "Token telah kadaluarsa, harap login kembali",
+                  icons: PhosphorIcons.x_circle_fill,
+                  iconColor: AppTheme.error,
+                  backgroundsColor: AppTheme.white,
+                  durations: 1800);
+            } else {
+              SnackbarAlertDialog().customDialogs(context,
+                  message: "Presensi gagal, kelas telah selesai",
+                  icons: PhosphorIcons.x_circle_fill,
+                  iconColor: AppTheme.error,
+                  backgroundsColor: AppTheme.white,
+                  durations: 1800);
+            }
+          }
+        }
       }
     }
   }
@@ -214,9 +280,11 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 81),
                   ElevatedButton(
-                    onPressed: () {
-                      uploadImage();
-                    }
+                    onPressed: !isLoading
+                        ? () {
+                            uploadImage();
+                          }
+                        : null
                     // Navigator.pushNamed(
                     //     context, '/schedule/presence/fingerprint')
                     ,
@@ -226,14 +294,23 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    child: Text(
-                      'Konfirmasi Kehadiran',
-                      style: AppTextStyle.poppinsTextStyle(
-                        color: AppTheme.white,
-                        fontSize: 14,
-                        fontsWeight: FontWeight.w400,
-                      ),
-                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 128,
+                            child: SpinKitThreeBounce(
+                              color: AppTheme.white,
+                              size: 13.3,
+                            ),
+                          )
+                        : Text(
+                            'Konfirmasi Kehadiran',
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.white,
+                              fontSize: 14,
+                              fontsWeight: FontWeight.w400,
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 24),
                 ],
