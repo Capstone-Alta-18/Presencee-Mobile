@@ -161,6 +161,7 @@ class _CardMatkulState extends State<CardMatkul> {
                   animation: true,
                   animationDuration: 1200,
                   lineWidth: 7.0,
+                  // percent : 0.8,
                   percent: manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
                   // startAngle: 0.5,
                   center: Container(

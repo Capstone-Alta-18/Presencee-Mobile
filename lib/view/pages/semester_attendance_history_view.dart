@@ -1,4 +1,5 @@
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
@@ -40,7 +41,21 @@ class _SemesterHistoryState extends State<SemesterHistory> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Padding(padding: EdgeInsets.only(bottom: 55)),
+                  Center(
+                    child: PersentaseKehadiran(diagram: false),
+                  ),
+                  Padding(padding: EdgeInsets.only(bottom: 43)),
+                  Text(
+                    "Kehadiran Per Mata Kuliah",
+                    textAlign: TextAlign.start,
+                    style: AppTextStyle.poppinsTextStyle(
+                      fontSize: 18,
+                      fontsWeight: FontWeight.w600
+                    ),
+                  ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
                     itemCount: manager.kehadiran.length,
