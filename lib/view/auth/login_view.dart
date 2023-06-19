@@ -8,7 +8,7 @@ import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/alerted_success_attendance.dart';
+import '../widgets/alerted_attendance.dart';
 // import 'dart:math' as math;
 
 
@@ -99,9 +99,11 @@ class _LoginPageState extends State<LoginPage> {
           context, 
           message: "Login Berhasil", 
           icons: PhosphorIcons.check_circle_fill,
-          iconColor: AppTheme.success,
-          backgroundsColor: AppTheme.white,
-          durations: 1800
+          iconColor: AppTheme.white,
+          backgroundsColor: AppTheme.success,
+          durations: 1800,
+          snacksbarsBehavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(bottom: 0)
         );
       } else {
         setState(() {

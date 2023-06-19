@@ -1,7 +1,7 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
+import 'package:presencee/view/widgets/alerted_attendance.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 // import 'package:presencee/view/auth/local_auth_biometrics.dart';
 import 'package:presencee/theme/constant.dart';
@@ -25,7 +25,7 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
   } */
 
   static Future<bool> hasBiometrics(BuildContext context) async {
-    final isDeviceSupport = await auth.isDeviceSupported();
+    // final isDeviceSupport = await auth.isDeviceSupported();
     try {
       bool canCheckBiometrics = await auth.canCheckBiometrics;
       if (!canCheckBiometrics) {

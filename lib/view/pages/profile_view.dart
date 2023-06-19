@@ -211,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> isLogout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    dispose();
+    // dispose();
     await prefs.clear();
     await prefs.remove('token');
     Navigator.pushNamedAndRemoveUntil(context, '//login', (route) => false);

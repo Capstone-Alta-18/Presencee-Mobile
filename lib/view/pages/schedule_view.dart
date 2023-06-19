@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../theme/constant.dart';
+import '../widgets/alerted_attendance.dart';
 import '../widgets/card_absensi.dart';
 
 class SchedulePage extends StatefulWidget {
