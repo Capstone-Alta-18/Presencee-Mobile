@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:presencee/model/riwayat_kehadiran_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
@@ -30,13 +31,15 @@ class _CardMatkulState extends State<CardMatkul> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiran();
+      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 0);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
+    // final getTotal = manager.kehadiranNew.meta!.toJson();
+    // List<String>
 
     if (manager.state == DataState.initial) {
       return const LoadingMatkulCard();
@@ -47,7 +50,8 @@ class _CardMatkulState extends State<CardMatkul> {
     }
 
     Color cardColor(int selectedIndex){
-      if (manager.kehadiran[selectedIndex].kodeMatkul.toString() == "MU"){
+      // if (manager.kehadiran[selectedIndex].kodeMatkul.toString() == "MU"){
+      if ("MU" == "MU"){
         return AppTheme.greenCard;
       } else {
         return AppTheme.purpleCard;
@@ -58,7 +62,7 @@ class _CardMatkulState extends State<CardMatkul> {
             height: 164,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: 5,
+              itemCount: manager.kehadiranNew.meta!.toJson().length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 return AnimationConfiguration.staggeredList(
@@ -104,7 +108,9 @@ class _CardMatkulState extends State<CardMatkul> {
                                     animation: true,
                                     animationDuration: 1200,
                                     lineWidth: 7.0,
-                                    percent: manager.kehadiran[index].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
+                                    percent: manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(index).toDouble() / 16.0,
+                                    // percent: 0.8,
+                                    // percent: manager.kehadiran[index].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
                                     // startAngle: 0.5,
                                     center: Container(
                                       width: 50,
@@ -115,7 +121,8 @@ class _CardMatkulState extends State<CardMatkul> {
                                           shape: BoxShape.circle),
                                       child: Center(
                                         child: Text(
-                                          "${manager.kehadiran[index].kodeMatkul}",
+                                          // "${manager.kehadiran[index].kodeMatkul}",
+                                          "MU",
                                           style: AppTextStyle.poppinsTextStyle(
                                             color: AppTheme.black,
                                             fontSize: 22,
@@ -129,7 +136,7 @@ class _CardMatkulState extends State<CardMatkul> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    manager.kehadiran[index].mataKuliah.toString(),
+                                    manager.kehadiranNew.meta!.toJson().keys.toList()[index].toString(),
                                     style: AppTextStyle.poppinsTextStyle(
                                       color: AppTheme.black,
                                       fontSize: 14,
@@ -161,7 +168,9 @@ class _CardMatkulState extends State<CardMatkul> {
                   animation: true,
                   animationDuration: 1200,
                   lineWidth: 7.0,
-                  percent: manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
+                  percent: manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex).toDouble() / 16.0,
+                  // percent : 0.8,
+                  // percent: manager.kehadiran[widget.selectedIndex].kehadiran![0].toJson().values.reduce((value, element) => value + element) / 16.0,
                   // startAngle: 0.5,
                   center: Container(
                     width: 50,
@@ -172,7 +181,8 @@ class _CardMatkulState extends State<CardMatkul> {
                     ),
                     child: Center(
                       child: Text(
-                        manager.kehadiran[widget.selectedIndex].kodeMatkul.toString(),
+                        "MU",
+                        // manager.kehadiran[widget.selectedIndex].kodeMatkul.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontSize: 22,
@@ -192,7 +202,7 @@ class _CardMatkulState extends State<CardMatkul> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        manager.kehadiran[widget.selectedIndex].mataKuliah.toString(),
+                        manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,
                           fontSize: 16,
@@ -200,7 +210,8 @@ class _CardMatkulState extends State<CardMatkul> {
                         ),
                       ),
                       Text(
-                        manager.kehadiran[widget.selectedIndex].namaDosen.toString(),
+                        "Nama Dosen",
+                        // manager.kehadiranNew.meta!.bahasaIndonesia!.total.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,
                           fontSize: 14,

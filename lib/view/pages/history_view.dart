@@ -17,7 +17,7 @@ class HistoryPage extends StatelessWidget {
           children: [
             const Header(
               title: 'Riwayat Kehadiran',
-              subtitle: 'Semester 2022/2',
+              subtitle: 'Semester 2022/3',
               back: false,
             ),
             Container(
