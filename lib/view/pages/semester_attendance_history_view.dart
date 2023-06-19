@@ -58,7 +58,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                   ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
-                    itemCount: manager.kehadiran.length,
+                    itemCount: manager.kehadiranNew.meta!.toJson().length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     itemBuilder: ((context, index) {

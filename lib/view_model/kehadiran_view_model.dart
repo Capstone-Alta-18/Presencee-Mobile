@@ -12,8 +12,10 @@ enum DataState {
 class KehadiranViewModel extends ChangeNotifier {
   List<RiwayatKehadiran> _kehadiran = [];
   DataState _state = DataState.initial;
+  RiwayatKehadiran _kehadiranNew = RiwayatKehadiran();
 
   List<RiwayatKehadiran> get kehadiran => _kehadiran;
+  RiwayatKehadiran get kehadiranNew => _kehadiranNew;
 
   DataState get state => _state;
 
@@ -23,6 +25,18 @@ class KehadiranViewModel extends ChangeNotifier {
     try {
       final kehadiran = await KehadiranApi.getKehadiran();
       _kehadiran = kehadiran;
+      _state = DataState.loaded;
+    } catch (e) {
+      _state = DataState.error;
+    }
+    notifyListeners();
+  }
+  getKehadiranNew({required int idMhs}) async {
+    _state = DataState.loading;
+    notifyListeners();
+    try {
+      final kehadiranNew = await KehadiranApi.getKehadiranNew(idMhs: idMhs);
+      _kehadiranNew = kehadiranNew;
       _state = DataState.loaded;
     } catch (e) {
       _state = DataState.error;
