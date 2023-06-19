@@ -18,12 +18,16 @@ class UserAPI {
       // log('response results = $response');
 
       if (response.statusCode == 200) {
+        apiToken = response.data['token'];
+        // print(apiToken);
+        // print('API TOKEN : $apiToken');
         // final datas = response.data['mahasiswas'];
         // final userLog = UserModel.fromJson(jsonDecode(response.data));
 
         // log('datas: $datas');
         // List<MahasiswaModel> mahasiswa = List<MahasiswaModel>.from(datas.map((model) => MahasiswaModel.fromJson(model)));
         // log('mahasiswa: $mahasiswa');
+        // print(response.data);
         return User.fromJson(response.data);
       } else {
         throw Exception('Failed to login');

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
@@ -16,14 +18,19 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected = true;
-  bool isAllSelected = false;
+  bool isTodaySelected =
+      true; // Set initial selection state of "Hari ini" button
+  bool isAllSelected = false; // Set initial selection state of "Semua" button
+  StreamController<DateTime> timeController = StreamController<DateTime>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+    });
+    Timer.periodic(Duration(seconds: 1), (_) {
+      timeController.add(DateTime.now());
     });
   }
 
@@ -32,10 +39,61 @@ class _SchedulePageState extends State<SchedulePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const TodayWidgets(
-            presensi: false,
-            back: false,
-          ),
+          StreamBuilder<DateTime>(
+              stream: timeController.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  DateTime currentTime = snapshot.data!;
+                  return TodayWidgets(
+                    presensi: false,
+                    back: false,
+                    currentTime: currentTime,
+                  );
+                } else {
+                  return Container(
+                    height: 237,
+                    width: double.maxFinite,
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.gray_2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [AppTheme.gradient_1, AppTheme.gradient_2],
+                      ),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(40),
+                        bottomRight: Radius.circular(40),
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Loading',
+                          style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.white,
+                              fontSize: 14,
+                              fontsWeight: FontWeight.w400),
+                        ),
+                        Text(
+                          'Loading',
+                          style: AppTextStyle.poppinsTextStyle(
+                            color: AppTheme.white,
+                            fontSize: 45,
+                            fontsWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              }),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
@@ -54,7 +112,7 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _buildJadwalAbsensi() {
-     if (isTodaySelected) {
+    if (isTodaySelected) {
       return CardAbsensi(
         matkul: 'Bahasa Indonesia (MU22)',
         hari: 'Senin',
@@ -86,7 +144,8 @@ class _SchedulePageState extends State<SchedulePage> {
             height: 22,
             width: 57,
             decoration: BoxDecoration(
-              color: isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
+              color:
+                  isTodaySelected ? AppTheme.primaryTheme_2 : AppTheme.gray_2,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Center(

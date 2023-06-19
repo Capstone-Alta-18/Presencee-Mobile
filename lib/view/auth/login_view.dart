@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import '../widgets/alerted_attendance.dart';
 // import 'dart:math' as math;
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -86,35 +85,35 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-    await Provider.of<UserViewModel>(context, listen: false).userLogin(emailController.text, passController.text);
+    await Provider.of<UserViewModel>(context, listen: false)
+        .userLogin(emailController.text, passController.text);
     if (mounted) {
       Navigator.pop(context);
-      UserViewModel userViewModel = Provider.of<UserViewModel>(context, listen: false);
+      UserViewModel userViewModel =
+          Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
         isLoading = false;
-        debugPrint(userViewModel.user?.message);
-        debugPrint(userViewModel.user?.token);
-        Navigator.of(context).pushNamedAndRemoveUntil('//home', (route) => false);
-        SnackbarAlertDialog().customDialogs(
-          context, 
-          message: "Login Berhasil", 
-          icons: PhosphorIcons.check_circle_fill,
-          iconColor: AppTheme.white,
-          backgroundsColor: AppTheme.success,
-          durations: 1800,
-          snacksbarsBehavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.only(bottom: 0)
-        );
+        // debugPrint(userViewModel.user?.message);
+        // debugPrint(userViewModel.user?.token);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('//home', (route) => false);
+        SnackbarAlertDialog().customDialogs(context,
+            message: "Login Berhasil",
+            icons: PhosphorIcons.check_circle_fill,
+            iconColor: AppTheme.success,
+            backgroundsColor: AppTheme.white,
+            margin: const EdgeInsets.only(bottom: 0),
+            durations: 1800);
       } else {
         setState(() {
-          SnackbarAlertDialog().customDialogs(
-            context,
-            message: "Login gagal",
-            icons: PhosphorIcons.x_circle_fill,
-            backgroundsColor: AppTheme.error,
-            iconColor: AppTheme.white,
-            durations: 1200
-          );
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Login gagal",
+              icons: PhosphorIcons.x_circle_fill,
+              backgroundsColor: AppTheme.error,
+              iconColor: AppTheme.white,
+              snacksbarsBehavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(bottom: 0),
+              durations: 1200);
           isLoading = false;
         });
       }
@@ -177,12 +176,13 @@ class _LoginPageState extends State<LoginPage> {
                             : null,
                       ),
                       validator: (value) {
-                        final emailRegex = RegExp(r"^[a-zA-Z0-9_.+-]+@gmail\.com$");
+                        final emailRegex =
+                            RegExp(r"^[a-zA-Z0-9_.+-]+@gmail\.com$");
                         if (value == null || value.isEmpty) {
                           return 'Email must be filled';
                         } else if (value.length < 6) {
                           return 'Email must be at least 6 characters';
-                          } else if (!emailRegex.hasMatch(value)) {
+                        } else if (!emailRegex.hasMatch(value)) {
                           return 'Invalid email format';
                         }
                         return null;
@@ -221,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                        // 2 opsi icon password 
+                        // 2 opsi icon password
                         /* suffixIcon: Transform(
                           alignment: Alignment.center,
                           transform: Matrix4.rotationY(math.pi),
@@ -276,26 +276,27 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           disabledBackgroundColor: AppTheme.disabled,
                         ),
-                        onPressed: isButtonActive && !isLoading ? () async {
-                              if (formKey.currentState!.validate()) {
-                                signIn();
+                        onPressed: isButtonActive && !isLoading
+                            ? () async {
+                                if (formKey.currentState!.validate()) {
+                                  signIn();
+                                }
                               }
-                            }
-                          : null,
-                          child: isLoading
+                            : null,
+                        child: isLoading
                             ? const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: SpinKitThreeBounce(
-                                    color: AppTheme.white,
-                                    size: 13.3,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: SpinKitThreeBounce(
+                                      color: AppTheme.white,
+                                      size: 13.3,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
+                                ],
+                              )
                             : Text(
                                 "Masuk",
                                 style: AppTextStyle.poppinsTextStyle(
@@ -308,7 +309,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Center(
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).pushNamed('//help'),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('//help'),
                         child: Text(
                           "Lupa Password?",
                           textAlign: TextAlign.center,

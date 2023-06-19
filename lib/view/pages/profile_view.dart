@@ -1,12 +1,13 @@
-import 'dart:io';
+import 'dart:ui';
+import 'package:presencee/view_model/upload_view_model.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../view_model/mahasiswa_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../view_model/mahasiswa_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -18,7 +19,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   XFile? image;
-
+  bool isLoading = true;
   final emailController = TextEditingController();
   final telponController = TextEditingController();
   final jurusanController = TextEditingController();
@@ -27,37 +28,154 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaViewModel>(context, listen: false)
-          .getOneMahasiswa(oneId: 2);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+      if (mounted) {
+        await Provider.of<MahasiswaViewModel>(context, listen: false)
+            .getOneMahasiswa(oneId: idMahasiswa ?? 0);
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
     });
+    super.initState();
   }
 
   Future getImage(ImageSource source) async {
-    // final imagesData = Provider.of<MahasiswaViewModel>(context, listen: false);
     try {
       ImagePicker picker = ImagePicker();
-      var photo = await picker.pickImage(source: source);
+      XFile? photo = await picker.pickImage(source: source);
+      if (photo != null) {
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Dialog(
+                backgroundColor: Colors.transparent,
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: AppTheme.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await Provider.of<UploadImageViewModel>(context, listen: false)
+              .uploadImage(photo);
+          if (mounted) {
+            final url =
+                Provider.of<UploadImageViewModel>(context, listen: false)
+                    .image
+                    ?.url;
+            SharedPreferences sharedPreferences =
+                await SharedPreferences.getInstance();
+            final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+            if (mounted) {
+              final dataMahas =
+                  Provider.of<MahasiswaViewModel>(context, listen: false);
+              await Provider.of<MahasiswaViewModel>(context, listen: false)
+                  .updateMahasiswa(
+                      idMahasiswa: idMahasiswa!,
+                      name: dataMahas.mahasiswaSingle.name!,
+                      email: dataMahas.mahasiswaSingle.email!,
+                      nim: dataMahas.mahasiswaSingle.nim!,
+                      image: url!,
+                      phone: dataMahas.mahasiswaSingle.phone!,
+                      jurusan: dataMahas.mahasiswaSingle.jurusan!,
+                      tahunMasuk: dataMahas.mahasiswaSingle.tahunMasuk!,
+                      ipk: dataMahas.mahasiswaSingle.ipk!,
+                      userId: dataMahas.mahasiswaSingle.userId!);
+              if (mounted) {
+                await Provider.of<MahasiswaViewModel>(context, listen: false)
+                    .getOneMahasiswa(oneId: idMahasiswa);
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: AppTheme.primaryTheme,
+                    content: Text(
+                      'Foto profil kamu sudah disematkan !',
+                      style: AppTextStyle.poppinsTextStyle(
+                        fontsWeight: FontWeight.w500,
+                        color: AppTheme.white,
+                      ),
+                    ),
+                  ));
+                  Navigator.pop(context);
+                }
+              }
+            }
+          }
+        }
+      }
+    } on PlatformException catch (e) {
+      debugPrint('Failed to pick Image : $e');
+    }
+  }
 
-      setState(() {
-        if (photo != null) {
-          // https://stackoverflow.com/questions/57509972/flutter-dio-how-to-upload-image
+  Future hapusImage() async {
+    showDialog(
+      context: context,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+    if (mounted) {
+      final dataMahas = Provider.of<MahasiswaViewModel>(context, listen: false);
+      await Provider.of<MahasiswaViewModel>(context, listen: false)
+          .updateMahasiswa(
+              idMahasiswa: idMahasiswa!,
+              name: dataMahas.mahasiswaSingle.name!,
+              email: dataMahas.mahasiswaSingle.email!,
+              nim: dataMahas.mahasiswaSingle.nim!,
+              image: '',
+              phone: dataMahas.mahasiswaSingle.phone!,
+              jurusan: dataMahas.mahasiswaSingle.jurusan!,
+              tahunMasuk: dataMahas.mahasiswaSingle.tahunMasuk!,
+              ipk: dataMahas.mahasiswaSingle.ipk!,
+              userId: dataMahas.mahasiswaSingle.userId!);
+      if (mounted) {
+        await Provider.of<MahasiswaViewModel>(context, listen: false)
+            .getOneMahasiswa(oneId: idMahasiswa);
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
             content: Text(
-              'Foto profil kamu sudah disematkan !',
+              'Foto Profil kamu sudah di hapus !',
               style: AppTextStyle.poppinsTextStyle(
                 fontsWeight: FontWeight.w500,
                 color: AppTheme.white,
               ),
             ),
           ));
-          image = photo;
+          Navigator.pop(context);
         }
-      });
-    } on PlatformException catch (e) {
-      debugPrint('Failed to pick Image : $e');
+      }
     }
   }
 
@@ -159,24 +277,25 @@ class _ProfilePageState extends State<ProfilePage> {
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            setState(() {
-                              if (image != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    duration: const Duration(seconds: 1),
-                                    backgroundColor: AppTheme.error,
-                                    content: Text(
-                                      'Foto Profil kamu sudah di hapus !',
-                                      style: AppTextStyle.poppinsTextStyle(
-                                        fontsWeight: FontWeight.w500,
-                                        color: AppTheme.white,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                              image = null;
-                            });
+                            hapusImage();
+                            // setState(() {
+                            //   if (dataMahas.mahasiswaSingle.image != null) {
+                            //     ScaffoldMessenger.of(context).showSnackBar(
+                            //       SnackBar(
+                            //         duration: const Duration(seconds: 1),
+                            //         backgroundColor: AppTheme.error,
+                            //         content: Text(
+                            //           'Foto Profil kamu sudah di hapus !',
+                            //           style: AppTextStyle.poppinsTextStyle(
+                            //             fontsWeight: FontWeight.w500,
+                            //             color: AppTheme.white,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   }
+                            //   image = null;
+                            // });
                           },
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: AppTheme.gray_2),
@@ -209,12 +328,13 @@ class _ProfilePageState extends State<ProfilePage> {
         });
   }
 
-  Future<void> isLogout(BuildContext context) async {
+  void isLogout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // dispose();
     await prefs.clear();
     await prefs.remove('token');
-    Navigator.pushNamedAndRemoveUntil(context, '//login', (route) => false);
+    if (mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '//login', (route) => false);
+    }
   }
 
   void alertLogout() {
@@ -255,7 +375,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextButton(
-                        onPressed: () => isLogout(context),
+                        onPressed: () => isLogout(),
                         style: ElevatedButton.styleFrom(
                           side: const BorderSide(color: AppTheme.primaryTheme),
                           foregroundColor: AppTheme.primaryTheme,
@@ -301,13 +421,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
 
-    if (dataMahas.state == Status.initial) {
-      return const ProfileLoading();
-    } else if (dataMahas.state == Status.loading) {
-      return const ProfileLoading();
-    } else if (dataMahas.state == Status.error) {
-      return const ProfileError();
-    }
+    // if (dataMahas.state == Status.initial) {
+    //   return const ProfileLoading();
+    // } else if (dataMahas.state == Status.completed) {
+    //   return const ProfilePage();
+    // } else if (dataMahas.state == Status.error) {
+    //   return const ProfileError();
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -334,7 +454,8 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           Column(
             children: [
-              image != null
+              // image != null
+              dataMahas.mahasiswaSingle.image != ''
                   ? Container(
                       margin: const EdgeInsets.all(21),
                       height: 130,
@@ -350,7 +471,11 @@ class _ProfilePageState extends State<ProfilePage> {
                               elevation: 0,
                               child: CircleAvatar(
                                 radius: 65,
-                                backgroundImage: FileImage(File(image!.path)),
+                                backgroundColor: AppTheme.white,
+                                // backgroundImage: FileImage(File(image!.path)),
+                                backgroundImage: NetworkImage(
+                                    dataMahas.mahasiswaSingle.image ?? '',
+                                    scale: 1.0),
                               ),
                             ),
                           ),
@@ -424,24 +549,70 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                dataMahas.mahasiswaSingle.name.toString(),
-                style: AppTextStyle.poppinsTextStyle(
-                  fontSize: 24,
-                  fontsWeight: FontWeight.w500,
-                  color: AppTheme.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              isLoading
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Text(
+                        'Nama',
+                        style: AppTextStyle.poppinsTextStyle(
+                          fontSize: 24,
+                          fontsWeight: FontWeight.w500,
+                          color: AppTheme.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : dataMahas.mahasiswaSingle.name != null
+                      ? Text(
+                          dataMahas.mahasiswaSingle.name.toString(),
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 24,
+                            fontsWeight: FontWeight.w500,
+                            color: AppTheme.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : Text(
+                          'Name',
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 24,
+                            fontsWeight: FontWeight.w500,
+                            color: AppTheme.black,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
               const Padding(padding: EdgeInsets.only(bottom: 8)),
-              Text(
-                dataMahas.mahasiswaSingle.nim.toString(),
-                style: AppTextStyle.poppinsTextStyle(
-                  fontSize: 16,
-                  fontsWeight: FontWeight.w400,
-                  color: AppTheme.black_3,
-                ),
-              ),
+              isLoading
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Text(
+                        'NIM',
+                        style: AppTextStyle.poppinsTextStyle(
+                          fontSize: 16,
+                          fontsWeight: FontWeight.w400,
+                          color: AppTheme.black_3,
+                        ),
+                      ),
+                    )
+                  : dataMahas.mahasiswaSingle.nim != null
+                      ? Text(
+                          dataMahas.mahasiswaSingle.nim.toString(),
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w400,
+                            color: AppTheme.black_3,
+                          ),
+                        )
+                      : Text(
+                          'NIM',
+                          style: AppTextStyle.poppinsTextStyle(
+                            fontSize: 16,
+                            fontsWeight: FontWeight.w400,
+                            color: AppTheme.black_3,
+                          ),
+                        ),
             ],
           ),
           const Padding(padding: EdgeInsets.only(bottom: 20)),
@@ -452,44 +623,54 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTextField(
-                    'Email',
-                    dataMahas.mahasiswaSingle.email.toString() == 'failed to fetch Email'
-                        ? emailController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.email.toString())),
+                  'Email',
+                  dataMahas.mahasiswaSingle.email == null
+                      ? emailController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.email.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'No. Telp',
-                    dataMahas.mahasiswaSingle.phone.toString() == 'failed to fetch phone'
-                        ? telponController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.phone.toString())),
+                  'No. Telp',
+                  dataMahas.mahasiswaSingle.phone == null
+                      ? telponController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.phone.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'Jurusan',
-                    dataMahas.mahasiswaSingle.jurusan.toString() == 'failed to fetch Jurusan'
-                        ? jurusanController
-                        : TextEditingController(
-                            text:
-                                dataMahas.mahasiswaSingle.jurusan.toString())),
+                  'Jurusan',
+                  dataMahas.mahasiswaSingle.jurusan == null
+                      ? jurusanController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.jurusan.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'Tahun',
-                    dataMahas.mahasiswaSingle.tahunMasuk == '20??'
-                        ? tahunController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.tahunMasuk
-                                .toString())),
+                  'Tahun',
+                  dataMahas.mahasiswaSingle.tahunMasuk == null
+                      ? tahunController
+                      : TextEditingController(
+                          text:
+                              dataMahas.mahasiswaSingle.tahunMasuk.toString()),
+                  isLoading,
+                ),
                 _buildTextField(
-                    'IPK',
-                    dataMahas.mahasiswaSingle.ipk.toString() == '0.0'
-                        ? ipkController
-                        : TextEditingController(
-                            text: dataMahas.mahasiswaSingle.ipk.toString())),
+                  'IPK',
+                  dataMahas.mahasiswaSingle.ipk == null
+                      ? ipkController
+                      : TextEditingController(
+                          text: dataMahas.mahasiswaSingle.ipk.toString()),
+                  isLoading,
+                ),
               ],
             ),
           ),
           Column(
             children: [
               ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/profiles/underMaintenance'),
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/profiles/underMaintenance'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryTheme_2,
                   foregroundColor: AppTheme.white,
@@ -514,7 +695,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controllers) {
+  Widget _buildTextField(
+      String label, TextEditingController controllers, bool isLoading) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Row(
@@ -537,7 +719,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: AppTheme.black,
               ),
               readOnly: true,
-              controller: controllers,
+              controller: isLoading
+                  ? TextEditingController(text: 'Loading')
+                  : controllers,
               textAlign: TextAlign.left,
               decoration: const InputDecoration(
                 contentPadding:

@@ -1,8 +1,16 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:presencee/view/pages/camera_view.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'dart:ui';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+
+import 'alerted_attendance.dart';
 
 class CardPresence extends StatefulWidget {
   const CardPresence({super.key});
@@ -13,54 +21,96 @@ class CardPresence extends StatefulWidget {
 
 class _CardPresenceState extends State<CardPresence> {
   int? _selectedValue;
-  File? image;
-  String? location;
 
-  Future<void> _getImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.camera);
-    setState(() {
-      if (pickedImage != null) {
-        image = File(pickedImage.path);
-        _getLocation();
-      } else {
-        debugPrint('No image selected.');
-      }
-    });
+  Future<String> getTimeZone() async {
+    String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    return timeZoneName;
   }
 
-  Future<void> _getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  Future<String> convertTimeZone() async {
+    tz.initializeTimeZones();
+    String timeZoneName = await getTimeZone();
+    tz.Location location = tz.getLocation(timeZoneName);
+    tz.TZDateTime now = tz.TZDateTime.now(location);
+    String offset = now.timeZoneOffset.toString().split('.').first;
+    return offset;
+  }
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      debugPrint('Location services are disabled.');
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.deniedForever) {
-      debugPrint( 'Location permissions are permanently denied, we cannot request permissions.');
-      return;
-    }
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        debugPrint('Location permissions are denied (actual value: $permission).');
-        return;
+  void keteranganAbsen({required String status}) async {
+    showDialog(
+      context: context,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
+    );
+    var timezone = await convertTimeZone();
+    var now = DateTime.now().toString().split(' ');
+    var tm = timezone.toString().split(':');
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final idUser = sharedPreferences.getInt('id_user');
+    final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+    if (mounted) {
+      await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
+          userId: idUser!,
+          mahasiswaId: idMahasiswa!,
+          jadwalId: 1,
+          // timeAttemp: '2023-06-18T03:40:50+08:00',
+          timeAttemp: "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
+          matakuliah: 'Akuntansi',
+          status: status,
+          location: '',
+          image: '');
+      if (mounted) {
+        Navigator.pop(context);
+        if (Provider.of<AbsensiViewModel>(context, listen: false)
+                .absensi
+                ?.message ==
+            'success creating absen') {
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Absensi berhasil",
+              icons: PhosphorIcons.check_circle_fill,
+              iconColor: AppTheme.success,
+              backgroundsColor: AppTheme.white,
+              durations: 1800);
+        } else if (Provider.of<AbsensiViewModel>(context, listen: false)
+                    .absensi
+                    ?.message ==
+                'missing or malformed jwt' ||
+            Provider.of<AbsensiViewModel>(context, listen: false)
+                    .absensi
+                    ?.message ==
+                'invalid or expired jwt') {
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Token telah kadaluarsa, harap login kembali",
+              icons: PhosphorIcons.x_circle_fill,
+              iconColor: AppTheme.error,
+              backgroundsColor: AppTheme.white,
+              durations: 1800);
+        } else {
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Absensi gagal",
+              icons: PhosphorIcons.x_circle_fill,
+              iconColor: AppTheme.error,
+              backgroundsColor: AppTheme.white,
+              durations: 1800);
+        }
+        Navigator.pop(context);
       }
     }
-
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    setState(() {
-      location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
-    });
   }
 
   @override
@@ -93,7 +143,7 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Senin',
+              'Abdul Jalil',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -102,7 +152,7 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 6),
             Text(
-              '07.00 - 09.00',
+              'Senin 07.00 - 09.00',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -146,7 +196,8 @@ class _CardPresenceState extends State<CardPresence> {
                       context: context,
                       builder: (BuildContext context) {
                         return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
+                          builder:
+                              (BuildContext context, StateSetter setState) {
                             return AlertDialog(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
@@ -195,7 +246,8 @@ class _CardPresenceState extends State<CardPresence> {
                                   ),
                                   const SizedBox(height: 10),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
@@ -204,7 +256,8 @@ class _CardPresenceState extends State<CardPresence> {
                                             color: AppTheme.primaryTheme_2,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(2),
+                                            borderRadius:
+                                                BorderRadius.circular(2),
                                           ),
                                         ),
                                         onPressed: () {
@@ -223,12 +276,23 @@ class _CardPresenceState extends State<CardPresence> {
                                       const SizedBox(width: 8),
                                       ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppTheme.primaryTheme_2,
+                                          backgroundColor:
+                                              AppTheme.primaryTheme_2,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(2),
+                                            borderRadius:
+                                                BorderRadius.circular(2),
                                           ),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          if (_selectedValue == 1) {
+                                            keteranganAbsen(status: 'Sakit');
+                                          } else if (_selectedValue == 2) {
+                                            keteranganAbsen(status: 'Izin');
+                                          } else if (_selectedValue == 3) {
+                                            keteranganAbsen(
+                                                status: 'Dispensasi');
+                                          }
+                                        },
                                         child: Text(
                                           'Simpan',
                                           style: AppTextStyle.poppinsTextStyle(
@@ -288,7 +352,8 @@ class _CardPresenceState extends State<CardPresence> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () => Navigator.pushNamed(context, '/schedule/presence/fingerprint'),
+                                  onPressed: () => Navigator.pushNamed(context,
+                                      '/schedule/presence/fingerprint'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
@@ -306,7 +371,25 @@ class _CardPresenceState extends State<CardPresence> {
                                 ),
                                 const SizedBox(width: 8),
                                 ElevatedButton(
-                                  onPressed: () => _getImage(),
+                                  // onPressed: () => _getImage(),
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                CameraView()));
+                                    // _getImage();
+                                    // _getLocation();
+                                    // Stack(children: [
+                                    //   Positioned(
+                                    //     top: 0,
+                                    //     child: Text(
+                                    //       location ?? 'Location not available',
+                                    //       style: TextStyle(color: Colors.white),
+                                    //     ),
+                                    //   ),
+                                    // ]);
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(

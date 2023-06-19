@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 
 class CardAbsensi extends StatelessWidget {
-  CardAbsensi({super.key, required this.matkul, required this.hari, required this.jam});
+  CardAbsensi({super.key, required this.matkul, this.hari, required this.jam});
 
   bool isTodayPresent = true;
   String? matkul;
