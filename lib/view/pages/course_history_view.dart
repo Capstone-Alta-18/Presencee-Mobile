@@ -1,14 +1,17 @@
+
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
 import 'package:presencee/view/widgets/list_history.dart';
+import 'package:presencee/view_model/dosen_view_model.dart';
 import '../../view_model/kehadiran_view_model.dart';
 import 'package:flutter/material.dart';
 import '../../theme/constant.dart';
 
 class CourseHistory extends StatefulWidget {
   final KehadiranViewModel manager;
+  final DosenViewModel managerDosen;
   final int selectedIndex;
-  const CourseHistory({Key? key,required this.manager,required this.selectedIndex}) : super(key: key);
+  const CourseHistory({Key? key,required this.manager,required this.managerDosen,required this.selectedIndex}) : super(key: key);
 
   @override
   State<CourseHistory> createState() => _CourseHistoryState();
@@ -36,14 +39,14 @@ class _CourseHistoryState extends State<CourseHistory> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Bahasa Indonesia (MU)',
+                        widget.manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
                         style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontsWeight: FontWeight.w600,
                             fontSize: 24),
                       ),
                       Text(
-                        'Siswandi',
+                        widget.managerDosen.dosen.dosens![widget.selectedIndex].name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontsWeight: FontWeight.w400,
@@ -52,10 +55,10 @@ class _CourseHistoryState extends State<CourseHistory> {
                     ],
                   ),
                 )),
-            const Flexible(
+            Flexible(
               flex: 8,
               child: TabBarView(
-                children: [ListHistory(), DiagramHistory()],
+                children: [ListHistory(), DiagramHistory(manager: widget.manager,selectedIndex: widget.selectedIndex,)],
               ),
             )
           ],

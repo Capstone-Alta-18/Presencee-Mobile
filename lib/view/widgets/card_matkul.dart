@@ -6,6 +6,7 @@ import 'package:presencee/model/riwayat_kehadiran_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -30,16 +31,15 @@ class _CardMatkulState extends State<CardMatkul> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 0);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
-    // final getTotal = manager.kehadiranNew.meta!.toJson();
-    // List<String>
+    final managerDosen = Provider.of<DosenViewModel>(context);
 
     if (manager.state == DataState.initial) {
       return const LoadingMatkulCard();
@@ -92,7 +92,7 @@ class _CardMatkulState extends State<CardMatkul> {
                                     child: child,
                                   );
                                 },
-                                pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager, selectedIndex: index),
+                                pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager, selectedIndex: index,managerDosen: managerDosen,),
                               ),
                             );
                           },
@@ -210,7 +210,7 @@ class _CardMatkulState extends State<CardMatkul> {
                         ),
                       ),
                       Text(
-                        "Nama Dosen",
+                        managerDosen.dosen.dosens![widget.selectedIndex].name.toString(),
                         // manager.kehadiranNew.meta!.bahasaIndonesia!.total.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,

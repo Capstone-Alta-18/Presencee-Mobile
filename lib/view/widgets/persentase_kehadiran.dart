@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/model/riwayat_kehadiran_model.dart';
@@ -8,24 +10,14 @@ import 'package:provider/provider.dart';
 
 class PersentaseKehadiran extends StatefulWidget {
   final bool diagram;
-  const PersentaseKehadiran({super.key, required this.diagram});
+  final int selectedIndex;
+  const PersentaseKehadiran({super.key, required this.diagram, required this.selectedIndex});
 
   @override
   State<PersentaseKehadiran> createState() => _PersentaseKehadiranState();
 }
 
 class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 0);
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
@@ -36,6 +28,15 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
       return const LoadingMatkulCard();
     } else if (manager.state == DataState.error) {
       return const ErrorMatkulCards();
+    }
+
+    getPercent1(){
+      double percent = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).reduce((value, element) => (value + element)) / 80 * 100;
+      return percent.toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2);
+    }
+    getPercent2(){
+      double percent = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex) / 16 * 100;
+      return percent.toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2);
     }
 
     return widget.diagram == false
@@ -49,7 +50,7 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).reduce((value, element) => (value + element)).toDouble() / 80 * 100} %",
+                  "${getPercent1()} %",
                   // "62,5%",
                   style: AppTextStyle.poppinsTextStyle(
                     color: AppTheme.black,
@@ -86,9 +87,9 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
             animation: true,
             animationDuration: 1200,
             lineWidth: 30.0,
-            percent: 0.8,
+            percent: manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex) / 16,
             center: Text(
-              "63,5%",
+              '${getPercent2()}%',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontSize: 40,
