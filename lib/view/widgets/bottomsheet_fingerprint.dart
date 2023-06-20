@@ -1,11 +1,17 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
+import 'package:presencee/view/widgets/alerted_attendance.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 // import 'package:presencee/view/auth/local_auth_biometrics.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import '../../view_model/absensi_view_model.dart';
 
 class FingerprintBottomsheet extends StatefulWidget {
   const FingerprintBottomsheet({super.key});
@@ -16,6 +22,11 @@ class FingerprintBottomsheet extends StatefulWidget {
 
 class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
   static final auth = LocalAuthentication();
+
+  Future<String> getTimeZone() async {
+    String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    return timeZoneName;
+  }
   
 
   /* @override
@@ -25,7 +36,7 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
   } */
 
   static Future<bool> hasBiometrics(BuildContext context) async {
-    final isDeviceSupport = await auth.isDeviceSupported();
+    // final isDeviceSupport = await auth.isDeviceSupported();
     try {
       bool canCheckBiometrics = await auth.canCheckBiometrics;
       if (!canCheckBiometrics) {
@@ -52,9 +63,21 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
     }
   }
 
+  Future<String> convertTimeZone() async {
+    tz.initializeTimeZones();
+    String timeZoneName = await getTimeZone();
+    tz.Location location = tz.getLocation(timeZoneName);
+    tz.TZDateTime now = tz.TZDateTime.now(location);
+    String offset = now.timeZoneOffset.toString().split('.').first;
+    return offset;
+  }
+
   Future<void> authenticate() async {
     bool isAuthenticated = false;
     bool canCheckBiometrics = await hasBiometrics(context);
+    var timezone = await convertTimeZone();
+    var now = DateTime.now().toString().split(' ');
+    var tm = timezone.toString().split(':');
 
     if (canCheckBiometrics) {
       isAuthenticated = await auth.authenticate(
@@ -66,6 +89,19 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
       );
 
       if (isAuthenticated) {
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        final idUser = sharedPreferences.getInt('id_user');
+        final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+        await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
+          userId: idUser!,
+          mahasiswaId: idMahasiswa!,
+          jadwalId: 1,
+          timeAttemp: "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
+          matakuliah: 'Akuntansi',
+          status: 'Hadir',
+          location: "",
+          image: ""
+        );
         SnackbarAlertDialog().customDialogs(
           context, message: "Presensi Berhasil", 
           icons: PhosphorIcons.check_circle, 

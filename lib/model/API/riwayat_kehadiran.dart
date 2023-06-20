@@ -1,10 +1,7 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'privates.dart';
 import 'package:presencee/model/riwayat_kehadiran_model.dart';
-
-// const String baseURL = "https://647eb234c246f166da8f47fa.mockapi.io/kehadiran";
 
 class KehadiranApi {
   static const String url = "$baseURL/v1/absens/riwayat";
@@ -18,7 +15,7 @@ class KehadiranApi {
         queryParameters: {
           "absen_id" : 0,
           "user_id" : 0,
-          "mahasiswa_id" : 0,
+          "mahasiswa_id" : 35,
           "jadwal_id" : 0,
           "created_after" : "2023-06-02T15:04:05Z",
           "created_before" : "2023-06-20T15:04:05Z",

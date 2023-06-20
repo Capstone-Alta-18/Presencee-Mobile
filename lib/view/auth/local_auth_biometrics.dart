@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
+import 'package:presencee/view/widgets/alerted_attendance.dart';
 
 class AuthBiometrics {
   static final auth = LocalAuthentication();

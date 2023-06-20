@@ -46,7 +46,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future getImage(ImageSource source) async {
-    // final imagesData = Provider.of<MahasiswaViewModel>(context, listen: false);
     try {
       ImagePicker picker = ImagePicker();
       XFile? photo = await picker.pickImage(source: source);
