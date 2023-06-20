@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 
 class CardAbsensi extends StatelessWidget {
-  CardAbsensi({super.key, required this.matkul, this.hari, required this.jam});
+  CardAbsensi({super.key, required this.matkul, this.dosen, required this.jam});
 
   bool isTodayPresent = true;
   String? matkul;
-  String? hari;
+  String? dosen;
   String? jam;
 
   @override
@@ -31,7 +31,7 @@ class CardAbsensi extends StatelessWidget {
           children: [
             const SizedBox(height: 2),
             Text(
-              hari!,
+              dosen!,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.gray_5,
                 fontsWeight: FontWeight.w400,
