@@ -1,16 +1,15 @@
-import 'dart:async';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view/widgets/today.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-// import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-// import 'package:presencee/model/jadwal_model.dart';
-import 'package:presencee/view_model/jadwal_view_model.dart';
-import 'package:presencee/view_model/mahasiswa_view_model.dart';
-import 'package:provider/provider.dart';
-import 'package:presencee/view/widgets/today.dart';
-import '../../theme/constant.dart';
-// import '../widgets/alerted_attendance.dart';
 import '../widgets/card_absensi.dart';
+import '../../theme/constant.dart';
+import 'package:intl/intl.dart';
+import 'dart:async';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -20,9 +19,8 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  bool isTodaySelected =
-      true; // Set initial selection state of "Hari ini" button
-  bool isAllSelected = false; // Set initial selection state of "Semua" button
+  bool isTodaySelected = true;
+  bool isAllSelected = false;
   StreamController<DateTime> timeController = StreamController<DateTime>();
 
   @override
@@ -119,6 +117,23 @@ class _SchedulePageState extends State<SchedulePage> {
 
   Widget _buildJadwalAbsensi() {
     final allJadwal = Provider.of<JadwalViewModel>(context);
+
+    if (allJadwal.status == DataStatus.initial) {
+      return const JadwalLoading();
+    } else if (allJadwal.status == DataStatus.loading) {
+      return const JadwalLoading();
+    } else if (allJadwal.status == DataStatus.error) {
+      return Container(
+        alignment: Alignment.center,
+        height: 320,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ErrorMatkulCards(),
+          ],
+        )
+      );
+    }
 
     String getInitials(String name) {
       if (name.isEmpty) return '';
@@ -230,55 +245,56 @@ class _SchedulePageState extends State<SchedulePage> {
       ],
     );
   }
-}
 
-Widget _searchBar() {
-  // bool isSearch = false;
+  Widget _searchBar() {
+    final inputUser = Provider.of<JadwalViewModel>(context);
+    const searchText = '';
 
-  return TextField(
-    inputFormatters: [
-      LengthLimitingTextInputFormatter(15),
-    ],
-    decoration: InputDecoration(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-      hintText: 'input search text...',
-      hintStyle: const TextStyle(
-        color: AppTheme.gray_2,
-      ),
-      border: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(
+    return TextField(
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+        hintText: 'input search text...',
+        hintStyle: const TextStyle(
           color: AppTheme.gray_2,
         ),
-      ),
-      suffixIcon: Container(
-        decoration: const BoxDecoration(
-          // color: isSearch ? highlightSearch : Colors.transparent,      // change color when search are clicked
-          border: Border(
-            left: BorderSide(
-              color: AppTheme.gray_2,
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(
+            color: AppTheme.gray_2,
+          ),
+        ),
+        suffixIcon: Container(
+          decoration: const BoxDecoration(
+            // color: isSearch ? highlightSearch : Colors.transparent,      // change color when search are clicked
+            border: Border(
+              left: BorderSide(
+                color: AppTheme.gray_2,
+              ),
             ),
           ),
-        ),
-        child: IconButton(
-          icon: const Icon(
-            Icons.search,
+          child: IconButton(
+            icon: const Icon(
+              Icons.search,
+            ),
+            onPressed: () {
+              inputUser.searchJadwal(searchText);
+            },
           ),
-          onPressed: () {
-            // isSearch = !isSearch;
-          },
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(
+            color: AppTheme.primaryTheme_2,
+            width: 1,
+          ),
         ),
       ),
-      focusedBorder: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(
-          color: AppTheme.primaryTheme_2,
-          width: 1,
-        ),
-      ),
-    ),
-    onChanged: (value) {
-      // Implementasi logika pencarian di sini
-    },
-  );
+      onChanged: (value) {
+        inputUser.searchJadwal(value);
+      },
+    );
+  }
 }

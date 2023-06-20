@@ -1,27 +1,4 @@
-/* class JadwalPelajaran {
-  List<Data>? data;
-
-  JadwalPelajaran({this.data});
-
-  JadwalPelajaran.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-} */
-
-class Data {
+class JadwalPelajaran {
   final int? id;
   final int? matakuliahId;
   final int? roomId;
@@ -33,7 +10,7 @@ class Data {
   final int? dosenId;
   Dosen? dosen;
 
-  Data(
+  JadwalPelajaran(
       {this.id,
       this.matakuliahId,
       this.roomId,
@@ -45,8 +22,8 @@ class Data {
       this.dosenId,
       this.dosen});
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory JadwalPelajaran.fromJson(Map<String, dynamic> json) {
+    return JadwalPelajaran(
       id: json['id'],
       matakuliahId: json['matakuliah_id'],
       roomId: json['room_id'],

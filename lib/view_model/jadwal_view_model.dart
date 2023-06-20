@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
 import '../model/jadwal_model.dart';
 
-enum Status {
+enum DataStatus {
   initial,
   loading,
   completed,
@@ -10,24 +10,36 @@ enum Status {
 }
 
 class JadwalViewModel extends ChangeNotifier {
-  List<Data> _jadwals = [];
-  Status _status = Status.initial;
+  List<JadwalPelajaran> _jadwals = [];
+  List<JadwalPelajaran> filteredJadwals = [];
+  DataStatus _status = DataStatus.initial;
 
-  List<Data> get jadwals => _jadwals;
+  List<JadwalPelajaran> get jadwals => _jadwals;
 
-  Status get status => _status;
+  DataStatus get status => _status;
 
   getJadwal({required int pages, required int limits}) async {
-    _status = Status.loading;
+    _status = DataStatus.loading;
     notifyListeners();
 
     try {
       final allJadwal = await JadwalApi.getPageJadwal(pages: pages, limits: limits);
       _jadwals = allJadwal;
-      _status = Status.completed;
+      _status = DataStatus.completed;
     } catch (e) {
-      _status = Status.error;
+      _status = DataStatus.error;
     }
     notifyListeners();
   }
+
+  searchJadwal(String query) {
+    filteredJadwals = jadwals.where((jadwal) => jadwal.name!.toLowerCase().contains(query.toLowerCase())).toList();
+    notifyListeners();
+  }
+
+  searchJadwalByDosen(String query) {
+    filteredJadwals = jadwals.where((jadwal) => jadwal.dosen!.name!.toLowerCase().contains(query.toLowerCase())).toList();
+    notifyListeners();
+  }
+
 }

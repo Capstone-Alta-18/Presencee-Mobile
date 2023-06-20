@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:presencee/model/riwayat_kehadiran_model.dart';
-import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class PersentaseKehadiran extends StatefulWidget {
   final bool diagram;

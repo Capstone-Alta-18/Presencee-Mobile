@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 
 class CardAbsensi extends StatelessWidget {
-  CardAbsensi({super.key, required this.matkul, this.dosen, required this.jam});
+  const CardAbsensi({super.key, required this.matkul, this.dosen, required this.jam});
 
-  bool isTodayPresent = true;
-  String? matkul;
-  String? dosen;
-  String? jam;
+  final bool isTodayPresent = true;
+  final String? matkul;
+  final String? dosen;
+  final String? jam;
 
   @override
   Widget build(BuildContext context) {

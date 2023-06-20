@@ -1,17 +1,16 @@
-// import 'dart:developer';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:local_auth/local_auth.dart';
-import 'package:presencee/view/widgets/alerted_attendance.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-// import 'package:presencee/view/auth/local_auth_biometrics.dart';
-import 'package:presencee/theme/constant.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:presencee/view/widgets/alerted_attendance.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../view_model/absensi_view_model.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:developer';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import '../../view_model/absensi_view_model.dart';
 
 class FingerprintBottomsheet extends StatefulWidget {
   const FingerprintBottomsheet({super.key});
@@ -27,13 +26,6 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
     String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
     return timeZoneName;
   }
-  
-
-  /* @override
-  void initState() {
-    AuthBiometrics.authenticate();
-    super.initState();
-  } */
 
   static Future<bool> hasBiometrics(BuildContext context) async {
     // final isDeviceSupport = await auth.isDeviceSupported();
@@ -59,6 +51,7 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
         backgroundsColor: AppTheme.white,
         durations: 1200
       );
+      log(e.message.toString());
       return false;
     }
   }

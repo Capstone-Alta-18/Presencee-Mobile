@@ -1,4 +1,3 @@
-import 'package:presencee/model/upload_model.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
