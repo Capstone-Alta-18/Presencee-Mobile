@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/camera_view.dart';
 import 'package:presencee/view/widgets/alerted_success_attendance.dart';
@@ -21,6 +23,8 @@ class CardPresence extends StatefulWidget {
 
 class _CardPresenceState extends State<CardPresence> {
   int? _selectedValue;
+  String? location;
+  String? address;
 
   Future<String> getTimeZone() async {
     String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
@@ -373,6 +377,7 @@ class _CardPresenceState extends State<CardPresence> {
                                 ElevatedButton(
                                   // onPressed: () => _getImage(),
                                   onPressed: () {
+                                    // _getLocation();
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(

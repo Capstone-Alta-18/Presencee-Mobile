@@ -58,18 +58,61 @@ class _CameraViewState extends State<CameraView> {
 
   Future<void> _getLocation() async {
     bool serviceEnabled;
-    LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       debugPrint('Location services are disabled.');
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Aktifkan Lokasi'),
+            content: const Text(
+                'Aplikasi membutuhkan akses lokasi GPS. Aktifkan lokasi sekarang?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Batal'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  setState(() {
+                    _requestLocationPermission();
+                  });
+                },
+                child: const Text('Aktifkan'),
+              ),
+            ],
+          ),
+        );
+      }
       return;
     }
+  }
 
+  Future<void> _requestLocationPermission() async {
+    LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
       debugPrint(
           'Location permissions are permanently denied, we cannot request permissions.');
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Izin Ditolak'),
+            content: const Text(
+                'Aplikasi tidak dapat mengakses lokasi karena izin akses lokasi ditolak secara permanen.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
       return;
     }
 
@@ -79,6 +122,22 @@ class _CameraViewState extends State<CameraView> {
           permission != LocationPermission.always) {
         debugPrint(
             'Location permissions are denied (actual value: $permission).');
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Izin Ditolak'),
+              content: const Text(
+                  'Aplikasi tidak dapat mengakses lokasi karena izin akses lokasi ditolak.'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
         return;
       }
     }
@@ -106,11 +165,6 @@ class _CameraViewState extends State<CameraView> {
     } catch (e) {
       debugPrint('Error: $e');
     }
-
-    // setState(() {
-    //   location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
-    //   print(location);
-    // });
   }
 
   Future initCamera(CameraDescription cameraDescription) async {
