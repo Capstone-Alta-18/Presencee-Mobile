@@ -8,7 +8,7 @@ import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/alerted_success_attendance.dart';
+import '../widgets/alerted_attendance.dart';
 // import 'dart:math' as math;
 
 class LoginPage extends StatefulWidget {
@@ -93,8 +93,8 @@ class _LoginPageState extends State<LoginPage> {
           Provider.of<UserViewModel>(context, listen: false);
       if (userViewModel.user != null) {
         isLoading = false;
-        debugPrint(userViewModel.user?.message);
-        debugPrint(userViewModel.user?.token);
+        // debugPrint(userViewModel.user?.message);
+        // debugPrint(userViewModel.user?.token);
         Navigator.of(context)
             .pushNamedAndRemoveUntil('//home', (route) => false);
         SnackbarAlertDialog().customDialogs(context,
@@ -102,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
             icons: PhosphorIcons.check_circle_fill,
             iconColor: AppTheme.success,
             backgroundsColor: AppTheme.white,
+            margin: const EdgeInsets.only(bottom: 0),
             durations: 1800);
       } else {
         setState(() {
@@ -110,6 +111,8 @@ class _LoginPageState extends State<LoginPage> {
               icons: PhosphorIcons.x_circle_fill,
               backgroundsColor: AppTheme.error,
               iconColor: AppTheme.white,
+              snacksbarsBehavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(bottom: 0),
               durations: 1200);
           isLoading = false;
         });

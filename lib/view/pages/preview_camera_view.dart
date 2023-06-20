@@ -1,19 +1,19 @@
-import 'dart:io';
-
-import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intl/intl.dart';
-import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:presencee/theme/constant.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:intl/intl.dart';
+import 'dart:io';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
+import '../widgets/alerted_attendance.dart';
 
 class PreviewScreen extends StatefulWidget {
   final XFile imgPath;
@@ -278,12 +278,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
                       fontSize: 14,
                     ),
                   ),
-                  const SizedBox(height: 81),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   ElevatedButton(
                     onPressed: !isLoading
-                        ? () {
-                            uploadImage();
-                          }
+                        ? () => uploadImage()
                         : null
                     // Navigator.pushNamed(
                     //     context, '/schedule/presence/fingerprint')

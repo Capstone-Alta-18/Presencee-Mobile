@@ -1,25 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:presencee/model/riwayat_kehadiran_model.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/widgets/State_Status_widget.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:provider/provider.dart';
 
-class PersentaseKehadiran extends StatelessWidget {
+class PersentaseKehadiran extends StatefulWidget {
   final bool diagram;
   const PersentaseKehadiran({super.key, required this.diagram});
 
   @override
+  State<PersentaseKehadiran> createState() => _PersentaseKehadiranState();
+}
+
+class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 0);
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-    return diagram == false
+    final manager = Provider.of<KehadiranViewModel>(context);
+
+    if (manager.state == DataState.initial) {
+      return const LoadingMatkulCard();
+    } else if (manager.state == DataState.loading) {
+      return const LoadingMatkulCard();
+    } else if (manager.state == DataState.error) {
+      return const ErrorMatkulCards();
+    }
+
+    return widget.diagram == false
         ? CircularPercentIndicator(
             radius: 105.0,
             animation: true,
             animationDuration: 1200,
             lineWidth: 15.0,
-            percent: 0.8,
+            percent: manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).reduce((value, element) => (value + element)).toDouble() / 80,
             center: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "62,5%",
+                  "${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).reduce((value, element) => (value + element)).toDouble() / 80 * 100} %",
+                  // "62,5%",
                   style: AppTextStyle.poppinsTextStyle(
                     color: AppTheme.black,
                     fontSize: 28,

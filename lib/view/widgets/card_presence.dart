@@ -2,17 +2,16 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/camera_view.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+
+import 'alerted_attendance.dart';
 
 class CardPresence extends StatefulWidget {
   const CardPresence({super.key});

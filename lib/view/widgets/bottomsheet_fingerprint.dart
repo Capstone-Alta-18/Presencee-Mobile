@@ -1,14 +1,14 @@
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:presencee/view/widgets/alerted_success_attendance.dart';
+import 'package:presencee/view/widgets/alerted_attendance.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 // import 'package:presencee/view/auth/local_auth_biometrics.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +36,7 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
   }
 
   static Future<bool> hasBiometrics(BuildContext context) async {
-    final isDeviceSupport = await auth.isDeviceSupported();
+    // final isDeviceSupport = await auth.isDeviceSupported();
     try {
       bool canCheckBiometrics = await auth.canCheckBiometrics;
       if (!canCheckBiometrics) {
@@ -62,7 +62,6 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
   Future<void> authenticate() async {
     bool isAuthenticated = false;
     bool canCheckBiometrics = await hasBiometrics(context);
-
     if (canCheckBiometrics) {
       _getLocation();
       isAuthenticated = await auth.authenticate(
