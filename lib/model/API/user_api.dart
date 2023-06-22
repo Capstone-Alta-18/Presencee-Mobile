@@ -19,7 +19,7 @@ class UserAPI {
 
       if (response.statusCode == 200) {
         apiToken = response.data['token'];
-        print(apiToken);
+        // print(apiToken);
         // print('API TOKEN : $apiToken');
         // final datas = response.data['mahasiswas'];
         // final userLog = UserModel.fromJson(jsonDecode(response.data));
