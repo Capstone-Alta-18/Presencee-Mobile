@@ -57,6 +57,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   camera: ^0.10.5+2
   geocoding: ^2.1.0
+  syncfusion_flutter_charts: ^21.2.10
   timezone: ^0.9.2
   flutter_native_timezone: ^2.0.0
   fluttertoast: ^8.2.2

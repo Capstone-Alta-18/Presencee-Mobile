@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 
 class DiagramHistory extends StatelessWidget {
-  const DiagramHistory({super.key});
+  final KehadiranViewModel manager;
+  final int selectedIndex;
+  const DiagramHistory({super.key,required this.manager,required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +14,10 @@ class DiagramHistory extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 27),
-        const Center(
+        Center(
           child: PersentaseKehadiran(
             diagram: true,
+            selectedIndex: selectedIndex,
           ),
         ),
         Padding(
@@ -87,7 +91,7 @@ class DiagramHistory extends StatelessWidget {
                                   fontsWeight: FontWeight.w400,
                                   fontSize: 16)),
                           Text(
-                            '9',
+                            '${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(selectedIndex)}',
                             style: AppTextStyle.poppinsTextStyle(
                                 color: AppTheme.black,
                                 fontsWeight: FontWeight.w400,
@@ -107,7 +111,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '0',
+                            '${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(selectedIndex)}',
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -127,7 +131,7 @@ class DiagramHistory extends StatelessWidget {
                                 fontSize: 16),
                           ),
                           Text(
-                            '1',
+                            '${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Sakit"]).elementAt(selectedIndex)}',
                             style: AppTextStyle.poppinsTextStyle(
                                 color: AppTheme.black,
                                 fontsWeight: FontWeight.w400,
@@ -147,7 +151,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '0',
+                            '${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Izin"]).elementAt(selectedIndex)}',
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
@@ -168,7 +172,7 @@ class DiagramHistory extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '0',
+                            '${manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Dispensasi"]).elementAt(selectedIndex)}',
                             style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.black,
                               fontsWeight: FontWeight.w400,
