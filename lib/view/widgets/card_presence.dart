@@ -2,19 +2,34 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/camera_view.dart';
+import 'package:presencee/view/pages/fingerprint_view.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+// import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+// import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
 
 import 'alerted_attendance.dart';
 
 class CardPresence extends StatefulWidget {
-  const CardPresence({super.key});
+  final String namaMatkul;
+  final String kodeKelas;
+  final String namaDosen;
+  final String date;
+  final int idJadwal;
+  const CardPresence(
+      {super.key,
+      required this.namaMatkul,
+      required this.kodeKelas,
+      required this.namaDosen,
+      required this.date,
+      required this.idJadwal});
 
   @override
   State<CardPresence> createState() => _CardPresenceState();
@@ -25,19 +40,19 @@ class _CardPresenceState extends State<CardPresence> {
   String? location;
   String? address;
 
-  Future<String> getTimeZone() async {
-    String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    return timeZoneName;
-  }
+  // Future<String> getTimeZone() async {
+  //   String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  //   return timeZoneName;
+  // }
 
-  Future<String> convertTimeZone() async {
-    tz.initializeTimeZones();
-    String timeZoneName = await getTimeZone();
-    tz.Location location = tz.getLocation(timeZoneName);
-    tz.TZDateTime now = tz.TZDateTime.now(location);
-    String offset = now.timeZoneOffset.toString().split('.').first;
-    return offset;
-  }
+  // Future<String> convertTimeZone() async {
+  //   tz.initializeTimeZones();
+  //   String timeZoneName = await getTimeZone();
+  //   tz.Location location = tz.getLocation(timeZoneName);
+  //   tz.TZDateTime now = tz.TZDateTime.now(location);
+  //   String offset = now.timeZoneOffset.toString().split('.').first;
+  //   return offset;
+  // }
 
   void keteranganAbsen({required String status}) async {
     showDialog(
@@ -60,9 +75,9 @@ class _CardPresenceState extends State<CardPresence> {
         ),
       ),
     );
-    var timezone = await convertTimeZone();
+    // var timezone = await convertTimeZone();
     var now = DateTime.now().toString().split(' ');
-    var tm = timezone.toString().split(':');
+    // var tm = timezone.toString().split(':');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     final idUser = sharedPreferences.getInt('id_user');
     final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
@@ -70,15 +85,35 @@ class _CardPresenceState extends State<CardPresence> {
       await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
           userId: idUser!,
           mahasiswaId: idMahasiswa!,
-          jadwalId: 1,
+          jadwalId: widget.idJadwal,
           // timeAttemp: '2023-06-18T03:40:50+08:00',
-          timeAttemp: "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
-          matakuliah: 'Akuntansi',
+          // timeAttemp: "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
+          timeAttemp: "${now[0]}T${now[1].split('.')[0]}+00:00",
+          matakuliah: widget.namaMatkul,
           status: status,
           location: '',
           image: '');
       if (mounted) {
         Navigator.pop(context);
+        var now = DateTime.now();
+        var jamAfter = DateFormat('yyyy-MM-ddT00:00:00+00:00').format(now);
+        var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
+        var previousMonday = now.subtract(Duration(days: now.weekday - 1));
+        var nextSaturday = previousMonday.add(Duration(days: 6));
+        var createdAfter =
+            DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
+        var createdBefore =
+            DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
+        setState(() {
+          Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(
+              userId: idUser, jamAfter: jamAfter, jamBefore: jamBefore);
+
+          Provider.of<JadwalViewModel>(context, listen: false)
+              .getFilterJadwalSemua(
+                  userId: idUser,
+                  jamAfter: createdAfter,
+                  jamBefore: createdBefore);
+        });
         if (Provider.of<AbsensiViewModel>(context, listen: false)
                 .absensi
                 ?.message ==
@@ -118,6 +153,8 @@ class _CardPresenceState extends State<CardPresence> {
 
   @override
   Widget build(BuildContext context) {
+    final dataMahasiswa =
+        Provider.of<MahasiswaViewModel>(context).mahasiswaSingle;
     return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
       child: Card(
@@ -129,7 +166,8 @@ class _CardPresenceState extends State<CardPresence> {
           children: [
             const SizedBox(height: 24),
             Text(
-              'Bahasa Indonesia',
+              // 'Bahasa Indonesia',
+              widget.namaMatkul,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -137,7 +175,8 @@ class _CardPresenceState extends State<CardPresence> {
               ),
             ),
             Text(
-              '(MU)',
+              // '(MU)',
+              '(${widget.kodeKelas})',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -146,7 +185,8 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Abdul Jalil',
+              // 'Abdul Jalil',
+              widget.namaDosen,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -155,7 +195,8 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Senin 07.00 - 09.00',
+              // 'Senin 07.00 - 09.00',
+              widget.date,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -164,7 +205,8 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 30),
             Text(
-              'Kristina Fabulous',
+              // 'Kristina Fabulous',
+              dataMahasiswa.name ?? '',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -173,7 +215,8 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 2),
             Text(
-              '200280120739',
+              // '200280120739',
+              dataMahasiswa.nim ?? '',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_3,
                 fontsWeight: FontWeight.w400,
@@ -355,8 +398,23 @@ class _CardPresenceState extends State<CardPresence> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () => Navigator.pushNamed(context,
-                                      '/schedule/presence/fingerprint'),
+                                  onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              FingerprintView(
+                                                idJadwal: widget.idJadwal,
+                                                namaMatkul: widget.namaMatkul,
+                                                namaDosen: widget.namaDosen,
+                                                kodeKelas: widget.kodeKelas,
+                                                date: widget.date,
+                                                namaMahasiswa:
+                                                    dataMahasiswa.name!,
+                                                nim: dataMahasiswa.nim!,
+                                              ))),
+                                  // Navigator.pushNamed(
+                                  //     context, '/schedule/presence/fingerprint',
+                                  //     arguments: widget.idJadwal),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
@@ -381,7 +439,16 @@ class _CardPresenceState extends State<CardPresence> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
-                                                CameraView()));
+                                                CameraView(
+                                                  idJadwal: widget.idJadwal,
+                                                  namaMatkul: widget.namaMatkul,
+                                                  namaDosen: widget.namaDosen,
+                                                  kodeKelas: widget.kodeKelas,
+                                                  date: widget.date,
+                                                  namaMahasiswa:
+                                                      dataMahasiswa.name!,
+                                                  nim: dataMahasiswa.nim!,
+                                                )));
                                     // _getImage();
                                     // _getLocation();
                                     // Stack(children: [

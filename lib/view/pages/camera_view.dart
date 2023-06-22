@@ -14,7 +14,22 @@ import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CameraView extends StatefulWidget {
-  const CameraView({Key? key});
+  final String namaMatkul;
+  final String kodeKelas;
+  final String namaDosen;
+  final String date;
+  final String namaMahasiswa;
+  final String nim;
+  final int idJadwal;
+  const CameraView(
+      {Key? key,
+      required this.idJadwal,
+      required this.namaMatkul,
+      required this.kodeKelas,
+      required this.namaDosen,
+      required this.date,
+      required this.namaMahasiswa,
+      required this.nim});
 
   @override
   State<CameraView> createState() => _CameraViewState();
@@ -360,6 +375,13 @@ class _CameraViewState extends State<CameraView> {
             builder: (_) => PreviewScreen(
                   imgPath: value,
                   location: location.toString(),
+                  idJadwal: widget.idJadwal,
+                  namaMatkul: widget.namaMatkul,
+                  namaDosen: widget.namaDosen,
+                  kodeKelas: widget.kodeKelas,
+                  date: widget.date,
+                  namaMahasiswa: widget.namaMahasiswa,
+                  nim: widget.nim,
                 )));
         // if (mounted) {
         //   setState(() {

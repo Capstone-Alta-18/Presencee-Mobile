@@ -8,7 +8,18 @@ import 'package:presencee/view/widgets/card_presence.dart';
 import 'package:presencee/view/widgets/today.dart';
 
 class PresenceView extends StatefulWidget {
-  const PresenceView({super.key});
+  final String namaMatkul;
+  final String kodeKelas;
+  final String namaDosen;
+  final String date;
+  final int idJadwal;
+  const PresenceView(
+      {super.key,
+      required this.namaMatkul,
+      required this.kodeKelas,
+      required this.namaDosen,
+      required this.date,
+      required this.idJadwal});
 
   @override
   State<PresenceView> createState() => _PresenceViewState();
@@ -103,8 +114,16 @@ class _PresenceViewState extends State<PresenceView> {
               }),
           SizedBox(
               height: MediaQuery.of(context).size.height * 0.44,
-              child: const CardPresence()),
-          const BottomContainer(), // butuh tambahan button di bawah
+              child: CardPresence(
+                namaMatkul: widget.namaMatkul,
+                namaDosen: widget.namaDosen,
+                kodeKelas: widget.kodeKelas,
+                date: widget.date,
+                idJadwal: widget.idJadwal,
+              )),
+          BottomContainer(
+            idJadwal: widget.idJadwal,
+          ), // butuh tambahan button di bawah
         ],
       ),
     );

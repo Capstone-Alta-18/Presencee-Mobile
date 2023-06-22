@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:presencee/model/API/absensi_api.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:presencee/theme/constant.dart';
 import '../../view_model/user_view_model.dart';
@@ -95,15 +97,24 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
         // debugPrint(userViewModel.user?.message);
         // debugPrint(userViewModel.user?.token);
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('//home', (route) => false);
-        SnackbarAlertDialog().customDialogs(context,
-            message: "Login Berhasil",
-            icons: PhosphorIcons.check_circle_fill,
-            iconColor: AppTheme.success,
-            backgroundsColor: AppTheme.white,
-            margin: const EdgeInsets.only(bottom: 0),
-            durations: 1800);
+        //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        // final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+        if (mounted) {
+          await Provider.of<MahasiswaViewModel>(context, listen: false)
+              .getOneMahasiswa(
+                  oneId: userViewModel.user?.data?.mahasiswa?.id ?? 0);
+          if (mounted) {
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('//home', (route) => false);
+            SnackbarAlertDialog().customDialogs(context,
+                message: "Login Berhasil",
+                icons: PhosphorIcons.check_circle_fill,
+                iconColor: AppTheme.success,
+                backgroundsColor: AppTheme.white,
+                margin: const EdgeInsets.only(bottom: 0),
+                durations: 1800);
+          }
+        }
       } else {
         setState(() {
           SnackbarAlertDialog().customDialogs(context,

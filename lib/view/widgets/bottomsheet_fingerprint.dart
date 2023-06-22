@@ -12,11 +12,26 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
 
 class FingerprintBottomsheet extends StatefulWidget {
-  const FingerprintBottomsheet({super.key});
+  final String namaMatkul;
+  final String kodeKelas;
+  final String namaDosen;
+  final String date;
+  final String namaMahasiswa;
+  final String nim;
+  final int idJadwal;
+  const FingerprintBottomsheet(
+      {super.key,
+      required this.idJadwal,
+      required this.namaMatkul,
+      required this.kodeKelas,
+      required this.namaDosen,
+      required this.date,
+      required this.namaMahasiswa,
+      required this.nim});
 
   @override
   State<FingerprintBottomsheet> createState() => _FingerprintBottomsheetState();
@@ -76,9 +91,9 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
         setState(() {
           isLoading = true;
         });
-        var timezone = await convertTimeZone();
+        // var timezone = await convertTimeZone();
         var now = DateTime.now().toString().split(' ');
-        var tm = timezone.toString().split(':');
+        // var tm = timezone.toString().split(':');
         SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         final idUser = sharedPreferences.getInt('id_user');
@@ -88,11 +103,12 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
               .createAbsen(
                   userId: idUser!,
                   mahasiswaId: idMahasiswa!,
-                  jadwalId: 1,
+                  jadwalId: widget.idJadwal,
                   // timeAttemp: '2023-06-18T03:40:50+08:00',
                   timeAttemp:
-                      "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
-                  matakuliah: 'Akuntansi',
+                      // "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
+                      "${now[0]}T${now[1].split('.')[0]}+00:00",
+                  matakuliah: widget.namaMatkul,
                   status: 'Hadir',
                   location: location!,
                   image: '');
@@ -132,19 +148,19 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
     }
   }
 
-  Future<String> getTimeZone() async {
-    String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    return timeZoneName;
-  }
+  // Future<String> getTimeZone() async {
+  //   String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  //   return timeZoneName;
+  // }
 
-  Future<String> convertTimeZone() async {
-    tz.initializeTimeZones();
-    String timeZoneName = await getTimeZone();
-    tz.Location location = tz.getLocation(timeZoneName);
-    tz.TZDateTime now = tz.TZDateTime.now(location);
-    String offset = now.timeZoneOffset.toString().split('.').first;
-    return offset;
-  }
+  // Future<String> convertTimeZone() async {
+  //   tz.initializeTimeZones();
+  //   String timeZoneName = await getTimeZone();
+  //   tz.Location location = tz.getLocation(timeZoneName);
+  //   tz.TZDateTime now = tz.TZDateTime.now(location);
+  //   String offset = now.timeZoneOffset.toString().split('.').first;
+  //   return offset;
+  // }
 
   Future<void> openAppSettings() {
     // return AppSettings.openAppSettings();
@@ -264,6 +280,7 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.idJadwal);
     return Positioned(
       bottom: 0,
       child: Container(
@@ -280,7 +297,8 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
           children: [
             const SizedBox(height: 24),
             Text(
-              'Bahasa Indonesia',
+              // 'Bahasa Indonesia',
+              widget.namaMatkul,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -288,7 +306,8 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
               ),
             ),
             Text(
-              '(MU)',
+              // '(MU)',
+              '(${widget.kodeKelas})',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -297,7 +316,8 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Senin',
+              // 'Senin',
+              widget.namaDosen,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -306,7 +326,8 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
             ),
             const SizedBox(height: 6),
             Text(
-              '07.00 - 09.00',
+              // '07.00 - 09.00',
+              widget.date,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -315,7 +336,8 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
             ),
             const SizedBox(height: 30),
             Text(
-              'Kristina Fabulous',
+              // 'Kristina Fabulous',
+              widget.namaMahasiswa,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -324,7 +346,8 @@ class _FingerprintBottomsheetState extends State<FingerprintBottomsheet> {
             ),
             const SizedBox(height: 2),
             Text(
-              '200280120739',
+              // '200280120739',
+              widget.nim,
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_3,
                 fontsWeight: FontWeight.w400,

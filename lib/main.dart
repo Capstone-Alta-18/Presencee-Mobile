@@ -2,6 +2,7 @@ import 'package:presencee/model/upload_model.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:presencee/view/widgets/card_absensi.dart';
 import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
 import 'package:presencee/view/splash_view.dart';
@@ -68,8 +69,8 @@ class MyApp extends StatelessWidget {
           '/profiles': (_) => const ProfilePage(),
           '/semester_present': (_) => const KehadiranSemester(),
           // '/course_history' : (_) => CourseHistory(selectedIndex: 0, manager: KehadiranViewModel(),),
-          '/presence': (_) => const PresenceView(),
-          '/fingerprint': (_) => const FingerprintView(),
+          // '/presence': (_) => const PresenceView(),
+          // '/fingerprint': (_) => const FingerprintView(),
           '/help': (_) => const CustomerService(),
           '/underMaintenance': (_) => const PusatBantuanPage(),
         },
@@ -126,37 +127,43 @@ class MyApp extends StatelessWidget {
               },
               transitionDuration: const Duration(milliseconds: 500),
             );
-          } else if (settings.name == '/schedule/presence') {
-            return PageRouteBuilder(
-              transitionsBuilder: (_, a, sA, c) {
-                var tween = Tween<double>(begin: 0.0, end: 1.0);
-                var curvedAnimation = CurvedAnimation(
-                  parent: a,
-                  curve: Curves.ease,
-                );
-                return FadeTransition(
-                  opacity: tween.animate(curvedAnimation),
-                  child: c,
-                );
-              },
-              pageBuilder: (_, __, ___) => const PresenceView(),
-            );
-          } else if (settings.name == '/schedule/presence/fingerprint') {
-            return PageRouteBuilder(
-              transitionsBuilder: (_, a, sA, c) {
-                var tween = Tween<double>(begin: 0.0, end: 1.0);
-                var curvedAnimation = CurvedAnimation(
-                  parent: a,
-                  curve: Curves.ease,
-                );
-                return FadeTransition(
-                  opacity: tween.animate(curvedAnimation),
-                  child: c,
-                );
-              },
-              pageBuilder: (_, __, ___) => const FingerprintView(),
-            );
-          } else if (settings.name == '/profiles/underMaintenance') {
+          }
+          //  else if (settings.name == '/schedule/presence') {
+          //   return PageRouteBuilder(
+          //     transitionsBuilder: (_, a, sA, c) {
+          //       var tween = Tween<double>(begin: 0.0, end: 1.0);
+          //       var curvedAnimation = CurvedAnimation(
+          //         parent: a,
+          //         curve: Curves.ease,
+          //       );
+          //       return FadeTransition(
+          //         opacity: tween.animate(curvedAnimation),
+          //         child: c,
+          //       );
+          //     },
+          //     pageBuilder: (_, __, ___) {
+          //       final namaMatkul = settings.arguments as CardAbsensi;
+          //       final kodeKelas = settings.arguments as CardAbsensi;
+          //     },
+          //   );
+          // }
+          // else if (settings.name == '/schedule/presence/fingerprint') {
+          //   return PageRouteBuilder(
+          //     transitionsBuilder: (_, a, sA, c) {
+          //       var tween = Tween<double>(begin: 0.0, end: 1.0);
+          //       var curvedAnimation = CurvedAnimation(
+          //         parent: a,
+          //         curve: Curves.ease,
+          //       );
+          //       return FadeTransition(
+          //         opacity: tween.animate(curvedAnimation),
+          //         child: c,
+          //       );
+          //     },
+          //     pageBuilder: (_, __, ___) => const FingerprintView(),
+          //   );
+          // }
+          else if (settings.name == '/profiles/underMaintenance') {
             return PageRouteBuilder(
               pageBuilder: (_, __, ___) => const PusatBantuanPage(),
               transitionsBuilder: (_, __, ___, c) =>

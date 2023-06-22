@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionScreen extends StatefulWidget {
@@ -35,6 +38,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     final token = sharedPreferences.getString('token');
     final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
     final idUser = sharedPreferences.getInt('id_user');
+
     if (token == null || idMahasiswa == null || idUser == null) {
       if (mounted) {
         Navigator.of(context)
@@ -42,6 +46,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
       }
     } else {
       apiToken = token;
+      await Provider.of<MahasiswaViewModel>(context, listen: false)
+          .getOneMahasiswa(oneId: idMahasiswa);
       if (mounted) {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('//home', (route) => false);

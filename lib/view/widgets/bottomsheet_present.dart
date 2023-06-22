@@ -5,7 +5,8 @@ import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/attendance_subject_list.dart';
 
 class BottomContainer extends StatefulWidget {
-  const BottomContainer({super.key});
+  final int idJadwal;
+  const BottomContainer({super.key, required this.idJadwal});
 
   @override
   State<BottomContainer> createState() => _BottomContainerState();
@@ -14,7 +15,8 @@ class BottomContainer extends StatefulWidget {
 class _BottomContainerState extends State<BottomContainer> {
   bool isExpand = false;
   int dayWeek = 2;
-  final DraggableScrollableController _controller = DraggableScrollableController();
+  final DraggableScrollableController _controller =
+      DraggableScrollableController();
   final minSize = 0.25;
   final maxSize = 0.55;
   double blur = 0;
@@ -28,7 +30,7 @@ class _BottomContainerState extends State<BottomContainer> {
     });
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -38,7 +40,8 @@ class _BottomContainerState extends State<BottomContainer> {
       maxChildSize: maxSize,
       expand: true,
       builder: (context, scrollController) => BackdropFilter(
-        filter: ColorFilter.mode(AppTheme.primaryTheme.withOpacity(blur), BlendMode.srcOver),
+        filter: ColorFilter.mode(
+            AppTheme.primaryTheme.withOpacity(blur), BlendMode.srcOver),
         // filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
         child: Container(
           decoration: const BoxDecoration(
@@ -65,11 +68,12 @@ class _BottomContainerState extends State<BottomContainer> {
               Container(
                 margin: const EdgeInsets.only(top: 36),
                 child: AttendanceSubsList(
-                  total: 12,
-                  mataKuliah: 'Bahasa Indonesia (MU22)', 
-                  tanggalHadir: "Masuk : $dayWeek Februari 2021", 
-                  statusHadir: "Terkonfirmasi", 
+                  // total: 12,
+                  // mataKuliah: 'Bahasa Indonesia (MU22)',
+                  // tanggalHadir: "Masuk : $dayWeek Februari 2021",
+                  // statusHadir: "Terkonfirmasi",
                   scrollControllers: scrollController,
+                  idJadwal: widget.idJadwal,
                 ),
               ),
             ],

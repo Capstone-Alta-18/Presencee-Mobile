@@ -10,16 +10,32 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
+// import 'package:timezone/data/latest.dart' as tz;
+// import 'package:timezone/timezone.dart' as tz;
 
 import '../widgets/alerted_attendance.dart';
 
 class PreviewScreen extends StatefulWidget {
   final XFile imgPath;
   final String location;
+  final String namaMatkul;
+  final String kodeKelas;
+  final String namaDosen;
+  final String date;
+  final String namaMahasiswa;
+  final String nim;
+  final int idJadwal;
   const PreviewScreen(
-      {super.key, required this.imgPath, required this.location});
+      {super.key,
+      required this.imgPath,
+      required this.location,
+      required this.idJadwal,
+      required this.namaMatkul,
+      required this.kodeKelas,
+      required this.namaDosen,
+      required this.date,
+      required this.namaMahasiswa,
+      required this.nim});
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -27,27 +43,27 @@ class PreviewScreen extends StatefulWidget {
 
 class _PreviewScreenState extends State<PreviewScreen> {
   bool isLoading = false;
-  Future<String> getTimeZone() async {
-    String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    return timeZoneName;
-  }
+  // Future<String> getTimeZone() async {
+  //   String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  //   return timeZoneName;
+  // }
 
-  Future<String> convertTimeZone() async {
-    tz.initializeTimeZones();
-    String timeZoneName = await getTimeZone();
-    tz.Location location = tz.getLocation(timeZoneName);
-    tz.TZDateTime now = tz.TZDateTime.now(location);
-    String offset = now.timeZoneOffset.toString().split('.').first;
-    return offset;
-  }
+  // Future<String> convertTimeZone() async {
+  //   tz.initializeTimeZones();
+  //   String timeZoneName = await getTimeZone();
+  //   tz.Location location = tz.getLocation(timeZoneName);
+  //   tz.TZDateTime now = tz.TZDateTime.now(location);
+  //   String offset = now.timeZoneOffset.toString().split('.').first;
+  //   return offset;
+  // }
 
   void uploadImage() async {
     setState(() {
       isLoading = true;
     });
-    var timezone = await convertTimeZone();
+    // var timezone = await convertTimeZone();
     var now = DateTime.now().toString().split(' ');
-    var tm = timezone.toString().split(':');
+    // var tm = timezone.toString().split(':');
     if (mounted) {
       await Provider.of<UploadImageViewModel>(context, listen: false)
           .uploadImage(widget.imgPath);
@@ -64,11 +80,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
               .createAbsen(
                   userId: idUser!,
                   mahasiswaId: idMahasiswa!,
-                  jadwalId: 1,
+                  jadwalId: widget.idJadwal,
                   // timeAttemp: '2023-06-18T03:40:50+08:00',
                   timeAttemp:
-                      "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
-                  matakuliah: 'Akuntansi',
+                      // "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
+                      "${now[0]}T${now[1].split('.')[0]}+00:00",
+                  matakuliah: widget.namaMatkul,
                   status: 'Hadir',
                   location: widget.location,
                   image: url!);
@@ -227,7 +244,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 children: [
                   const SizedBox(height: 24),
                   Text(
-                    'Bahasa Indonesia',
+                    // 'Bahasa Indonesia',
+                    widget.namaMatkul,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -235,7 +253,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     ),
                   ),
                   Text(
-                    '(MU)',
+                    // '(MU)',
+                    '(${widget.kodeKelas})',
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -244,7 +263,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Abdul Jalil',
+                    // 'Abdul Jalil',
+                    widget.namaDosen,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -253,7 +273,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Senin 07.00 - 09.00',
+                    // 'Senin 07.00 - 09.00',
+                    widget.date,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -262,7 +283,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    'Kristina Fabulous',
+                    // 'Kristina Fabulous',
+                    widget.namaMahasiswa,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -271,7 +293,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '200280120739',
+                    // '200280120739',
+                    widget.nim,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_3,
                       fontsWeight: FontWeight.w400,
@@ -280,9 +303,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   ElevatedButton(
-                    onPressed: !isLoading
-                        ? () => uploadImage()
-                        : null
+                    onPressed: !isLoading ? () => uploadImage() : null
                     // Navigator.pushNamed(
                     //     context, '/schedule/presence/fingerprint')
                     ,

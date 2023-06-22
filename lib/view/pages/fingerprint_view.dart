@@ -7,7 +7,22 @@ import 'package:presencee/view/widgets/bottomsheet_fingerprint.dart';
 import 'package:presencee/view/widgets/today.dart';
 
 class FingerprintView extends StatefulWidget {
-  const FingerprintView({super.key});
+  final String namaMatkul;
+  final String kodeKelas;
+  final String namaDosen;
+  final String date;
+  final String namaMahasiswa;
+  final String nim;
+  final int idJadwal;
+  const FingerprintView(
+      {super.key,
+      required this.idJadwal,
+      required this.namaMatkul,
+      required this.kodeKelas,
+      required this.namaDosen,
+      required this.date,
+      required this.namaMahasiswa,
+      required this.nim});
 
   @override
   State<FingerprintView> createState() => _FingerprintViewState();
@@ -102,7 +117,15 @@ class _FingerprintViewState extends State<FingerprintView> {
                     );
                   }
                 }),
-            FingerprintBottomsheet(),
+            FingerprintBottomsheet(
+              idJadwal: widget.idJadwal,
+              namaMatkul: widget.namaMatkul,
+              namaDosen: widget.namaDosen,
+              date: widget.date,
+              kodeKelas: widget.kodeKelas,
+              namaMahasiswa: widget.namaMahasiswa,
+              nim: widget.nim,
+            ),
           ],
         ),
       ),

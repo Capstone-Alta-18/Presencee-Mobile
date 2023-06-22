@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../view_model/mahasiswa_view_model.dart';
@@ -19,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   XFile? image;
-  bool isLoading = true;
+  bool isLoading = false;
   final emailController = TextEditingController();
   final telponController = TextEditingController();
   final jurusanController = TextEditingController();
@@ -28,20 +29,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
-      if (mounted) {
-        await Provider.of<MahasiswaViewModel>(context, listen: false)
-            .getOneMahasiswa(oneId: idMahasiswa ?? 0);
-        Future.delayed(const Duration(seconds: 1), () {
-          setState(() {
-            isLoading = false;
-          });
-        });
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    //   SharedPreferences sharedPreferences =
+    //       await SharedPreferences.getInstance();
+    //   final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+    //   if (mounted) {
+    //     await Provider.of<MahasiswaViewModel>(context, listen: false)
+    //         .getOneMahasiswa(oneId: idMahasiswa ?? 0);
+    //     Future.delayed(const Duration(seconds: 1), () {
+    //       setState(() {
+    //         isLoading = false;
+    //       });
+    //     });
+    //   }
+    // });
     super.initState();
   }
 
@@ -440,15 +441,15 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () => alertLogout(),
-            icon: const Icon(
-              PhosphorIcons.sign_out_bold,
-              size: 24,
-            ),
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     onPressed: () => alertLogout(),
+        //     icon: const Icon(
+        //       PhosphorIcons.sign_out_bold,
+        //       size: 24,
+        //     ),
+        //   ),
+        // ],
       ),
       body: ListView(
         children: [
