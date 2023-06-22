@@ -1,6 +1,7 @@
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
@@ -21,6 +22,8 @@ class _SemesterHistoryState extends State<SemesterHistory> {
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
+    final managerDosen = Provider.of<DosenViewModel>(context);
+    
     if (manager.state == DataState.initial) {
       return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.loading) {
@@ -45,7 +48,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                 children: [
                   Padding(padding: EdgeInsets.only(bottom: 55)),
                   Center(
-                    child: PersentaseKehadiran(diagram: false),
+                    child: PersentaseKehadiran(diagram: false,selectedIndex: 0,),
                   ),
                   Padding(padding: EdgeInsets.only(bottom: 43)),
                   Text(
@@ -81,6 +84,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                                     pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(
                                       manager: manager,
                                       selectedIndex: index,
+                                      managerDosen: managerDosen,
                                     ),
                                     transitionsBuilder: (context, animation,
                                       secondaryAnimation, child) {

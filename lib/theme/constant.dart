@@ -40,6 +40,11 @@ class AppTheme {
   // cards color
   static const Color greenCard = Color(0xFFE1FFE6);
   static const Color purpleCard = Color(0xFFE3E1FF);
+
+  // Circular Color
+  static const Color hadir = Color(0xFFFE7968);
+  static const Color absen = Color(0xFFAE3838);
+  static const Color kosong = Color(0xFFD1D1D1);
 }
 
 class AppTextStyle {
