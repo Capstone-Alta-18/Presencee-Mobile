@@ -151,9 +151,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextFormField(
+                      key: const ValueKey('email'),
                       controller: emailController,
                       textInputAction: TextInputAction.next,
-                      autofocus: true,
+                      // autofocus: true,
                       decoration: InputDecoration(
                         hintText: "yourname@students.com",
                         hintStyle: const TextStyle(
@@ -199,6 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextFormField(
+                      key: const ValueKey('password'),
                       controller: passController,
                       obscureText: _secureText,
                       textInputAction: TextInputAction.done,
@@ -268,6 +270,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        key: const ValueKey('login-button'),
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 40),
                           backgroundColor: AppTheme.primaryTheme_2,
@@ -308,6 +311,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Center(
+                      key: const ValueKey('forgot-button'),
                       child: TextButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed('//help'),

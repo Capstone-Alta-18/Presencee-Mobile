@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:presencee/model/API/dosen_api.dart';
+import 'package:presencee/model/dosen_model.dart';
 import '../model/API/mahasiswa_api.dart';
 import '../model/mahasiswa_model.dart';
 
@@ -81,3 +83,6 @@ class MahasiswaViewModel extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+
+

@@ -31,7 +31,7 @@ class LoadingMatkulCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      LoadingsProgress(),
+                      LoadingsProgress(loading: false,),
                     ],
                   ),
                 ),
@@ -50,41 +50,44 @@ class LoadingSemesterHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Header(
-            title: 'Riwayat Kehadiran',
-            subtitle: 'Semester 2022/2',
-            back: true,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: Column(
-              children: [
-                Shimmer.fromColors(
-                  baseColor: AppTheme.gray,
-                  highlightColor: AppTheme.gray_2,
-                  child: ListView.builder(
-                    itemCount: 3,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    itemBuilder: ((context, index) {
-                      return Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const SizedBox(
-                          height: 128,
-                        ),
-                      );
-                    }),
-                  ),
-                )
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Header(
+              title: 'Riwayat Kehadiran',
+              subtitle: 'Semester 2022/2',
+              back: false,
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
+                children: [
+                  LoadingsProgress(loading: true,),
+                  Shimmer.fromColors(
+                    baseColor: AppTheme.gray,
+                    highlightColor: AppTheme.gray_2,
+                    child: ListView.builder(
+                      itemCount: 3,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      itemBuilder: ((context, index) {
+                        return Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const SizedBox(
+                            height: 128,
+                          ),
+                        );
+                      }),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       )
     );
   }
@@ -111,14 +114,21 @@ class JadwalLoading extends StatelessWidget {
 }
 
 class LoadingsProgress extends StatelessWidget {
-  const LoadingsProgress({super.key});
+  final bool loading;
+  const LoadingsProgress({super.key, required this.loading});
 
   @override
   Widget build(BuildContext context) {
-    return const SpinKitRipple(
+    return loading == false 
+    ? const SpinKitRipple(
       color: AppTheme.primaryTheme,
       size: 90.0,
+    )
+    : const SpinKitRipple(
+      color: AppTheme.primaryTheme,
+      size: 200.0,
     );
+    
   }
 }
 

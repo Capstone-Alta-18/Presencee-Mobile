@@ -13,6 +13,7 @@ import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
 import 'view_model/kehadiran_view_model.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(create: (context) => AbsensiViewModel()),
         ChangeNotifierProvider(create: (context) => UploadImageViewModel()),
+        ChangeNotifierProvider(create: (context) => DosenViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
