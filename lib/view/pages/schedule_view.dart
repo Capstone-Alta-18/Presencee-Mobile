@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
@@ -72,23 +73,23 @@ class _SchedulePageState extends State<SchedulePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final user =
-          Provider.of<UserViewModel>(context, listen: false).user?.data;
+      final mahasiswa = Provider.of<MahasiswaViewModel>(context, listen: false)
+          .mahasiswaSingle;
       var now = DateTime.now();
-      var jamAfter = DateFormat('yyyy-MM-ddT00:00:00+00:00').format(now);
+      var jamAfter = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(now);
       var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
       var previousMonday = now.subtract(Duration(days: now.weekday - 1));
       var nextSaturday = previousMonday.add(const Duration(days: 6));
       var createdAfter =
-          DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
+          DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
       var createdBefore =
           DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
 
       Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(
-          userId: user?.id ?? 0, jamAfter: jamAfter, jamBefore: jamBefore);
+          userId: mahasiswa.userId!, jamAfter: jamAfter, jamBefore: jamBefore);
 
       Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwalSemua(
-          userId: user?.id ?? 0,
+          userId: mahasiswa.userId!,
           jamAfter: createdAfter,
           jamBefore: createdBefore);
     });
@@ -343,7 +344,10 @@ class _SchedulePageState extends State<SchedulePage> {
             : GroupedListView<Data, String>(
                 shrinkWrap: true,
                 elements: allJadwal.jadwals.map((jadwal) => jadwal).toList(),
-                groupBy: (element) => element.jamMulai!,
+                groupBy: (element) {
+                  final dayName = getDayName(element.jamMulai!);
+                  return dayName;
+                },
                 groupSeparatorBuilder: (String groupByValue) {
                   final groupHari = getDayName(groupByValue);
                   return Row(

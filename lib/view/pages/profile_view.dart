@@ -65,15 +65,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 Provider.of<UploadImageViewModel>(context, listen: false)
                     .image
                     ?.url;
-            SharedPreferences sharedPreferences =
-                await SharedPreferences.getInstance();
-            final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+
             if (mounted) {
               final dataMahas =
                   Provider.of<MahasiswaViewModel>(context, listen: false);
               await Provider.of<MahasiswaViewModel>(context, listen: false)
                   .updateMahasiswa(
-                      idMahasiswa: idMahasiswa!,
+                      idMahasiswa: dataMahas.mahasiswaSingle.id!,
                       name: dataMahas.mahasiswaSingle.name!,
                       email: dataMahas.mahasiswaSingle.email!,
                       nim: dataMahas.mahasiswaSingle.nim!,
@@ -85,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       userId: dataMahas.mahasiswaSingle.userId!);
               if (mounted) {
                 await Provider.of<MahasiswaViewModel>(context, listen: false)
-                    .getOneMahasiswa(oneId: idMahasiswa);
+                    .getOneMahasiswa(oneId: dataMahas.mahasiswaSingle.id!);
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     backgroundColor: AppTheme.primaryTheme,
@@ -130,13 +128,11 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
     if (mounted) {
       final dataMahas = Provider.of<MahasiswaViewModel>(context, listen: false);
       await Provider.of<MahasiswaViewModel>(context, listen: false)
           .updateMahasiswa(
-              idMahasiswa: idMahasiswa!,
+              idMahasiswa: dataMahas.mahasiswaSingle.id!,
               name: dataMahas.mahasiswaSingle.name!,
               email: dataMahas.mahasiswaSingle.email!,
               nim: dataMahas.mahasiswaSingle.nim!,
@@ -148,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
               userId: dataMahas.mahasiswaSingle.userId!);
       if (mounted) {
         await Provider.of<MahasiswaViewModel>(context, listen: false)
-            .getOneMahasiswa(oneId: idMahasiswa);
+            .getOneMahasiswa(oneId: dataMahas.mahasiswaSingle.id!);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: AppTheme.primaryTheme,
