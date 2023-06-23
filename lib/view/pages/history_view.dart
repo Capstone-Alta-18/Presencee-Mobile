@@ -31,15 +31,17 @@ class _HistoryPageState extends State<HistoryPage> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 0);
+      Provider.of<KehadiranViewModel>(context, listen: false)
+          .getKehadiranNew(idMhs: 14);
       Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
     final managerDosen = Provider.of<DosenViewModel>(context);
-    
+
     if (manager.state == DataState.initial) {
       return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.loading) {
@@ -47,7 +49,6 @@ class _HistoryPageState extends State<HistoryPage> {
     } else if (manager.state == DataState.error) {
       return const ErrorSemesterHistoryCard();
     }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -62,18 +63,19 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(bottom: 55)),
-                  Center(
-                    child: PersentaseKehadiran(diagram: false,selectedIndex: 0,),
+                  const Padding(padding: EdgeInsets.only(bottom: 55)),
+                  const Center(
+                    child: PersentaseKehadiran(
+                      diagram: false,
+                      selectedIndex: 0,
+                    ),
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 43)),
+                  const Padding(padding: EdgeInsets.only(bottom: 43)),
                   Text(
                     "Kehadiran Per Mata Kuliah",
                     textAlign: TextAlign.start,
                     style: AppTextStyle.poppinsTextStyle(
-                      fontSize: 18,
-                      fontsWeight: FontWeight.w600
-                    ),
+                        fontSize: 18, fontsWeight: FontWeight.w600),
                   ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
@@ -92,23 +94,28 @@ class _HistoryPageState extends State<HistoryPage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: InkWell(
-                              splashColor: AppTheme.primaryTheme.withOpacity(0.4),
+                              splashColor:
+                                  AppTheme.primaryTheme.withOpacity(0.4),
                               onTap: () {
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
-                                    transitionDuration: const Duration(milliseconds: 500),
-                                    pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        CourseHistory(
                                       manager: manager,
                                       selectedIndex: index,
                                       managerDosen: managerDosen,
                                     ),
                                     transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
+                                        secondaryAnimation, child) {
                                       var begin = const Offset(1.0, 0.0);
                                       var end = Offset.zero;
                                       var curve = Curves.ease;
-                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                            
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+
                                       return SlideTransition(
                                         position: animation.drive(tween),
                                         child: child,

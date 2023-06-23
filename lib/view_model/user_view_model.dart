@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:presencee/model/API/user_api.dart';
 import 'package:presencee/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +31,8 @@ class UserViewModel extends ChangeNotifier {
       await sharedPreferences.setInt(
           'id_mahasiswa', user?.data?.mahasiswa?.id ?? 0);
       _state = DataState.loaded;
-      // notifyListeners();
+
+      notifyListeners();
     } catch (e) {
       _state = DataState.error;
       notifyListeners();

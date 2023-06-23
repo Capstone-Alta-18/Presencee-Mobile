@@ -85,7 +85,7 @@ class _SchedulePageState extends State<SchedulePage> {
       var jamAfter = DateFormat('yyyy-MM-ddT00:00:00+00:00').format(now);
       var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
       var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-      var nextSaturday = previousMonday.add(Duration(days: 6));
+      var nextSaturday = previousMonday.add(const Duration(days: 6));
       var createdAfter =
           DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
       var createdBefore =
@@ -288,13 +288,14 @@ class _SchedulePageState extends State<SchedulePage> {
               itemCount: _searchResults.length,
               itemBuilder: (context, index) {
                 Data jadwal = _searchResults[index];
-                final namaHari = getDayName(jadwal.jam!);
-                final jam = getTime(jadwal.jam!);
-                final kodeKelas = getInitials(jadwal.name!);
+                final namaHari = getDayName(jadwal.jamMulai!);
+                final jamMulai = getTime(jadwal.jamMulai!);
+                final jamSelesai = getTime(jadwal.jamSelesai!);
+                final kodeKelas = getInitials(jadwal.room!.name!);
                 return CardAbsensi(
                   matkul: jadwal.name!,
                   dosen: jadwal.dosen!.name!,
-                  jam: "$namaHari $jam",
+                  jam: "$namaHari $jamMulai-$jamSelesai",
                   kodeKelas: kodeKelas,
                   idJadwal: jadwal.id!,
                 );
@@ -328,14 +329,18 @@ class _SchedulePageState extends State<SchedulePage> {
                 itemCount: filterJadwal.filterJadwals.length,
                 itemBuilder: (context, index) {
                   final fullName = filterJadwal.filterJadwals[index].name!;
-                  final initials = getInitials(fullName);
+                  final initials = getInitials(
+                      filterJadwal.filterJadwals[index].room!.name!);
                   final dayName =
-                      getDayName(filterJadwal.filterJadwals[index].jam!);
-                  final time = getTime(filterJadwal.filterJadwals[index].jam!);
+                      getDayName(filterJadwal.filterJadwals[index].jamMulai!);
+                  final jamMulai =
+                      getTime(filterJadwal.filterJadwals[index].jamMulai!);
+                  final jamSelesai =
+                      getTime(filterJadwal.filterJadwals[index].jamSelesai!);
                   return CardAbsensi(
                     matkul: fullName,
                     dosen: filterJadwal.filterJadwals[index].dosen!.name!,
-                    jam: "$dayName $time",
+                    jam: "$dayName $jamMulai-$jamSelesai",
                     kodeKelas: initials,
                     idJadwal: filterJadwal.filterJadwals[index].id!,
                   );
@@ -363,7 +368,7 @@ class _SchedulePageState extends State<SchedulePage> {
             : GroupedListView<Data, String>(
                 shrinkWrap: true,
                 elements: allJadwal.jadwals.map((jadwal) => jadwal).toList(),
-                groupBy: (element) => element.jam!,
+                groupBy: (element) => element.jamMulai!,
                 groupSeparatorBuilder: (String groupByValue) {
                   final groupHari = getDayName(groupByValue);
                   return Row(
@@ -390,13 +395,14 @@ class _SchedulePageState extends State<SchedulePage> {
                   );
                 },
                 itemBuilder: (context, Data element) {
-                  final initials = getInitials(element.name!);
-                  final hari = getDayName(element.jam!);
-                  final jam = getTime(element.jam!);
+                  final initials = getInitials(element.room!.name!);
+                  final hari = getDayName(element.jamMulai!);
+                  final jamMulai = getTime(element.jamMulai!);
+                  final jamSelesai = getTime(element.jamSelesai!);
                   return CardAbsensi(
                     matkul: element.name!,
                     dosen: element.dosen!.name!,
-                    jam: '$hari $jam',
+                    jam: '$hari $jamMulai-$jamSelesai',
                     kodeKelas: initials,
                     idJadwal: element.id!,
                   );

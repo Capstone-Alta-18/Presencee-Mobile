@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/attendance_subject_list.dart';
 
 class ListHistory extends StatefulWidget {
-  const ListHistory({super.key});
+  final int idJadwal;
+  const ListHistory({super.key, required this.idJadwal});
 
   @override
   State<ListHistory> createState() => _ListHistoryState();
@@ -76,7 +77,19 @@ class _ListHistoryState extends State<ListHistory> {
             ),
           ),
           const SizedBox(height: 39),
-          const AttendanceSubsList(total: 17, mataKuliah: 'Bahasa Indonesia (MU22)', tanggalHadir: 'Masuk : 28 Februari', statusHadir: 'Terkonfirmasi')
+          AttendanceSubsList(
+            // total: 12,
+            // mataKuliah: 'Bahasa Indonesia (MU22)',
+            // tanggalHadir: "Masuk : $dayWeek Februari 2021",
+            // statusHadir: "Terkonfirmasi",
+            // scrollControllers: scrollController,
+            idJadwal: widget.idJadwal,
+          ),
+          // const AttendanceSubsList(
+          //     total: 17,
+          //     mataKuliah: 'Bahasa Indonesia (MU22)',
+          //     tanggalHadir: 'Masuk : 28 Februari',
+          //     statusHadir: 'Terkonfirmasi')
         ],
       ),
     );
