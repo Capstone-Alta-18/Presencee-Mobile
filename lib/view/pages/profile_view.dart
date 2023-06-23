@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:presencee/model/API/privates.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../view_model/mahasiswa_view_model.dart';
@@ -19,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   XFile? image;
-  bool isLoading = true;
+  bool isLoading = false;
   final emailController = TextEditingController();
   final telponController = TextEditingController();
   final jurusanController = TextEditingController();
@@ -28,20 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
-      if (mounted) {
-        await Provider.of<MahasiswaViewModel>(context, listen: false)
-            .getOneMahasiswa(oneId: idMahasiswa ?? 0);
-        Future.delayed(const Duration(seconds: 1), () {
-          setState(() {
-            isLoading = false;
-          });
-        });
-      }
-    });
     super.initState();
   }
 
@@ -215,7 +202,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ElevatedButton(
                           onPressed: () async {
                             await getImage(ImageSource.camera);
-                            Navigator.pop(context);
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: AppTheme.gray_2),
@@ -246,7 +235,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ElevatedButton(
                           onPressed: () async {
                             await getImage(ImageSource.gallery);
-                            Navigator.pop(context);
+                            if (mounted) {
+                              Navigator.pop(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: AppTheme.gray_2),
@@ -278,24 +269,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           onPressed: () {
                             Navigator.pop(context);
                             hapusImage();
-                            // setState(() {
-                            //   if (dataMahas.mahasiswaSingle.image != null) {
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //       SnackBar(
-                            //         duration: const Duration(seconds: 1),
-                            //         backgroundColor: AppTheme.error,
-                            //         content: Text(
-                            //           'Foto Profil kamu sudah di hapus !',
-                            //           style: AppTextStyle.poppinsTextStyle(
-                            //             fontsWeight: FontWeight.w500,
-                            //             color: AppTheme.white,
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     );
-                            //   }
-                            //   image = null;
-                            // });
                           },
                           style: ElevatedButton.styleFrom(
                             side: const BorderSide(color: AppTheme.gray_2),
@@ -332,6 +305,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     await prefs.remove('token');
+    apiToken = '';
     if (mounted) {
       Navigator.pushNamedAndRemoveUntil(context, '//login', (route) => false);
     }
@@ -421,14 +395,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final dataMahas = Provider.of<MahasiswaViewModel>(context);
 
-    // if (dataMahas.state == Status.initial) {
-    //   return const ProfileLoading();
-    // } else if (dataMahas.state == Status.completed) {
-    //   return const ProfilePage();
-    // } else if (dataMahas.state == Status.error) {
-    //   return const ProfileError();
-    // }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -440,21 +406,11 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         centerTitle: true,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () => alertLogout(),
-            icon: const Icon(
-              PhosphorIcons.sign_out_bold,
-              size: 24,
-            ),
-          ),
-        ],
       ),
       body: ListView(
         children: [
           Column(
             children: [
-              // image != null
               dataMahas.mahasiswaSingle.image != ''
                   ? Container(
                       margin: const EdgeInsets.all(21),
@@ -472,7 +428,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircleAvatar(
                                 radius: 65,
                                 backgroundColor: AppTheme.white,
-                                // backgroundImage: FileImage(File(image!.path)),
                                 backgroundImage: NetworkImage(
                                     dataMahas.mahasiswaSingle.image ?? '',
                                     scale: 1.0),

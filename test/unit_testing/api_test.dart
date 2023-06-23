@@ -1,3 +1,4 @@
+import 'package:presencee/model/API/dosen_api.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
 import 'package:presencee/model/API/mahasiswa_api.dart';
 import 'package:test/test.dart';
@@ -16,9 +17,11 @@ void main() {
       var jadwals = await JadwalApi.getPageJadwal(pages: 1, limits: 10);
       expect(jadwals, isNotNull);
       expect(jadwals.length, 10);
-      expect(jadwals[0].name, 'Agama');
-      expect(jadwals[0].dosen?.name, 'Dewa Biara');
-      expect(jadwals[0].dosen?.phone, '08122345435');
+
+      // data dinamis, bisa bisa berubah
+      expect(jadwals[0].name, 'Mathematics');
+      expect(jadwals[0].dosen?.name, 'Andi Lukito');
+      expect(jadwals[0].dosen?.phone, '0817647648');
     });
 
     test('Get Semua Mahasiswa API', () async {

@@ -35,7 +35,7 @@ class KehadiranApi {
         List<RiwayatKehadiran> kehadiran = (jsonDecode(response.data) as List).map((model) => RiwayatKehadiran.fromJson(model)).toList();
         // List<RiwayatKehadiran> kehadiran = List<RiwayatKehadiran>.from(
         //     datas.map((model) => RiwayatKehadiran.fromJson(model))).toList();
-        print('kehadiran: $kehadiran');
+        // print('kehadiran: $kehadiran');
         return kehadiran;
       } else {
         throw Exception('Failed to load kehadiran');

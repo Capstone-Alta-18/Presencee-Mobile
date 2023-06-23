@@ -8,9 +8,8 @@ class UserAPI {
 
   Future<User> userLogin(String email, String password) async {
     try {
-      var response = await dio.post(
-        url,
-        data: {'email': email, 'password': password});
+      var response =
+          await dio.post(url, data: {'email': email, 'password': password});
 
       if (response.statusCode == 200) {
         apiToken = response.data['token'];

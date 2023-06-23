@@ -10,11 +10,12 @@ enum DataStatus {
 }
 
 class JadwalViewModel extends ChangeNotifier {
-  List<JadwalPelajaran> _jadwals = [];
-  List<JadwalPelajaran> filteredJadwals = [];
+  List<Data> _jadwals = [];
+  List<Data> _filterJadwals = [];
   DataStatus _status = DataStatus.initial;
 
-  List<JadwalPelajaran> get jadwals => _jadwals;
+  List<Data> get jadwals => _jadwals;
+  List<Data> get filterJadwals => _filterJadwals;
 
   DataStatus get status => _status;
 
@@ -23,7 +24,8 @@ class JadwalViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final allJadwal = await JadwalApi.getPageJadwal(pages: pages, limits: limits);
+      final allJadwal =
+          await JadwalApi.getPageJadwal(pages: pages, limits: limits);
       _jadwals = allJadwal;
       _status = DataStatus.completed;
     } catch (e) {
@@ -32,14 +34,39 @@ class JadwalViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  searchJadwal(String query) {
-    filteredJadwals = jadwals.where((jadwal) => jadwal.name!.toLowerCase().contains(query.toLowerCase())).toList();
+  getFilterJadwal(
+      {required int userId,
+      required String jamAfter,
+      required String jamBefore}) async {
+    _status = DataStatus.loading;
+    notifyListeners();
+
+    try {
+      final filterJadwal = await JadwalApi.getFilterJadwal(
+          userId: userId, jamAfter: jamAfter, jamBefore: jamBefore);
+      _filterJadwals = filterJadwal;
+      _status = DataStatus.completed;
+    } catch (e) {
+      _status = DataStatus.error;
+    }
     notifyListeners();
   }
 
-  searchJadwalByDosen(String query) {
-    filteredJadwals = jadwals.where((jadwal) => jadwal.dosen!.name!.toLowerCase().contains(query.toLowerCase())).toList();
+  getFilterJadwalSemua(
+      {required int userId,
+      required String jamAfter,
+      required String jamBefore}) async {
+    _status = DataStatus.loading;
+    notifyListeners();
+
+    try {
+      final filterJadwalSemua = await JadwalApi.getFilterJadwal(
+          userId: userId, jamAfter: jamAfter, jamBefore: jamBefore);
+      _jadwals = filterJadwalSemua;
+      _status = DataStatus.completed;
+    } catch (e) {
+      _status = DataStatus.error;
+    }
     notifyListeners();
   }
-
 }

@@ -88,9 +88,9 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(PhosphorIcons.clock_counter_clockwise_bold),
               label: 'Riwayat',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(
-                key: const Key('profile-button'),
+                key: Key('profile-button'),
                 PhosphorIcons.user_bold),
               label: 'Profil',
             ),

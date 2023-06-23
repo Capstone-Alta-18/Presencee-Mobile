@@ -8,18 +8,18 @@ class DosenModel {
     if (json['dosens'] != null) {
       dosens = <Dosens>[];
       json['dosens'].forEach((v) {
-        dosens!.add(new Dosens.fromJson(v));
+        dosens!.add(Dosens.fromJson(v));
       });
     }
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.dosens != null) {
-      data['dosens'] = this.dosens!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (dosens != null) {
+      data['dosens'] = dosens!.map((v) => v.toJson()).toList();
     }
-    data['status'] = this.status;
+    data['status'] = status;
     return data;
   }
 }
@@ -28,7 +28,7 @@ class Dosens {
   int? iD;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
   String? name;
   String? email;
   String? nip;
@@ -62,17 +62,17 @@ class Dosens {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ID'] = this.iD;
-    data['CreatedAt'] = this.createdAt;
-    data['UpdatedAt'] = this.updatedAt;
-    data['DeletedAt'] = this.deletedAt;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['nip'] = this.nip;
-    data['phone'] = this.phone;
-    data['image'] = this.image;
-    data['user_id'] = this.userId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ID'] = iD;
+    data['CreatedAt'] = createdAt;
+    data['UpdatedAt'] = updatedAt;
+    data['DeletedAt'] = deletedAt;
+    data['name'] = name;
+    data['email'] = email;
+    data['nip'] = nip;
+    data['phone'] = phone;
+    data['image'] = image;
+    data['user_id'] = userId;
     return data;
   }
 }

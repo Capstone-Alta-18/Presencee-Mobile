@@ -1,3 +1,4 @@
+import 'package:presencee/view/pages/camera_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,6 +14,7 @@ import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/app_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AbsensiViewModel()),
         ChangeNotifierProvider(create: (context) => UploadImageViewModel()),
         ChangeNotifierProvider(create: (context) => DosenViewModel()),
+        ChangeNotifierProvider(create: (context) => AppViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -69,8 +72,8 @@ class MyApp extends StatelessWidget {
           '/profiles': (_) => const ProfilePage(),
           '/semester_present': (_) => const KehadiranSemester(),
           // '/course_history' : (_) => CourseHistory(selectedIndex: 0, manager: KehadiranViewModel(),),
-          '/presence': (_) => const PresenceView(),
-          '/fingerprint': (_) => const FingerprintView(),
+          // '/presence': (_) => const PresenceView(),
+          // '/fingerprint': (_) => const FingerprintView(),
           '/help': (_) => const CustomerService(),
           '/underMaintenance': (_) => const PusatBantuanPage(),
         },
@@ -156,6 +159,21 @@ class MyApp extends StatelessWidget {
                 );
               },
               pageBuilder: (_, __, ___) => const FingerprintView(),
+            );
+          } else if (settings.name == '/schedule/presence/camera') {
+            return PageRouteBuilder(
+              transitionsBuilder: (_, a, sA, c) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: a,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: c,
+                );
+              },
+              pageBuilder: (_, __, ___) => const CameraView(),
             );
           } else if (settings.name == '/profiles/underMaintenance') {
             return PageRouteBuilder(
