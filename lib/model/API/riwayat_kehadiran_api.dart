@@ -10,32 +10,25 @@ class KehadiranApi {
     final dio = Dio();
 
     try {
-      final response = await dio.get(
-        url,
-        queryParameters: {
-          "absen_id" : 0,
-          "user_id" : 0,
-          "mahasiswa_id" : 35,
-          "jadwal_id" : 0,
-          "created_after" : "2023-06-02T15:04:05Z",
-          "created_before" : "2023-06-20T15:04:05Z",
-          "is_konfirmasi" : true,
-        },
-        options: Options(headers: {
+      final response = await dio.get(url,
+          queryParameters: {
+            "absen_id": 0,
+            "user_id": 0,
+            "mahasiswa_id": 35,
+            "jadwal_id": 0,
+            "created_after": "2023-06-02T15:04:05Z",
+            "created_before": "2023-06-20T15:04:05Z",
+            "is_konfirmasi": true,
+          },
+          options: Options(headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $apiToken'
-          })
-      );
-
-      // print('response results = $response');
+          }));
 
       if (response.statusCode == 200) {
-        final datas = response as List;
-        print('response data : ${datas}');
-        List<RiwayatKehadiran> kehadiran = (jsonDecode(response.data) as List).map((model) => RiwayatKehadiran.fromJson(model)).toList();
-        // List<RiwayatKehadiran> kehadiran = List<RiwayatKehadiran>.from(
-        //     datas.map((model) => RiwayatKehadiran.fromJson(model))).toList();
-        print('kehadiran: $kehadiran');
+        List<RiwayatKehadiran> kehadiran = (jsonDecode(response.data) as List)
+            .map((model) => RiwayatKehadiran.fromJson(model))
+            .toList();
         return kehadiran;
       } else {
         throw Exception('Failed to load kehadiran');
@@ -49,27 +42,22 @@ class KehadiranApi {
     final dio = Dio();
 
     try {
-      final response = await dio.get(
-        url,
-        queryParameters: {
-          "absen_id" : 0,
-          "user_id" : 0,
-          "mahasiswa_id" : idMhs,
-          "jadwal_id" : 0,
-          "created_after" : "2023-06-02T15:04:05Z",
-          "created_before" : "2023-06-20T15:04:05Z",
-          "is_konfirmasi" : true,
-        },
-        options: Options(headers: {
+      final response = await dio.get(url,
+          queryParameters: {
+            "absen_id": 0,
+            "user_id": 0,
+            "mahasiswa_id": idMhs,
+            "jadwal_id": 0,
+            "created_after": "2023-06-02T15:04:05Z",
+            "created_before": "2023-06-30T15:04:05Z",
+            "is_konfirmasi": false,
+          },
+          options: Options(headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $apiToken'
-          })
-      );
-
-      // print('response results = $response');
+          }));
 
       if (response.statusCode == 200) {
-        print(response.data);
         return RiwayatKehadiran.fromJson(response.data);
       } else {
         throw Exception('Failed to load kehadiran');

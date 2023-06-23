@@ -7,22 +7,9 @@ import 'package:presencee/view/widgets/bottomsheet_fingerprint.dart';
 import 'package:presencee/view/widgets/today.dart';
 
 class FingerprintView extends StatefulWidget {
-  final String namaMatkul;
-  final String kodeKelas;
-  final String namaDosen;
-  final String date;
-  final String namaMahasiswa;
-  final String nim;
-  final int idJadwal;
-  const FingerprintView(
-      {super.key,
-      required this.idJadwal,
-      required this.namaMatkul,
-      required this.kodeKelas,
-      required this.namaDosen,
-      required this.date,
-      required this.namaMahasiswa,
-      required this.nim});
+  const FingerprintView({
+    super.key,
+  });
 
   @override
   State<FingerprintView> createState() => _FingerprintViewState();
@@ -32,8 +19,7 @@ class _FingerprintViewState extends State<FingerprintView> {
   StreamController<DateTime> timeController = StreamController<DateTime>();
   @override
   void initState() {
-    // TODO: implement initState
-    Timer.periodic(Duration(seconds: 1), (_) {
+    Timer.periodic(const Duration(seconds: 1), (_) {
       timeController.add(DateTime.now());
     });
     super.initState();
@@ -44,7 +30,6 @@ class _FingerprintViewState extends State<FingerprintView> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
-          // alignment: Alignment.center,
           children: [
             StreamBuilder<DateTime>(
                 stream: timeController.stream,
@@ -117,15 +102,7 @@ class _FingerprintViewState extends State<FingerprintView> {
                     );
                   }
                 }),
-            FingerprintBottomsheet(
-              idJadwal: widget.idJadwal,
-              namaMatkul: widget.namaMatkul,
-              namaDosen: widget.namaDosen,
-              date: widget.date,
-              kodeKelas: widget.kodeKelas,
-              namaMahasiswa: widget.namaMahasiswa,
-              nim: widget.nim,
-            ),
+            const FingerprintBottomsheet(),
           ],
         ),
       ),

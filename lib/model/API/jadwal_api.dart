@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:presencee/model/API/privates.dart';
 import '../jadwal_model.dart';
 
@@ -23,13 +20,10 @@ class JadwalApi {
             'limit': limits,
           });
 
-      // print('response results = $response');
-
       if (response.statusCode == 200) {
         final datas = response.data['data'];
         List<Data> jadwalList =
             List<Data>.from(datas.map((model) => Data.fromJson(model)));
-        // log("Results >> ${jadwalList[0].name}");
         return jadwalList;
       } else {
         throw Exception('Failed to load All jadwal...');
@@ -52,8 +46,6 @@ class JadwalApi {
             'Authorization': 'Bearer $apiToken'
           }),
           queryParameters: {
-            // 'page': pages,
-            // 'limit': limits,
             'jadwal_id': 0,
             'user_id': userId,
             'dosen_id': 0,
@@ -63,13 +55,10 @@ class JadwalApi {
             'room_id': 0,
           });
 
-      // print('response results = $response');
-
       if (response.statusCode == 200) {
         final datas = response.data['data'];
         List<Data> listJadwal =
             List<Data>.from(datas.map((model) => Data.fromJson(model)));
-        // log("Results FIlter>> ${response.data['data']}");
         return listJadwal;
       } else {
         throw Exception('Failed to load filter jadwal...');
@@ -92,8 +81,6 @@ class JadwalApi {
             'Authorization': 'Bearer $apiToken'
           }),
           queryParameters: {
-            // 'page': pages,
-            // 'limit': limits,
             'jadwal_id': 0,
             'user_id': userId,
             'dosen_id': 0,
@@ -103,13 +90,10 @@ class JadwalApi {
             'room_id': 0,
           });
 
-      // print('response results = $response');
-
       if (response.statusCode == 200) {
         final datas = response.data['data'];
         List<Data> listJadwalSemua =
             List<Data>.from(datas.map((model) => Data.fromJson(model)));
-        // log("Results Filter Semua>> ${response.data['data']}");
         return listJadwalSemua;
       } else {
         throw Exception('Failed to load filter jadwal...');

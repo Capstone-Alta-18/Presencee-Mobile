@@ -1,8 +1,7 @@
-import 'package:presencee/model/upload_model.dart';
+import 'package:presencee/view/pages/camera_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presencee/view/widgets/card_absensi.dart';
 import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
 import 'package:presencee/view/splash_view.dart';
@@ -15,6 +14,7 @@ import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/app_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AbsensiViewModel()),
         ChangeNotifierProvider(create: (context) => UploadImageViewModel()),
         ChangeNotifierProvider(create: (context) => DosenViewModel()),
+        ChangeNotifierProvider(create: (context) => AppViewModel()),
       ],
       child: MaterialApp(
         localizationsDelegates: const [
@@ -129,43 +130,52 @@ class MyApp extends StatelessWidget {
               },
               transitionDuration: const Duration(milliseconds: 500),
             );
-          }
-          //  else if (settings.name == '/schedule/presence') {
-          //   return PageRouteBuilder(
-          //     transitionsBuilder: (_, a, sA, c) {
-          //       var tween = Tween<double>(begin: 0.0, end: 1.0);
-          //       var curvedAnimation = CurvedAnimation(
-          //         parent: a,
-          //         curve: Curves.ease,
-          //       );
-          //       return FadeTransition(
-          //         opacity: tween.animate(curvedAnimation),
-          //         child: c,
-          //       );
-          //     },
-          //     pageBuilder: (_, __, ___) {
-          //       final namaMatkul = settings.arguments as CardAbsensi;
-          //       final kodeKelas = settings.arguments as CardAbsensi;
-          //     },
-          //   );
-          // }
-          // else if (settings.name == '/schedule/presence/fingerprint') {
-          //   return PageRouteBuilder(
-          //     transitionsBuilder: (_, a, sA, c) {
-          //       var tween = Tween<double>(begin: 0.0, end: 1.0);
-          //       var curvedAnimation = CurvedAnimation(
-          //         parent: a,
-          //         curve: Curves.ease,
-          //       );
-          //       return FadeTransition(
-          //         opacity: tween.animate(curvedAnimation),
-          //         child: c,
-          //       );
-          //     },
-          //     pageBuilder: (_, __, ___) => const FingerprintView(),
-          //   );
-          // }
-          else if (settings.name == '/profiles/underMaintenance') {
+          } else if (settings.name == '/schedule/presence') {
+            return PageRouteBuilder(
+              transitionsBuilder: (_, a, sA, c) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: a,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: c,
+                );
+              },
+              pageBuilder: (_, __, ___) => const PresenceView(),
+            );
+          } else if (settings.name == '/schedule/presence/fingerprint') {
+            return PageRouteBuilder(
+              transitionsBuilder: (_, a, sA, c) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: a,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: c,
+                );
+              },
+              pageBuilder: (_, __, ___) => const FingerprintView(),
+            );
+          } else if (settings.name == '/schedule/presence/camera') {
+            return PageRouteBuilder(
+              transitionsBuilder: (_, a, sA, c) {
+                var tween = Tween<double>(begin: 0.0, end: 1.0);
+                var curvedAnimation = CurvedAnimation(
+                  parent: a,
+                  curve: Curves.ease,
+                );
+                return FadeTransition(
+                  opacity: tween.animate(curvedAnimation),
+                  child: c,
+                );
+              },
+              pageBuilder: (_, __, ___) => const CameraView(),
+            );
+          } else if (settings.name == '/profiles/underMaintenance') {
             return PageRouteBuilder(
               pageBuilder: (_, __, ___) => const PusatBantuanPage(),
               transitionsBuilder: (_, __, ___, c) =>

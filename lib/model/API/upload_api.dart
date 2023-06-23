@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:presencee/model/API/privates.dart';
@@ -17,7 +15,6 @@ class UploadImageAPI {
       var response = await dio.post(url, data: formData);
 
       if (response.statusCode == 200) {
-        print(response.data);
         return UploadImage.fromJson(response.data);
       } else {
         throw Exception('Failed to upload image');

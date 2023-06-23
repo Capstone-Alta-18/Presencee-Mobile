@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,29 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
+import 'package:presencee/model/mahasiswa_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/preview_camera_view.dart';
-import 'package:presencee/view_model/absensi_view_model.dart';
-import 'package:provider/provider.dart';
 
 class CameraView extends StatefulWidget {
-  final String namaMatkul;
-  final String kodeKelas;
-  final String namaDosen;
-  final String date;
-  final String namaMahasiswa;
-  final String nim;
-  final int idJadwal;
-  const CameraView(
-      {Key? key,
-      required this.idJadwal,
-      required this.namaMatkul,
-      required this.kodeKelas,
-      required this.namaDosen,
-      required this.date,
-      required this.namaMahasiswa,
-      required this.nim});
+  const CameraView({
+    super.key,
+  });
 
   @override
   State<CameraView> createState() => _CameraViewState();
@@ -43,12 +27,11 @@ class _CameraViewState extends State<CameraView> {
   String? address;
   XFile? imageFile;
   String? imageString;
-  // String formatDateTime =
-  //     DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now());
+  Map absenData = {};
+  Mahasiswas mahasiswa = Mahasiswas();
 
   @override
   void initState() {
-    // TODO: implement initState
     _getLocation();
     availableCameras().then((value) {
       cameras = value;
@@ -56,17 +39,16 @@ class _CameraViewState extends State<CameraView> {
         selectedCameraIndex = 0;
         initCamera(cameras[selectedCameraIndex]).then((_) => {});
       } else {
-        print('Tidak ada kamera');
+        log('Tidak ada kamera');
       }
     }).catchError((e) {
-      print(e.hashCode);
+      log(e.hashCode.toString());
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     cameraController?.dispose();
     super.dispose();
   }
@@ -102,7 +84,24 @@ class _CameraViewState extends State<CameraView> {
           ),
         );
       }
-      return;
+    } else {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      try {
+        List<Placemark> placemarks = await placemarkFromCoordinates(
+          position.latitude,
+          position.longitude,
+        );
+        Placemark placemark = placemarks[0];
+        String address =
+            "${placemark.subLocality}, ${placemark.locality}, ${placemark.country}";
+        setState(() {
+          location = address;
+        });
+      } catch (e) {
+        debugPrint('Error: $e');
+      }
     }
   }
 
@@ -165,18 +164,12 @@ class _CameraViewState extends State<CameraView> {
         position.latitude,
         position.longitude,
       );
-      // if (placemarks != null && placemarks.isNotEmpty) {
       Placemark placemark = placemarks[0];
       String address =
           "${placemark.subLocality}, ${placemark.locality}, ${placemark.country}";
-      // "${placemark.street},
-      print(placemark);
-      print(address);
       setState(() {
         location = address;
-        print(location);
       });
-      // }
     } catch (e) {
       debugPrint('Error: $e');
     }
@@ -193,13 +186,11 @@ class _CameraViewState extends State<CameraView> {
         setState(() {});
       }
     });
-    if (cameraController!.value.hasError) {
-      print('Kamera error');
-    }
+    if (cameraController!.value.hasError) {}
     try {
       await cameraController?.initialize();
     } catch (e) {
-      print('Kamera error $e');
+      log('Kamera error $e');
     }
     if (mounted) {
       setState(() {});
@@ -210,75 +201,73 @@ class _CameraViewState extends State<CameraView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.black,
-      body: Container(
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: cameraPreview(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 34),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Row(
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: cameraPreview(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 34),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            PhosphorIcons.x,
+                            color: AppTheme.white,
+                          )),
+                    ],
+                  ),
+                  Container(
+                    height: 42,
+                    width: MediaQuery.of(context).size.width,
+                    color: AppTheme.black_2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              PhosphorIcons.x,
+                        const Icon(
+                          PhosphorIcons.map_pin_line,
+                          color: AppTheme.white,
+                        ),
+                        Text(
+                          location == null ? 'Loading' : location.toString(),
+                          style: AppTextStyle.poppinsTextStyle(
                               color: AppTheme.white,
-                            )),
+                              fontSize: 16,
+                              fontsWeight: FontWeight.w400),
+                        ),
                       ],
                     ),
-                    Container(
-                      height: 42,
-                      width: MediaQuery.of(context).size.width,
-                      color: AppTheme.black_2,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Icon(
-                            PhosphorIcons.map_pin_line,
-                            color: AppTheme.white,
-                          ),
-                          Text(
-                            location == null ? 'Loading' : location.toString(),
-                            style: AppTextStyle.poppinsTextStyle(
-                                color: AppTheme.white,
-                                fontSize: 16,
-                                fontsWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: 120,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(15),
-                margin: const EdgeInsets.only(bottom: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    const Spacer(),
-                    cameraControl(context),
-                    cameraToogle(),
-                  ],
-                ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: 120,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(15),
+              margin: const EdgeInsets.only(bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  const Spacer(),
+                  cameraControl(context),
+                  cameraToogle(),
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -290,15 +279,11 @@ class _CameraViewState extends State<CameraView> {
         style: AppTextStyle.poppinsTextStyle(color: AppTheme.white),
       );
     }
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.8,
       width: MediaQuery.of(context).size.width,
       child: CameraPreview(cameraController!),
     );
-    // return AspectRatio(
-    //   aspectRatio: cameraController!.value.aspectRatio,
-    //   child: CameraPreview(cameraController!),
-    // );
   }
 
   Widget cameraToogle() {
@@ -324,10 +309,8 @@ class _CameraViewState extends State<CameraView> {
   getCameraIcon(lensDirection) {
     switch (lensDirection) {
       case CameraLensDirection.back:
-        // return CupertinoIcons.switch_camera;
         return Icons.change_circle_rounded;
       case CameraLensDirection.front:
-        // return CupertinoIcons.switch_camera_solid;
         return Icons.change_circle_rounded;
       case CameraLensDirection.external:
         return CupertinoIcons.photo_camera;
@@ -369,31 +352,15 @@ class _CameraViewState extends State<CameraView> {
 
   onCapture(context) async {
     try {
-      // await cameraController!.takePicture().then((value) => print(value));
       await cameraController!.takePicture().then((value) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => PreviewScreen(
                   imgPath: value,
                   location: location.toString(),
-                  idJadwal: widget.idJadwal,
-                  namaMatkul: widget.namaMatkul,
-                  namaDosen: widget.namaDosen,
-                  kodeKelas: widget.kodeKelas,
-                  date: widget.date,
-                  namaMahasiswa: widget.namaMahasiswa,
-                  nim: widget.nim,
                 )));
-        // if (mounted) {
-        //   setState(() {
-        //     imageFile = file;
-        //     print(imageFile!.path);
-        //     List<int> imageBytes = File(imageFile!.path).readAsBytesSync();
-        //     imageString = base64Encode(imageBytes);
-        //   });
-        // }
       });
     } catch (e) {
-      print('$e');
+      log('$e');
     }
   }
 }

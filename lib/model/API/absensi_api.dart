@@ -39,14 +39,11 @@ class AbsensiAPI {
       );
 
       if (response.statusCode == 201) {
-        // print('ABSENSI : ${response.data}');
         return Absensi.fromJson(response.data);
       } else {
-        // print('Gagal');
         throw Exception('Failed to create absen');
       }
     } catch (e) {
-      // print('Ga konek $e');
       throw Exception('Failed to connect to the server: $e');
     }
   }
@@ -76,19 +73,14 @@ class AbsensiAPI {
         },
       );
       if (response.statusCode == 200) {
-        // print('Filter Absensi : ${response.data['data']}');
         List<dynamic> dataList = response.data['data'];
         List<FilterAbsen> filterAbsensi =
             dataList.map((json) => FilterAbsen.fromJson(json)).toList();
-        // response.data = jsonDecode(response.data)
-        // return FilterAbsen.fromJson(response.data['data']);
         return filterAbsensi;
       } else {
-        // print('Gagal get list absensi');
         throw Exception('Failed to get absen');
       }
     } catch (e) {
-      // print('Ga dapet list absensi $e');
       throw Exception('Failed to connect to the server: $e');
     }
   }

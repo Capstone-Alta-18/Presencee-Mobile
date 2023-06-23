@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/model/API/absensi_api.dart';
 import 'package:presencee/model/filter_absensi_model.dart';
@@ -58,7 +57,6 @@ class AbsensiViewModel extends ChangeNotifier {
     try {
       final listabsensi = await absensiAPI.getAbsen(
           userId, mahasiswaId, jadwalId, createdAfter, createdBefore);
-      // final listabsensi = await absensiAPI.getAbsen();
       _listAbsensi = listabsensi;
       _state = DataState.loaded;
       notifyListeners();

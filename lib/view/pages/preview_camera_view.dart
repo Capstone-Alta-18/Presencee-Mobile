@@ -1,8 +1,7 @@
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:presencee/model/mahasiswa_model.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
@@ -10,32 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
-// import 'package:timezone/data/latest.dart' as tz;
-// import 'package:timezone/timezone.dart' as tz;
+import 'package:presencee/view_model/app_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 
 import '../widgets/alerted_attendance.dart';
 
 class PreviewScreen extends StatefulWidget {
   final XFile imgPath;
   final String location;
-  final String namaMatkul;
-  final String kodeKelas;
-  final String namaDosen;
-  final String date;
-  final String namaMahasiswa;
-  final String nim;
-  final int idJadwal;
-  const PreviewScreen(
-      {super.key,
-      required this.imgPath,
-      required this.location,
-      required this.idJadwal,
-      required this.namaMatkul,
-      required this.kodeKelas,
-      required this.namaDosen,
-      required this.date,
-      required this.namaMahasiswa,
-      required this.nim});
+  const PreviewScreen({
+    super.key,
+    required this.imgPath,
+    required this.location,
+  });
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -43,27 +29,27 @@ class PreviewScreen extends StatefulWidget {
 
 class _PreviewScreenState extends State<PreviewScreen> {
   bool isLoading = false;
-  // Future<String> getTimeZone() async {
-  //   String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-  //   return timeZoneName;
-  // }
+  Map absenData = {};
+  Mahasiswas mahasiswa = Mahasiswas();
 
-  // Future<String> convertTimeZone() async {
-  //   tz.initializeTimeZones();
-  //   String timeZoneName = await getTimeZone();
-  //   tz.Location location = tz.getLocation(timeZoneName);
-  //   tz.TZDateTime now = tz.TZDateTime.now(location);
-  //   String offset = now.timeZoneOffset.toString().split('.').first;
-  //   return offset;
-  // }
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  void getData() {
+    mahasiswa =
+        Provider.of<MahasiswaViewModel>(context, listen: false).mahasiswaSingle;
+    absenData = Provider.of<AppViewModel>(context, listen: false).dataAbsen;
+    setState(() {});
+  }
 
   void uploadImage() async {
     setState(() {
       isLoading = true;
     });
-    // var timezone = await convertTimeZone();
     var now = DateTime.now().toString().split(' ');
-    // var tm = timezone.toString().split(':');
     if (mounted) {
       await Provider.of<UploadImageViewModel>(context, listen: false)
           .uploadImage(widget.imgPath);
@@ -71,21 +57,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
         final url = Provider.of<UploadImageViewModel>(context, listen: false)
             .image
             ?.url;
-        SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        final idUser = sharedPreferences.getInt('id_user');
-        final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
         if (mounted) {
           await Provider.of<AbsensiViewModel>(context, listen: false)
               .createAbsen(
-                  userId: idUser!,
-                  mahasiswaId: idMahasiswa!,
-                  jadwalId: widget.idJadwal,
-                  // timeAttemp: '2023-06-18T03:40:50+08:00',
-                  timeAttemp:
-                      // "${now[0]}T${now[1].split('.')[0]}+0${tm[0]}:${tm[1]}",
-                      "${now[0]}T${now[1].split('.')[0]}+00:00",
-                  matakuliah: widget.namaMatkul,
+                  userId: mahasiswa.userId!,
+                  mahasiswaId: mahasiswa.id!,
+                  jadwalId: absenData['idJadwal'],
+                  timeAttemp: "${now[0]}T${now[1].split('.')[0]}+00:00",
+                  matakuliah: absenData['namaMatkul'],
                   status: 'Hadir',
                   location: widget.location,
                   image: url!);
@@ -97,12 +76,33 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     .absensi
                     ?.message ==
                 'success creating absen') {
-              SnackbarAlertDialog().customDialogs(context,
-                  message: "Presensi berhasil",
-                  icons: PhosphorIcons.check_circle_fill,
-                  iconColor: AppTheme.success,
-                  backgroundsColor: AppTheme.white,
-                  durations: 1800);
+              var nows = DateTime.now();
+              var previousMonday =
+                  nows.subtract(Duration(days: nows.weekday - 1));
+              var nextSaturday = previousMonday.add(const Duration(days: 6));
+              var createdAfter = DateFormat('yyyy-MM-ddT00:00:00+00:00')
+                  .format(previousMonday);
+              var createdBefore =
+                  DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
+
+              await Provider.of<AbsensiViewModel>(context, listen: false)
+                  .getAbsen(
+                      userId: mahasiswa.userId!,
+                      mahasiswaId: mahasiswa.id!,
+                      jadwalId: absenData['idJadwal'],
+                      createdAfter: createdAfter,
+                      createdBefore: createdBefore);
+              if (mounted) {
+                SnackbarAlertDialog().customDialogs(context,
+                    message: "Presensi berhasil",
+                    icons: PhosphorIcons.check_circle_fill,
+                    iconColor: AppTheme.success,
+                    backgroundsColor: AppTheme.white,
+                    durations: 1800);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
             } else if (Provider.of<AbsensiViewModel>(context, listen: false)
                         .absensi
                         ?.message ==
@@ -165,7 +165,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // Navigator.of(context).pop();
                       },
                       icon: const Icon(
                         PhosphorIcons.x,
@@ -244,8 +243,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 children: [
                   const SizedBox(height: 24),
                   Text(
-                    // 'Bahasa Indonesia',
-                    widget.namaMatkul,
+                    absenData['namaMatkul'],
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -253,8 +251,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     ),
                   ),
                   Text(
-                    // '(MU)',
-                    '(${widget.kodeKelas})',
+                    '(${absenData['kodeKelas']})',
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -263,8 +260,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    // 'Abdul Jalil',
-                    widget.namaDosen,
+                    absenData['namaDosen'],
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -273,8 +269,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    // 'Senin 07.00 - 09.00',
-                    widget.date,
+                    absenData['date'],
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -283,8 +278,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    // 'Kristina Fabulous',
-                    widget.namaMahasiswa,
+                    mahasiswa.name!,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -293,8 +287,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    // '200280120739',
-                    widget.nim,
+                    mahasiswa.nim!,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_3,
                       fontsWeight: FontWeight.w400,
@@ -303,10 +296,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   ElevatedButton(
-                    onPressed: !isLoading ? () => uploadImage() : null
-                    // Navigator.pushNamed(
-                    //     context, '/schedule/presence/fingerprint')
-                    ,
+                    onPressed: !isLoading ? () => uploadImage() : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primaryTheme_2,
                       shape: RoundedRectangleBorder(

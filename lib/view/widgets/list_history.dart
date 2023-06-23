@@ -33,7 +33,6 @@ class _ListHistoryState extends State<ListHistory> {
               borderRadius: BorderRadius.circular(2),
             ),
             child: DropdownButton2(
-              // https://stackoverflow.com/questions/70650773/flutter-i-want-to-show-dropdown-list-under-dropdown-flutter
               iconStyleData: const IconStyleData(
                 icon: Icon(
                   PhosphorIcons.caret_down,
@@ -41,9 +40,6 @@ class _ListHistoryState extends State<ListHistory> {
                 ),
               ),
               buttonStyleData: const ButtonStyleData(
-                  /* decoration: BoxDecoration(
-                  border: Border.all(color: AppTheme.primaryTheme),
-                ), */
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 16)),
               underline: Container(),
@@ -78,18 +74,8 @@ class _ListHistoryState extends State<ListHistory> {
           ),
           const SizedBox(height: 39),
           AttendanceSubsList(
-            // total: 12,
-            // mataKuliah: 'Bahasa Indonesia (MU22)',
-            // tanggalHadir: "Masuk : $dayWeek Februari 2021",
-            // statusHadir: "Terkonfirmasi",
-            // scrollControllers: scrollController,
             idJadwal: widget.idJadwal,
           ),
-          // const AttendanceSubsList(
-          //     total: 17,
-          //     mataKuliah: 'Bahasa Indonesia (MU22)',
-          //     tanggalHadir: 'Masuk : 28 Februari',
-          //     statusHadir: 'Terkonfirmasi')
         ],
       ),
     );

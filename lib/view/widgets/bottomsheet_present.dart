@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/attendance_subject_list.dart';
@@ -42,7 +40,6 @@ class _BottomContainerState extends State<BottomContainer> {
       builder: (context, scrollController) => BackdropFilter(
         filter: ColorFilter.mode(
             AppTheme.primaryTheme.withOpacity(blur), BlendMode.srcOver),
-        // filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
         child: Container(
           decoration: const BoxDecoration(
             color: AppTheme.white,
@@ -68,10 +65,6 @@ class _BottomContainerState extends State<BottomContainer> {
               Container(
                 margin: const EdgeInsets.only(top: 36),
                 child: AttendanceSubsList(
-                  // total: 12,
-                  // mataKuliah: 'Bahasa Indonesia (MU22)',
-                  // tanggalHadir: "Masuk : $dayWeek Februari 2021",
-                  // statusHadir: "Terkonfirmasi",
                   scrollControllers: scrollController,
                   idJadwal: widget.idJadwal,
                 ),

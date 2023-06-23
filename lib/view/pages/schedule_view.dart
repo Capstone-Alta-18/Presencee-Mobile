@@ -1,18 +1,15 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
-// import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-// import 'package:presencee/model/jadwal_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
-import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
 import '../../model/jadwal_model.dart';
 import '../../theme/constant.dart';
-// import '../widgets/alerted_attendance.dart';
 import '../widgets/card_absensi.dart';
 import 'package:grouped_list/grouped_list.dart';
 
@@ -61,7 +58,7 @@ class _SchedulePageState extends State<SchedulePage> {
           _searchResults = [];
           isSearching = false;
         });
-        print('Error: $error');
+        log('Error: $error');
       });
     } else {
       setState(() {
@@ -75,10 +72,6 @@ class _SchedulePageState extends State<SchedulePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // Provider.of<JadwalViewModel>(context, listen: false).getJadwal(
-      //   pages: 1,
-      //   limits: 10,
-      // );
       final user =
           Provider.of<UserViewModel>(context, listen: false).user?.data;
       var now = DateTime.now();
@@ -106,7 +99,6 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _searchController;
     super.dispose();
   }
@@ -176,7 +168,6 @@ class _SchedulePageState extends State<SchedulePage> {
             child: Column(
               children: [
                 _searchBar(),
-                // SearchScreen(),
                 const SizedBox(height: 20),
                 _viewJadwal(),
                 const SizedBox(height: 20),
@@ -190,8 +181,6 @@ class _SchedulePageState extends State<SchedulePage> {
   }
 
   Widget _searchBar() {
-    // bool isSearch = false;
-
     return TextField(
       inputFormatters: [
         LengthLimitingTextInputFormatter(15),
@@ -211,7 +200,6 @@ class _SchedulePageState extends State<SchedulePage> {
         ),
         suffixIcon: Container(
           decoration: const BoxDecoration(
-            // color: isSearch ? highlightSearch : Colors.transparent,      // change color when search are clicked
             border: Border(
               left: BorderSide(
                 color: AppTheme.gray_2,
@@ -224,7 +212,6 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
             onPressed: () {
               _performSearch(_searchController.text);
-              // isSearch = !isSearch;
             },
           ),
         ),
@@ -237,9 +224,6 @@ class _SchedulePageState extends State<SchedulePage> {
         ),
       ),
       onChanged: _performSearch,
-      // onChanged: (value) {
-      //   // Implementasi logika pencarian di sini
-      // },
     );
   }
 
@@ -267,15 +251,6 @@ class _SchedulePageState extends State<SchedulePage> {
       final time = DateFormat('HH:mm').format(dateTime);
       return time;
     }
-
-    // final fullName = allJadwal.jadwals[0].name!;
-    // final initials = getInitials(fullName);
-    // final dayName = getDayName(allJadwal.jadwals[0].jam!);
-    // final time = getTime(allJadwal.jadwals[0].jam!);
-
-    // Filter Jadwal
-    // final namaJadwal = filterJadwal.filterJadwals[0].name!;
-    // print(namaJadwal);
 
     if (isSearching) {
       return _isLoading
@@ -380,7 +355,6 @@ class _SchedulePageState extends State<SchedulePage> {
                             margin: const EdgeInsets.only(
                                 left: 15, right: 10, bottom: 5, top: 20),
                             child: Text(
-                              // groupByValue,
                               groupHari,
                               textAlign: TextAlign.start,
                               style: AppTextStyle.poppinsTextStyle(
@@ -409,44 +383,9 @@ class _SchedulePageState extends State<SchedulePage> {
                 },
                 itemComparator: (item1, item2) =>
                     item1.name!.compareTo(item2.name!),
-                // useStickyGroupSeparators: true,
                 floatingHeader: true,
                 order: GroupedListOrder.ASC,
               );
-        // ListView.builder(
-        //   shrinkWrap: true,
-        //   padding: const EdgeInsets.all(0),
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   itemCount: allJadwal.jadwals.length,
-        //   itemBuilder: (context, index) {
-        //     final initials = getInitials(allJadwal.jadwals[index].name!);
-        //     final hari = getDayName(allJadwal.jadwals[index].jam!);
-        //     final jam = getTime(allJadwal.jadwals[index].jam!);
-        //     return Column(
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       children: [
-        //         Padding(
-        //           padding: const EdgeInsets.only(left: 15),
-        //           child: Text(
-        //             hari,
-        //             style: AppTextStyle.poppinsTextStyle(
-        //                 fontSize: 18,
-        //                 fontsWeight: FontWeight.w500,
-        //                 color: AppTheme.black),
-        //           ),
-        //         ),
-        //         CardAbsensi(
-        //           matkul: allJadwal.jadwals[index].name!,
-        //           dosen: allJadwal.jadwals[index].dosen!.name!,
-        //           jam: '$hari $jam',
-        //           kodeKelas: initials,
-        //           idJadwal: allJadwal.jadwals[index].id!,
-        //         ),
-        //         const SizedBox(height: 30),
-        //       ],
-        //     );
-        //   },
-        // );
       } else {
         return const SizedBox.shrink();
       }

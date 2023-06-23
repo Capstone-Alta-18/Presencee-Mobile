@@ -1,6 +1,5 @@
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
-import 'package:presencee/view/widgets/list_history.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import '../../view_model/kehadiran_view_model.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +68,6 @@ class _CourseHistoryState extends State<CourseHistory> {
               flex: 8,
               child: TabBarView(
                 children: [
-                  // ListHistory(idJadwal: widget.manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex],),
                   DiagramHistory(
                     manager: widget.manager,
                     selectedIndex: widget.selectedIndex,

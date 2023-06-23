@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/pages/presence_view.dart';
+import 'package:presencee/view_model/app_view_model.dart';
+import 'package:provider/provider.dart';
 
 class CardAbsensi extends StatelessWidget {
   bool isTodayPresent = true;
@@ -26,17 +27,17 @@ class CardAbsensi extends StatelessWidget {
           splashColor: AppTheme.primaryTheme.withOpacity(0.2),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => PresenceView(
-                        namaMatkul: matkul,
-                        namaDosen: dosen,
-                        date: jam,
-                        kodeKelas: kodeKelas,
-                        idJadwal: idJadwal,
-                      ))),
-          // Navigator.of(context).pushNamed('/schedule/presence'),
+          onTap: () {
+            Provider.of<AppViewModel>(context, listen: false).absenData({
+              'namaMatkul': matkul,
+              'namaDosen': dosen,
+              'date': jam,
+              'kodeKelas': kodeKelas,
+              'idJadwal': idJadwal,
+            }).then(
+              (value) => Navigator.of(context).pushNamed('/schedule/presence'),
+            );
+          },
           title: Text('$matkul($kodeKelas)',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
@@ -71,17 +72,18 @@ class CardAbsensi extends StatelessWidget {
                 vertical: MediaQuery.of(context).size.height * 0.005),
             height: 30,
             child: ElevatedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => PresenceView(
-                            namaMatkul: matkul,
-                            namaDosen: dosen,
-                            date: jam,
-                            kodeKelas: kodeKelas,
-                            idJadwal: idJadwal,
-                          ))),
-              // Navigator.of(context).pushNamed('/schedule/presence'),
+              onPressed: () {
+                Provider.of<AppViewModel>(context, listen: false).absenData({
+                  'namaMatkul': matkul,
+                  'namaDosen': dosen,
+                  'date': jam,
+                  'kodeKelas': kodeKelas,
+                  'idJadwal': idJadwal,
+                }).then(
+                  (value) =>
+                      Navigator.of(context).pushNamed('/schedule/presence'),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: isTodayPresent
                     ? AppTheme.primaryTheme

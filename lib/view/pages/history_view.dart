@@ -28,7 +28,6 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<KehadiranViewModel>(context, listen: false)
@@ -146,40 +145,4 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     );
   }
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: SingleChildScrollView(
-  //       child: Column(
-  //         children: [
-  //           const Header(
-  //             title: 'Riwayat Kehadiran',
-  //             subtitle: 'Semester 2022/3',
-  //             back: false,
-  //           ),
-  //           Container(
-  //             margin: const EdgeInsets.only(top: 75, left: 95, right: 95),
-  //             child: const PersentaseKehadiran(
-  //               diagram: false,
-  //               selectedIndex: 0,
-  //             ),
-  //           ),
-  //           const KehadiranSemester(),
-  //           const CardMatkul(semester: false, selectedIndex: 0),
-  //           const RingkasanKehadiran(),
-  //            Text(
-  //             "Kehadiran Per Mata Kuliah",
-  //             textAlign: TextAlign.start,
-  //             style: AppTextStyle.poppinsTextStyle(
-  //               fontSize: 18,
-  //               fontsWeight: FontWeight.w600
-  //             ),
-  //           ),
-  //           // const SemesterHistory()
-  //           // BarChartWidget(),
-  //           // const SizedBox(height: 50),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }
