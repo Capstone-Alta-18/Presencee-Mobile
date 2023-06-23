@@ -261,6 +261,7 @@ class _SchedulePageState extends State<SchedulePage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _searchResults.length,
+              padding: const EdgeInsets.all(0),
               itemBuilder: (context, index) {
                 Data jadwal = _searchResults[index];
                 final namaHari = getDayName(jadwal.jamMulai!);
@@ -344,6 +345,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 shrinkWrap: true,
                 elements: allJadwal.jadwals.map((jadwal) => jadwal).toList(),
                 groupBy: (element) => element.jamMulai!,
+                padding: const EdgeInsets.all(0),
                 groupSeparatorBuilder: (String groupByValue) {
                   final groupHari = getDayName(groupByValue);
                   return Row(
