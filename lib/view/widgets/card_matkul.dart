@@ -11,17 +11,20 @@ import 'package:presencee/view/widgets/state_status_widget.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CardMatkul extends StatefulWidget {
   final bool semester;
   final int selectedIndex;
+  final int idJadwal;
 
   const CardMatkul({
     super.key,
     required this.semester,
     required this.selectedIndex,
+    required this.idJadwal
   });
 
   @override
@@ -40,6 +43,7 @@ class _CardMatkulState extends State<CardMatkul> {
 
     final manager = Provider.of<KehadiranViewModel>(context);
     final managerDosen = Provider.of<DosenViewModel>(context);
+    final jadwal = Provider.of<JadwalViewModel>(context);
 
     
    
@@ -117,6 +121,7 @@ class _CardMatkulState extends State<CardMatkul> {
                                   manager: manager,
                                   selectedIndex: index,
                                   managerDosen: managerDosen,
+                                  idJadwal: widget.idJadwal,
                                 ),
                               ),
                             );
@@ -246,7 +251,8 @@ class _CardMatkulState extends State<CardMatkul> {
                       Text(
                         // matkul.toString(),
                         // manager.kehadiranNew.meta!.toJson().entries.toList()[widget.selectedIndex].toString(),
-                        manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
+                        // manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
+                        jadwal.jadwals[widget.selectedIndex].name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,
                           fontSize: 16,
@@ -254,8 +260,8 @@ class _CardMatkulState extends State<CardMatkul> {
                         ),
                       ),
                       Text(
-                        managerDosen.dosen.dosens![widget.selectedIndex].name
-                            .toString(),
+                        jadwal.jadwals[widget.selectedIndex].dosen!.name.toString(),
+                        // managerDosen.dosen.dosens![widget.selectedIndex].name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,
                           fontSize: 14,
@@ -276,6 +282,7 @@ class _CardMatkulState extends State<CardMatkul> {
                         manager: manager,
                         selectedIndex: widget.selectedIndex,
                         managerDosen: managerDosen,
+                        idJadwal: widget.idJadwal,
                       ),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {

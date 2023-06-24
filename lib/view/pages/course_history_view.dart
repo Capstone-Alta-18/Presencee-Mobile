@@ -1,5 +1,6 @@
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
+import 'package:presencee/view/widgets/list_history.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import '../../view_model/kehadiran_view_model.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,14 @@ class CourseHistory extends StatefulWidget {
   final KehadiranViewModel manager;
   final DosenViewModel managerDosen;
   final int selectedIndex;
+  final int idJadwal;
+
   const CourseHistory(
       {Key? key,
       required this.manager,
       required this.managerDosen,
-      required this.selectedIndex})
+      required this.selectedIndex,
+      required this.idJadwal})
       : super(key: key);
 
   @override
@@ -64,6 +68,7 @@ class _CourseHistoryState extends State<CourseHistory> {
               flex: 8,
               child: TabBarView(
                 children: [
+                  ListHistory(idJadwal: widget.idJadwal),
                   DiagramHistory(
                     manager: widget.manager,
                     selectedIndex: widget.selectedIndex,

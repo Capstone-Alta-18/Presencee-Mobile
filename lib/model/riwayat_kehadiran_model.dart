@@ -19,37 +19,38 @@ class RiwayatKehadiran {
   }
 }
 
+
 class Meta {
   Akuntansi? akuntansi;
-  Akuntansi? bahasaIndonesia;
   Akuntansi? ilustrasi;
+  // Akuntansi? bahasaIndonesia;
   Akuntansi? mathematics;
-  Akuntansi? ppkn;
-  Akuntansi? agama;
+  // Akuntansi? ppkn;
+  // Akuntansi? agama;
   // AgamaDosen? agamaDosen;
 
   Meta(
-      {this.akuntansi, this.bahasaIndonesia, this.ilustrasi, this.mathematics});
+      {this.akuntansi, this.ilustrasi, this.mathematics});
 
   Meta.fromJson(Map<String, dynamic> json) {
     akuntansi = json['Akuntansi'] != null
         ? Akuntansi.fromJson(json['Akuntansi'])
         : null;
-    bahasaIndonesia = json['Bahasa Indonesia'] != null
-        ? Akuntansi.fromJson(json['Bahasa Indonesia'])
-        : null;
+    // bahasaIndonesia = json['Bahasa Indonesia'] != null
+    //     ? Akuntansi.fromJson(json['Bahasa Indonesia'])
+    //     : null;
     ilustrasi = json['Ilustrasi'] != null
         ? Akuntansi.fromJson(json['Ilustrasi'])
         : null;
     mathematics = json['Mathematics'] != null
         ? Akuntansi.fromJson(json['Mathematics'])
         : null;
-    agama = json['Agama'] != null
-        ? Akuntansi.fromJson(json['Agama'])
-        : null;
-    ppkn = json['PPKN'] != null
-        ? Akuntansi.fromJson(json['PPKN'])
-        : null;
+    // agama = json['Agama'] != null
+    //     ? Akuntansi.fromJson(json['Agama'])
+    //     : null;
+    // ppkn = json['PPKN'] != null
+    //     ? Akuntansi.fromJson(json['PPKN'])
+    //     : null;
     // agamaDosen = json['Agama_Dosen'] != null
     //     ? AgamaDosen.fromJson(json['Agama_Dosen'])
     //     : null;
@@ -60,15 +61,15 @@ class Meta {
     if (akuntansi != null) {
       data['Akuntansi'] = akuntansi!.toJson();
     }
-    if (bahasaIndonesia != null) {
-      data['Bahasa Indonesia'] = bahasaIndonesia!.toJson();
-    }
-    if (ppkn != null) {
-      data['PPKN'] = ppkn!.toJson();
-    }
-    if (agama != null) {
-      data['Agama'] = agama!.toJson();
-    }
+    // if (bahasaIndonesia != null) {
+    //   data['Bahasa Indonesia'] = bahasaIndonesia!.toJson();
+    // }
+    // if (ppkn != null) {
+    //   data['PPKN'] = ppkn!.toJson();
+    // }
+    // if (agama != null) {
+    //   data['Agama'] = agama!.toJson();
+    // }
     if (ilustrasi != null) {
       data['Ilustrasi'] = ilustrasi!.toJson();
     }

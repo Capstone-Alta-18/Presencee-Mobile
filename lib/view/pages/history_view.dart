@@ -7,7 +7,9 @@ import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import "package:provider/provider.dart";
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
@@ -51,20 +53,28 @@ class _HistoryPageState extends State<HistoryPage> {
 
    
     
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
-      await Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
-      SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
-        if (mounted) {
-          await Provider.of<KehadiranViewModel>(context, listen: false)
-              .getKehadiranNew(idMhs: idMahasiswa ?? 0, afterTime: after,beforeTime: before);
-          Future.delayed(const Duration(seconds: 1), () {
-            setState(() {
-              isLoading = false;
-            });
-          });
-        }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final user =
+          Provider.of<UserViewModel>(context, listen: false).user?.data;
+      Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
+      Provider.of<KehadiranViewModel>(context, listen: false)
+              .getKehadiranNew(idMhs: user!.mahasiswa!.id ?? 0, afterTime: after,beforeTime: before);
+      // Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(userId: user.id!, jamAfter: after, jamBefore: before);
+      // final jadwal = Provider.of<JadwalViewModel>(context, listen: false).jadwals.length;
+      // print(jadwal);
+      
+      // SharedPreferences sharedPreferences =
+      //       await SharedPreferences.getInstance();
+      //   final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+      //   if (mounted) {
+      //     await Provider.of<KehadiranViewModel>(context, listen: false)
+      //         .getKehadiranNew(idMhs: user!.mahasiswa!.id ?? 0, afterTime: after,beforeTime: before);
+      //     Future.delayed(const Duration(seconds: 1), () {
+      //       setState(() {
+      //         isLoading = false;
+      //       });
+      //     });
+      //   }
 
         // Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 14,afterTime:after,beforeTime:before );
       });
@@ -75,6 +85,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
     final managerDosen = Provider.of<DosenViewModel>(context);
+    final jadwal = Provider.of<JadwalViewModel>(context);
 
     if (manager.state == DataState.initial) {
       return const LoadingSemesterHistoryCard();
@@ -113,7 +124,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
-                    itemCount: manager.kehadiranNew.meta!.toJson().length,
+                    itemCount: jadwal.jadwals.length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     itemBuilder: ((context, index) {
@@ -141,6 +152,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                       manager: manager,
                                       selectedIndex: index,
                                       managerDosen: managerDosen,
+                                      idJadwal: jadwal.jadwals[index].id!,
                                     ),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
@@ -163,6 +175,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                 child: CardMatkul(
                                   semester: true,
                                   selectedIndex: index,
+                                  idJadwal: 1,
                                   // manager: manager,
                                 ),
                               ),

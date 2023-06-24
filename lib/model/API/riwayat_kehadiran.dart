@@ -69,7 +69,7 @@ class KehadiranApi {
       // print('response results = $response');
 
       if (response.statusCode == 200) {
-        print(response.data);
+        // print(response.data);
         return RiwayatKehadiran.fromJson(response.data);
       } else {
         throw Exception('Failed to load kehadiran');

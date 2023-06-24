@@ -59,12 +59,15 @@ class AbsensiViewModel extends ChangeNotifier {
           userId, mahasiswaId, jadwalId, createdAfter, createdBefore);
       _listAbsensi = listabsensi;
       _state = DataState.loaded;
-      notifyListeners();
-      return _listAbsensi;
+      // notifyListeners();
     } catch (e) {
       _state = DataState.error;
-      notifyListeners();
-      rethrow;
+      // notifyListeners();
+      // rethrow;
     }
+    notifyListeners();
+    return _listAbsensi;
+
+    
   }
 }

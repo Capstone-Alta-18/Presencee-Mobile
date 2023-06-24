@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:presencee/model/API/riwayat_kehadiran_api.dart';
+import 'package:presencee/model/API/riwayat_kehadiran.dart';
 import 'package:presencee/model/riwayat_kehadiran_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 
-enum DataState {
-  initial,
-  loading,
-  loaded,
-  error,
-}
+// enum DataState {
+//   initial,
+//   loading,
+//   loaded,
+//   error,
+// }
 
 class KehadiranViewModel extends ChangeNotifier {
   List<RiwayatKehadiran> _kehadiran = [];

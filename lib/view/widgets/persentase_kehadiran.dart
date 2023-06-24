@@ -8,6 +8,7 @@ import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../view_model/user_view_model.dart';
 
 class PersentaseKehadiran extends StatefulWidget {
   final bool diagram;
