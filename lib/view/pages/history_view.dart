@@ -35,7 +35,6 @@ class _HistoryPageState extends State<HistoryPage> {
     
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     var now = DateTime.utc(2023,06,19);
     var previousMonday = now.subtract(Duration(days: now.weekday - 1));
@@ -76,7 +75,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
     final managerDosen = Provider.of<DosenViewModel>(context);
-    
+
     if (manager.state == DataState.initial) {
       return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.loading) {
@@ -84,7 +83,6 @@ class _HistoryPageState extends State<HistoryPage> {
     } else if (manager.state == DataState.error) {
       return Center(child: Text("Terjadi Kesalahan",style: AppTextStyle.poppinsTextStyle(fontSize: 30,fontsWeight: FontWeight.w600,color: AppTheme.primaryTheme),),);
     }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -99,18 +97,19 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(bottom: 55)),
-                  Center(
-                    child: PersentaseKehadiran(diagram: false,selectedIndex: 0,),
+                  const Padding(padding: EdgeInsets.only(bottom: 55)),
+                  const Center(
+                    child: PersentaseKehadiran(
+                      diagram: false,
+                      selectedIndex: 0,
+                    ),
                   ),
-                  Padding(padding: EdgeInsets.only(bottom: 43)),
+                  const Padding(padding: EdgeInsets.only(bottom: 43)),
                   Text(
                     "Kehadiran Per Mata Kuliah",
                     textAlign: TextAlign.start,
                     style: AppTextStyle.poppinsTextStyle(
-                      fontSize: 18,
-                      fontsWeight: FontWeight.w600
-                    ),
+                        fontSize: 18, fontsWeight: FontWeight.w600),
                   ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
@@ -129,23 +128,28 @@ class _HistoryPageState extends State<HistoryPage> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: InkWell(
-                              splashColor: AppTheme.primaryTheme.withOpacity(0.4),
+                              splashColor:
+                                  AppTheme.primaryTheme.withOpacity(0.4),
                               onTap: () {
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
-                                    transitionDuration: const Duration(milliseconds: 500),
-                                    pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        CourseHistory(
                                       manager: manager,
                                       selectedIndex: index,
                                       managerDosen: managerDosen,
                                     ),
                                     transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
+                                        secondaryAnimation, child) {
                                       var begin = const Offset(1.0, 0.0);
                                       var end = Offset.zero;
                                       var curve = Curves.ease;
-                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                            
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+
                                       return SlideTransition(
                                         position: animation.drive(tween),
                                         child: child,
@@ -176,40 +180,4 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     );
   }
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: SingleChildScrollView(
-  //       child: Column(
-  //         children: [
-  //           const Header(
-  //             title: 'Riwayat Kehadiran',
-  //             subtitle: 'Semester 2022/3',
-  //             back: false,
-  //           ),
-  //           Container(
-  //             margin: const EdgeInsets.only(top: 75, left: 95, right: 95),
-  //             child: const PersentaseKehadiran(
-  //               diagram: false,
-  //               selectedIndex: 0,
-  //             ),
-  //           ),
-  //           const KehadiranSemester(),
-  //           const CardMatkul(semester: false, selectedIndex: 0),
-  //           const RingkasanKehadiran(),
-  //            Text(
-  //             "Kehadiran Per Mata Kuliah",
-  //             textAlign: TextAlign.start,
-  //             style: AppTextStyle.poppinsTextStyle(
-  //               fontSize: 18,
-  //               fontsWeight: FontWeight.w600
-  //             ),
-  //           ),
-  //           // const SemesterHistory()
-  //           // BarChartWidget(),
-  //           // const SizedBox(height: 50),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }
