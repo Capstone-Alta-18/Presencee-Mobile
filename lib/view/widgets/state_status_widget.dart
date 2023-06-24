@@ -97,6 +97,26 @@ class LoadingSemesterHistoryCard extends StatelessWidget {
   }
 }
 
+class JadwalLoading extends StatelessWidget {
+  const JadwalLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 1.2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: const ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        subtitle: SpinKitThreeBounce(
+          color: AppTheme.primaryTheme,
+          size: 30,
+        )
+        
+      ),
+    );
+  }
+}
+
 class LoadingsProgress extends StatelessWidget {
   final bool loading;
   const LoadingsProgress({super.key, required this.loading});

@@ -89,7 +89,9 @@ class _HomePageState extends State<HomePage> {
               label: 'Riwayat',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(PhosphorIcons.user_bold),
+              icon: Icon(
+                key: Key('profile-button'),
+                PhosphorIcons.user_bold),
               label: 'Profil',
             ),
           ],
