@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:presencee/view/widgets/State_Status_widget.dart';
 // import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 // import 'package:presencee/model/jadwal_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
@@ -119,6 +120,14 @@ class _SchedulePageState extends State<SchedulePage> {
 
   Widget _buildJadwalAbsensi() {
     final allJadwal = Provider.of<JadwalViewModel>(context);
+
+    if (allJadwal.status == Status.initial) {
+      return const Center();
+    } else if (allJadwal.status == Status.loading) {
+      return const Center();
+    } else if (allJadwal.status == Status.error) {
+      return const Center();
+    }
 
     String getInitials(String name) {
       if (name.isEmpty) return '';

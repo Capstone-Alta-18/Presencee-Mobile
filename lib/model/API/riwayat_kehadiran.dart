@@ -45,7 +45,7 @@ class KehadiranApi {
     }
   }
 
-  static Future<RiwayatKehadiran> getKehadiranNew({required int idMhs}) async {
+  static Future<RiwayatKehadiran> getKehadiranNew({required int idMhs, required String afterTime, required String beforeTime}) async {
     final dio = Dio();
 
     try {
@@ -56,8 +56,8 @@ class KehadiranApi {
           "user_id" : 0,
           "mahasiswa_id" : idMhs,
           "jadwal_id" : 0,
-          "created_after" : "2023-06-02T15:04:05Z",
-          "created_before" : "2023-06-20T15:04:05Z",
+          "created_after" : "${afterTime}T00:00:00Z",
+          "created_before" : "${beforeTime}T00:00:00Z",
           "is_konfirmasi" : true,
         },
         options: Options(headers: {

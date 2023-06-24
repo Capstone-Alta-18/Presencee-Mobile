@@ -51,7 +51,7 @@ class Data {
       matakuliahId: json['matakuliah_id'],
       roomId: json['room_id'],
       sks: json['sks'],
-      jam: json['jam'],
+      jam: json['jam_mulai'],
       name: json['name'],
       description: json['description'],
       userId: json['user_id'],
@@ -66,7 +66,7 @@ class Data {
     data['matakuliah_id'] = this.matakuliahId;
     data['room_id'] = this.roomId;
     data['sks'] = this.sks;
-    data['jam'] = this.jam;
+    data['jam_mulai'] = this.jam;
     data['name'] = this.name;
     data['description'] = this.description;
     data['user_id'] = this.userId;

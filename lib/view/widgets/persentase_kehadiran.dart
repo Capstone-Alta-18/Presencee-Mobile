@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/model/riwayat_kehadiran_model.dart';
 import 'package:presencee/theme/constant.dart';
@@ -21,13 +23,38 @@ class PersentaseKehadiran extends StatefulWidget {
 }
 
 class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
+  var afterTime = DateTime.utc(2023,06,19);
+  var beforeTime = DateTime.utc(2023,06,30);
+  List<DateTime> getWeeksForRange(DateTime start, DateTime end) {
+  var result = List<DateTime>.empty(growable: true);
+  
+  var date = start;
+  
+  while(date.difference(end).inDays < 0) {   
+    // start new week on Monday
+    // if (date.weekday == 1) {
+    //   result.add(date);
+    // } 
+    
+    result.add(date);
+    
+    date = date.add(const Duration(days: 1));
+  }
+  
+  // result.add(date);
+  
+  return result;
+}
+
   @override
   void initState() {
+    // print(getWeeksForRange(afterTime, beforeTime));
     // TODO: implement initState
     super.initState();
   }
 
   Widget build(BuildContext context) {
+    
     final manager = Provider.of<KehadiranViewModel>(context);
     final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex);
     final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex);
@@ -53,6 +80,23 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
       return const ErrorMatkulCards();
     }
 
+    getWeeks(){
+      var i = 0; 
+      List<int> weeks = [];
+      while(i<=112) { 
+          if(i % 7 == 0){
+            if(getWeeksForRange(afterTime, DateTime.now()).length >= i){
+              weeks.add(i);
+              // return weeks;
+            }
+          }
+          i++;
+          // weeks.add(i);
+      }
+      // print(weeks);
+      return weeks;
+    }
+
     getPercent1() {
       double percent = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).reduce((value, element) => (value + element)) / 64 * 100;
       return percent.toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2);
@@ -71,6 +115,7 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
             animation: true,
             animationDuration: 1200,
             lineWidth: 15.0,
+            // percent: 0.2,
             percent: manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).reduce((value, element) => (value + element)) / 64,
             center: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -95,7 +140,7 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: Text(
-                    "Minggu ke-10",
+                    "Minggu ke-${getWeeks().length}",
                     style: AppTextStyle.poppinsTextStyle(
                       color: Colors.white,
                       fontSize: 14,

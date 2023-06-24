@@ -91,6 +91,9 @@ class Meta {
   Akuntansi? bahasaIndonesia;
   Akuntansi? ilustrasi;
   Akuntansi? mathematics;
+  Akuntansi? ppkn;
+  Akuntansi? agama;
+  // AgamaDosen? agamaDosen;
 
   Meta(
       {this.akuntansi, this.bahasaIndonesia, this.ilustrasi, this.mathematics});
@@ -108,6 +111,15 @@ class Meta {
     mathematics = json['Mathematics'] != null
         ? Akuntansi.fromJson(json['Mathematics'])
         : null;
+    agama = json['Agama'] != null
+        ? Akuntansi.fromJson(json['Agama'])
+        : null;
+    ppkn = json['PPKN'] != null
+        ? Akuntansi.fromJson(json['PPKN'])
+        : null;
+    // agamaDosen = json['Agama_Dosen'] != null
+    //     ? AgamaDosen.fromJson(json['Agama_Dosen'])
+    //     : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -118,12 +130,21 @@ class Meta {
     if (bahasaIndonesia != null) {
       data['Bahasa Indonesia'] = bahasaIndonesia!.toJson();
     }
+    if (ppkn != null) {
+      data['PPKN'] = ppkn!.toJson();
+    }
+    if (agama != null) {
+      data['Agama'] = agama!.toJson();
+    }
     if (ilustrasi != null) {
       data['Ilustrasi'] = ilustrasi!.toJson();
     }
     if (mathematics != null) {
       data['Mathematics'] = mathematics!.toJson();
     }
+    // if (agamaDosen != null) {
+    //   data['Agama_Dosen'] = agamaDosen!.toJson();
+    // }
     return data;
   }
 }
@@ -164,4 +185,20 @@ class Akuntansi {
     return data;
   }
 }
+
+// class AgamaDosen {
+//   String? dosen;
+
+//   AgamaDosen({this.dosen});
+
+//   AgamaDosen.fromJson(Map<String, dynamic> json) {
+//     dosen = json['Dosen'];
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['Dosen'] = this.dosen;
+//     return data;
+//   }
+// }
 

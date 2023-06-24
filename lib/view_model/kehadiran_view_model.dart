@@ -31,11 +31,11 @@ class KehadiranViewModel extends ChangeNotifier {
     }
     notifyListeners();
   }
-  getKehadiranNew({required int idMhs}) async {
+  getKehadiranNew({required int idMhs, required String afterTime, required String beforeTime}) async {
     _state = DataState.loading;
     notifyListeners();
     try {
-      final kehadiranNew = await KehadiranApi.getKehadiranNew(idMhs: idMhs);
+      final kehadiranNew = await KehadiranApi.getKehadiranNew(idMhs: idMhs,afterTime: afterTime,beforeTime: beforeTime);
       _kehadiranNew = kehadiranNew;
       _state = DataState.loaded;
     } catch (e) {

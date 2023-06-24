@@ -39,7 +39,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        widget.manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
+                        '${widget.manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex]} (${widget.selectedIndex < 4 ? "MU" : "EE"})',
                         style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontsWeight: FontWeight.w600,

@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -8,6 +10,7 @@ import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/pages/history_view.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -33,6 +36,7 @@ class _CardMatkulState extends State<CardMatkul> {
   @override
   void initState() {
     super.initState();
+    
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
     //   Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
     // });
@@ -40,8 +44,13 @@ class _CardMatkulState extends State<CardMatkul> {
 
   @override
   Widget build(BuildContext context) {
+
+
     final manager = Provider.of<KehadiranViewModel>(context);
     final managerDosen = Provider.of<DosenViewModel>(context);
+
+    
+   
 
     final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex);
     final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex);
@@ -69,7 +78,7 @@ class _CardMatkulState extends State<CardMatkul> {
 
     Color cardColor(int selectedIndex){
       // if (manager.kehadiran[selectedIndex].kodeMatkul.toString() == "MU"){
-      if (selectedIndex <= 1){
+      if (selectedIndex <= 3){
         return AppTheme.greenCard;
       } else {
         return AppTheme.purpleCard;
@@ -154,7 +163,8 @@ class _CardMatkulState extends State<CardMatkul> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    manager.kehadiranNew.meta!.toJson().keys.toList()[index].toString(),
+                                    manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex],
+                                    // manager.kehadiranNew.meta!.toJson().keys.toList()[index].toString(),
                                     style: AppTextStyle.poppinsTextStyle(
                                       color: AppTheme.black,
                                       fontSize: 14,
@@ -197,7 +207,7 @@ class _CardMatkulState extends State<CardMatkul> {
                               ),
                               child: Center(
                                 child: Text(
-                                  widget.selectedIndex > 1 ? "EE" : "MU",
+                                  widget.selectedIndex > 3 ? "EE" : "MU",
                                   // manager.kehadiran[widget.selectedIndex].kodeMatkul.toString(),
                                   style: AppTextStyle.poppinsTextStyle(
                                       color: AppTheme.black,
@@ -268,6 +278,8 @@ class _CardMatkulState extends State<CardMatkul> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        // matkul.toString(),
+                        // manager.kehadiranNew.meta!.toJson().entries.toList()[widget.selectedIndex].toString(),
                         manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,

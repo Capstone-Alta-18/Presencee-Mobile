@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import '../model/jadwal_model.dart';
 
-enum Status {
-  initial,
-  loading,
-  completed,
-  error,
-}
+// enum Status {
+//   initial,
+//   loading,
+//   completed,
+//   error,
+// }
 
 class JadwalViewModel extends ChangeNotifier {
   List<Data> _jadwals = [];

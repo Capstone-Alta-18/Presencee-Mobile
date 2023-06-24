@@ -1,4 +1,6 @@
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
@@ -9,6 +11,8 @@ import 'package:presencee/view_model/kehadiran_view_model.dart';
 import "package:provider/provider.dart";
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DataKehadiran {
   DataKehadiran(this.xData, this.yData, this.text, this.color);
@@ -26,15 +30,48 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+
+  bool isLoading = true;
+    
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 0);
-      Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
-    });
+    var now = DateTime.utc(2023,06,19);
+    var previousMonday = now.subtract(Duration(days: now.weekday - 1));
+    var nextSaturday = previousMonday.add(Duration(days: 6));
+    print('monday : $previousMonday');
+    print('saturday: $nextSaturday');
+
+    var before = DateFormat('yyyy-MM-dd').format(nextSaturday);
+    var after = DateFormat('yyyy-MM-dd').format(previousMonday);
+     print('before : $before');
+    print('after: $after');
+
+
+
+   
+    
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async{
+      await Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
+      SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
+        if (mounted) {
+          await Provider.of<KehadiranViewModel>(context, listen: false)
+              .getKehadiranNew(idMhs: idMahasiswa ?? 0, afterTime: after,beforeTime: before);
+          Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              isLoading = false;
+            });
+          });
+        }
+
+        // Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 14,afterTime:after,beforeTime:before );
+      });
   }
+
+
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
@@ -45,7 +82,7 @@ class _HistoryPageState extends State<HistoryPage> {
     } else if (manager.state == DataState.loading) {
       return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.error) {
-      return const ErrorSemesterHistoryCard();
+      return Center(child: Text("Terjadi Kesalahan",style: AppTextStyle.poppinsTextStyle(fontSize: 30,fontsWeight: FontWeight.w600,color: AppTheme.primaryTheme),),);
     }
 
     return Scaffold(
