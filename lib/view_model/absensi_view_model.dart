@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/model/API/absensi_api.dart';
 import 'package:presencee/model/filter_absensi_model.dart';
-
 import '../model/absensi_model.dart';
 
 enum DataState {

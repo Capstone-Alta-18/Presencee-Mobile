@@ -1,3 +1,26 @@
+/* class JadwalPelajaran {
+  List<Data>? data;
+
+  JadwalPelajaran({this.data});
+
+  JadwalPelajaran.fromJson(Map<String, dynamic> json) {
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+} */
+
 class Data {
   final int? id;
   final int? matakuliahId;
@@ -28,18 +51,18 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-        id: json['id'],
-        matakuliahId: json['matakuliah_id'],
-        roomId: json['room_id'],
-        sks: json['sks'],
-        jamMulai: json['jam_mulai'],
-        jamSelesai: json['jam_selesai'],
-        name: json['name'],
-        description: json['description'],
-        userId: json['user_id'],
-        dosenId: json['dosen_id'],
-        dosen: json['dosen'] != null ? Dosen.fromJson(json['dosen']) : null,
-        room: json['room'] != null ? Room.fromJson(json['room']) : null);
+      id: json['id'],
+      matakuliahId: json['matakuliah_id'],
+      roomId: json['room_id'],
+      sks: json['sks'],
+      jamMulai: json['jam_mulai'],
+      jamSelesai: json['jam_selesai'],
+      name: json['name'],
+      description: json['description'],
+      userId: json['user_id'],
+      dosenId: json['dosen_id'],
+      dosen: json['dosen'] != null ? Dosen.fromJson(json['dosen']) : null,
+      room: json['room'] != null ? Room.fromJson(json['room']) : null);
   }
 
   Map<String, dynamic> toJson() {
