@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:presencee/model/mahasiswa_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
-import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -75,37 +74,33 @@ class _CardPresenceState extends State<CardPresence> {
           image: '');
       if (mounted) {
         Navigator.pop(context);
-        var now = DateTime.now();
-        var jamAfter = DateFormat('yyyy-MM-ddT00:00:00+00:00').format(now);
-        var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
-        var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-        var nextSaturday = previousMonday.add(const Duration(days: 6));
-        var createdAfter =
-            DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
-        var createdBefore =
-            DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
-        setState(() {
-          Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(
-              userId: mahasiswa.userId!,
-              jamAfter: jamAfter,
-              jamBefore: jamBefore);
 
-          Provider.of<JadwalViewModel>(context, listen: false)
-              .getFilterJadwalSemua(
-                  userId: mahasiswa.userId!,
-                  jamAfter: createdAfter,
-                  jamBefore: createdBefore);
-        });
         if (Provider.of<AbsensiViewModel>(context, listen: false)
                 .absensi
                 ?.message ==
             'success creating absen') {
-          SnackbarAlertDialog().customDialogs(context,
-              message: "Absensi berhasil",
-              icons: PhosphorIcons.check_circle_fill,
-              iconColor: AppTheme.success,
-              backgroundsColor: AppTheme.white,
-              durations: 1800);
+          var nows = DateTime.now();
+          var previousMonday = nows.subtract(Duration(days: nows.weekday - 1));
+          var nextSaturday = previousMonday.add(const Duration(days: 6));
+          var createdAfter =
+              DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
+          var createdBefore =
+              DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
+
+          await Provider.of<AbsensiViewModel>(context, listen: false).getAbsen(
+              userId: mahasiswa.userId!,
+              mahasiswaId: mahasiswa.id!,
+              jadwalId: absenData['idJadwal'],
+              createdAfter: createdAfter,
+              createdBefore: createdBefore);
+          if (mounted) {
+            SnackbarAlertDialog().customDialogs(context,
+                message: "Absensi berhasil",
+                icons: PhosphorIcons.check_circle_fill,
+                iconColor: AppTheme.success,
+                backgroundsColor: AppTheme.white,
+                durations: 1800);
+          }
         } else if (Provider.of<AbsensiViewModel>(context, listen: false)
                     .absensi
                     ?.message ==
