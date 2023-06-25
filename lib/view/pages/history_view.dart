@@ -9,12 +9,11 @@ import 'package:presencee/view/widgets/persentase_kehadiran.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import "package:provider/provider.dart";
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DataKehadiran {
   DataKehadiran(this.xData, this.yData, this.text, this.color);
@@ -54,11 +53,11 @@ class _HistoryPageState extends State<HistoryPage> {
    
     
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final user =
-          Provider.of<UserViewModel>(context, listen: false).user?.data;
+      final mahasiswa =
+          Provider.of<MahasiswaViewModel>(context, listen: false).mahasiswaSingle;
       Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
       Provider.of<KehadiranViewModel>(context, listen: false)
-              .getKehadiranNew(idMhs: user!.mahasiswa!.id ?? 0, afterTime: after,beforeTime: before);
+              .getKehadiranNew(idMhs: mahasiswa.id!, afterTime: after,beforeTime: before);
       // Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(userId: user.id!, jamAfter: after, jamBefore: before);
       // final jadwal = Provider.of<JadwalViewModel>(context, listen: false).jadwals.length;
       // print(jadwal);
