@@ -1,23 +1,23 @@
-import 'package:presencee/view/pages/camera_view.dart';
 import 'package:presencee/view/pages/semester_attendance_history_view.dart';
 import 'package:presencee/view/pages/helps/help_center_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presencee/view/widgets/kehadiran_semester.dart';
 import 'package:presencee/view/pages/helps/customer_view.dart';
-import 'package:presencee/view/splash_view.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view_model/upload_view_model.dart';
+import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view/pages/fingerprint_view.dart';
+import 'package:presencee/view_model/app_view_model.dart';
 import 'package:presencee/view/pages/presence_view.dart';
 import 'package:presencee/view/pages/schedule_view.dart';
 import 'package:presencee/view/pages/history_view.dart';
 import 'package:presencee/view/pages/profile_view.dart';
+import 'package:presencee/view/pages/camera_view.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
+import 'package:presencee/view/splash_view.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view_model/absensi_view_model.dart';
-import 'package:presencee/view_model/app_view_model.dart';
-import 'package:presencee/view_model/dosen_view_model.dart';
-import 'package:presencee/view_model/jadwal_view_model.dart';
-import 'package:presencee/view_model/upload_view_model.dart';
 import 'view_model/kehadiran_view_model.dart';
 import 'view_model/mahasiswa_view_model.dart';
 import 'view_model/user_view_model.dart';
@@ -35,13 +35,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => UploadImageViewModel()),
         ChangeNotifierProvider(create: (context) => MahasiswaViewModel()),
         ChangeNotifierProvider(create: (context) => KehadiranViewModel()),
-        ChangeNotifierProvider(create: (context) => JadwalViewModel()),
-        ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(create: (context) => AbsensiViewModel()),
-        ChangeNotifierProvider(create: (context) => UploadImageViewModel()),
+        ChangeNotifierProvider(create: (context) => JadwalViewModel()),
         ChangeNotifierProvider(create: (context) => DosenViewModel()),
+        ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(create: (context) => AppViewModel()),
       ],
       child: MaterialApp(

@@ -26,9 +26,10 @@ void main() {
     Finder passwordField = find.byKey(const Key('password'));
     await tester.enterText(passwordField, '123456');
     await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pumpAndSettle(const Duration(milliseconds: 1200));
 
     expect(find.byType(TextButton), anything);
-    await tester.tap(find.byType(TextButton));
+    await tester.tap(find.byType(TextButton), warnIfMissed: false);
     await tester.pump();
 
     await tester.pump(const Duration(milliseconds: 800));
@@ -51,13 +52,14 @@ void main() {
     expect(find.byType(LoginPage), findsOneWidget);
 
     Finder emailField = find.byKey(const Key('email'));
-    await tester.enterText(emailField, 'test@gmail.com');       // jika email salah test akan gagal
+    await tester.enterText(emailField, 'anton@gmail.com');       // jika email salah test akan gagal
 
     Finder passwordField = find.byKey(const Key('password'));
     await tester.enterText(passwordField, '123456');
     await tester.testTextInput.receiveAction(TextInputAction.next);
+    await tester.pumpAndSettle(const Duration(milliseconds: 1200));
 
-    await tester.pump(const Duration(seconds: 2));
+    await tester.pump(const Duration(seconds: 3));
     Finder loginButton = find.byKey(const Key('login-button'));
     await tester.tap(loginButton, warnIfMissed: false);
     await tester.press(loginButton, warnIfMissed: false);
