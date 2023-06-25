@@ -67,6 +67,7 @@ class _BottomContainerState extends State<BottomContainer> {
                 child: AttendanceSubsList(
                   scrollControllers: scrollController,
                   idJadwal: widget.idJadwal,
+                  subsList: true,
                 ),
               ),
             ],

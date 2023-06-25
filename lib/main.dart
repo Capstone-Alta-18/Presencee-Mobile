@@ -13,6 +13,7 @@ import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view/auth/login_view.dart';
 import 'package:presencee/view/home/homePage.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view/widgets/list_history.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/app_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
@@ -116,7 +117,7 @@ class MyApp extends StatelessWidget {
             );
           } else if (settings.name == '/history/semester_history') {
             return PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const SemesterHistory(),
+              pageBuilder: (_, __, ___) => const HistoryPage(),
               transitionsBuilder: (_, a, sA, c) {
                 var begin = const Offset(1.0, 0.0);
                 var end = Offset.zero;

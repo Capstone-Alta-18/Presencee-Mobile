@@ -232,6 +232,14 @@ class _SchedulePageState extends State<SchedulePage> {
     final allJadwal = Provider.of<JadwalViewModel>(context);
     final filterJadwal = Provider.of<JadwalViewModel>(context);
 
+    if (allJadwal.status == Status.initial) {
+      return const Center();
+    } else if (allJadwal.status == Status.loading) {
+      return const Center();
+    } else if (allJadwal.status == Status.error) {
+      return const Center();
+    }
+
     String getInitials(String name) {
       if (name.isEmpty) return '';
 

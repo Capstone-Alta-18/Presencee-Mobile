@@ -6,6 +6,7 @@ import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'course_history_view.dart';
@@ -89,6 +90,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                                       manager: manager,
                                       selectedIndex: index,
                                       managerDosen: managerDosen,
+                                      idJadwal: 1,
                                     ),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
@@ -111,6 +113,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                                 child: CardMatkul(
                                   semester: true,
                                   selectedIndex: index,
+                                  idJadwal: 1,
                                 ),
                               ),
                             ),

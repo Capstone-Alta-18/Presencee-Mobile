@@ -31,11 +31,11 @@ class KehadiranApi {
 
       if (response.statusCode == 200) {
         final datas = response as List;
-        // print('response data : ${datas}');
+        print('response data : ${datas}');
         List<RiwayatKehadiran> kehadiran = (jsonDecode(response.data) as List).map((model) => RiwayatKehadiran.fromJson(model)).toList();
         // List<RiwayatKehadiran> kehadiran = List<RiwayatKehadiran>.from(
         //     datas.map((model) => RiwayatKehadiran.fromJson(model))).toList();
-        // print('kehadiran: $kehadiran');
+        print('kehadiran: $kehadiran');
         return kehadiran;
       } else {
         throw Exception('Failed to load kehadiran');
@@ -45,7 +45,7 @@ class KehadiranApi {
     }
   }
 
-  static Future<RiwayatKehadiran> getKehadiranNew({required int idMhs}) async {
+  static Future<RiwayatKehadiran> getKehadiranNew({required int idMhs, required String afterTime, required String beforeTime}) async {
     final dio = Dio();
 
     try {
@@ -56,8 +56,8 @@ class KehadiranApi {
           "user_id" : 0,
           "mahasiswa_id" : idMhs,
           "jadwal_id" : 0,
-          "created_after" : "2023-06-02T15:04:05Z",
-          "created_before" : "2023-06-20T15:04:05Z",
+          "created_after" : "${afterTime}T00:00:00Z",
+          "created_before" : "${beforeTime}T00:00:00Z",
           "is_konfirmasi" : true,
         },
         options: Options(headers: {
@@ -69,7 +69,7 @@ class KehadiranApi {
       // print('response results = $response');
 
       if (response.statusCode == 200) {
-        print(response.data);
+        // print(response.data);
         return RiwayatKehadiran.fromJson(response.data);
       } else {
         throw Exception('Failed to load kehadiran');

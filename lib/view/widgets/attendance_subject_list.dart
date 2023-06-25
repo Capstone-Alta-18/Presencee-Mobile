@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:presencee/model/API/jadwal_api.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:provider/provider.dart';
@@ -8,11 +9,13 @@ import '../../theme/constant.dart';
 class AttendanceSubsList extends StatefulWidget {
   final ScrollController? scrollControllers;
   final int idJadwal;
+  final bool subsList;
 
-  const AttendanceSubsList({
+  const   AttendanceSubsList({
     super.key,
     this.scrollControllers,
     required this.idJadwal,
+    required this.subsList
   });
 
   @override
@@ -41,9 +44,18 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
     });
     super.initState();
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    final manager = Provider.of<AbsensiViewModel>(context);
+    if (manager.state == DataState.initial) {
+      return const Center();
+    } else if (manager.state == DataState.loading) {
+      return const Center();
+    } else if (manager.state == DataState.error) {
+      return Center(child: Text("Tidak ada riwayat absensi",style: AppTextStyle.poppinsTextStyle(fontSize: 20,fontsWeight: FontWeight.w600,color: AppTheme.primaryTheme),),);
+    }
     return Consumer<AbsensiViewModel>(
         builder: ((context, value, child) => value.listAbsensi.isEmpty
             ? Center(
@@ -57,7 +69,8 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
             : ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  ListView.separated(
+                  widget.subsList == true
+                  ? ListView.separated(
                     controller: widget.scrollControllers,
                     separatorBuilder: (context, index) => const Divider(),
                     physics: const NeverScrollableScrollPhysics(),
@@ -125,8 +138,91 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
                         ),
                       );
                     },
+                  )
+                  : ListView.separated(
+                    controller: widget.scrollControllers,
+                    separatorBuilder: (context, index) => const Divider(),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: value.listAbsensi.length,
+                    itemBuilder: (context, index) {
+                      final absenView = value.listAbsensi[index];
+                      return SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 24, right: 24),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    absenView.matakuliah ?? '',
+                                    style: AppTextStyle.poppinsTextStyle(
+                                      color: AppTheme.black,
+                                      fontsWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${absenView.status} : ${DateFormat('dd MMMM', 'id').format(DateTime.parse(absenView.timeAttemp.toString()))}',
+                                    style: AppTextStyle.poppinsTextStyle(
+                                      color: AppTheme.black_3,
+                                      fontsWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              absenView.isKonfirmasi == true
+                              ? Container(
+                                height: 30,
+                                width: 125,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.primaryTheme_2,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: 
+                                         Text(
+                                          'Terkonfirmasi',
+                                          style: AppTextStyle.poppinsTextStyle(
+                                            color: AppTheme.white,
+                                            fontsWeight: FontWeight.w400,
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                ),
+                              )
+                              : Container(
+                                height: 30,
+                                width: 125,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.gray_2,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: 
+                                         Text(
+                                          'Belum Terkonfirmasi',
+                                          style: AppTextStyle.poppinsTextStyle(
+                                            color: AppTheme.white,
+                                            fontsWeight: FontWeight.w400,
+                                            fontSize: 12,
+                                          ),
+                                        )
+                                ),
+                              )
+                            
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const Divider(),
+                  if(widget.subsList == true)
                   if (value.listAbsensi.length > 6)
                     Column(
                       children: [
