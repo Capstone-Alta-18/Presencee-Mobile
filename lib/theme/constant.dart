@@ -20,9 +20,8 @@ class AppTheme {
   static const Color gray = Color(0xFFF5F5F5);
   static const Color gray_2 = Color(0xFFD1D1D1);
   static const Color gray_3 = Color(0xFFA4A4A4);
-  static const Color gray_4 = Color(0xFFA4A4A4);
-  static const Color gray_5 = Color(0xFF767676);
-  static const Color gray_6 = Color(0xFF6A6A6A);
+  static const Color gray_4 = Color(0xFF767676);
+  static const Color gray_5 = Color(0xFF6A6A6A);
   static const Color greyText = Color.fromRGBO(0, 0, 0, 0.247);
 
   // Black and grays
@@ -34,7 +33,7 @@ class AppTheme {
 
   // Gradients
   static const Color gradient_1 = Color(0xFFCD4F3F);
-  static const Color gradient_2 = Color(0xFFFE9486);
+  static const Color gradient_2 = primaryTheme_2;
   static const Color gradient_3 = Color(0xFFFE7968);
 
   // cards color
@@ -42,9 +41,12 @@ class AppTheme {
   static const Color purpleCard = Color(0xFFE3E1FF);
 
   // Circular Color
-  static const Color hadir = Color(0xFFFE7968);
-  static const Color absen = Color(0xFFAE3838);
-  static const Color kosong = Color(0xFFD1D1D1);
+  static const Color hadir = primaryTheme_3;
+  static const Color absen = primaryTheme_2;
+  static const Color izin = primaryTheme;
+  static const Color sakit = Color(0xFFC95353);
+  static const Color dispensai = error;
+  static const Color kosong = gray_2;
 }
 
 class AppTextStyle {

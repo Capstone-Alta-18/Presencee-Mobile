@@ -67,9 +67,9 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
     List<DataKehadiran> kehadiran = [
       DataKehadiran("Hadir", hadir, "Hadir", AppTheme.primaryTheme),
       DataKehadiran("Alpa", alpa, "Alpa", AppTheme.absen),
-      DataKehadiran("Sakit", sakit, "Sakit", AppTheme.absen),
-      DataKehadiran("Izin", izin, "Izin", AppTheme.absen),
-      DataKehadiran("Dispensasi", dispen, "Dispensasi", AppTheme.absen),
+      DataKehadiran("Sakit", sakit, "Sakit", AppTheme.sakit),
+      DataKehadiran("Izin", izin, "Izin", AppTheme.sakit),
+      DataKehadiran("Dispensasi", dispen, "Dispensasi", AppTheme.dispensai),
       DataKehadiran("", total > 16 ? 0 : total - 16, "Kosong", AppTheme.kosong),
     ];
 

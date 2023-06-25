@@ -19,16 +19,16 @@ void main() {
       expect(jadwals.length, 10);
 
       // data dinamis, bisa bisa berubah
-      expect(jadwals[0].name, 'Mathematics');
-      expect(jadwals[0].dosen?.name, 'Andi Lukito');
-      expect(jadwals[0].dosen?.phone, '0817647648');
+      expect(jadwals[0].name, 'Bahasa Indonesia');
+      expect(jadwals[0].dosen?.name, 'M.Yazid');
+      expect(jadwals[0].dosen?.phone, '08374863578');
     });
 
     test('Get Semua Mahasiswa API', () async {
       var siswa = await MahasiswaAPI.getMahasiswa();
       expect(siswa, isNotNull);
       // expect(siswa, isNull);     // if null bakal error
-      expect(siswa.length, 37);     // default 37 mahasiswa kemungkinan akan nambah
+      expect(siswa.length, 41);     // default 37 mahasiswa kemungkinan akan nambah
     });
 
     test('Get single mahasiswa API', () async {

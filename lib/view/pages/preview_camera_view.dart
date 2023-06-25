@@ -189,7 +189,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                       Container(
                         height: 66,
                         width: MediaQuery.of(context).size.width,
-                        color: AppTheme.gray_6,
+                        color: AppTheme.gray_5,
                         child: Row(
                           children: [
                             const SizedBox(width: 15),

@@ -19,9 +19,7 @@ class HeaderHistory extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
+                    onPressed: () => Navigator.pop(context),
                     icon: const Icon(
                       PhosphorIcons.x,
                       color: AppTheme.white,
