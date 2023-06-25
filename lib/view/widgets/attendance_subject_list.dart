@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../theme/constant.dart';
 
@@ -28,9 +29,9 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final dataMahasiswa =
           Provider.of<MahasiswaViewModel>(context, listen: false);
-      var now = DateTime.now();
+      var now = DateTime.utc(2023,06,19);
       var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-      var nextSaturday = previousMonday.add(const Duration(days: 6));
+      var nextSaturday = previousMonday.add(const Duration(days: 112));
       var createdAfter =
           DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
       var createdBefore =

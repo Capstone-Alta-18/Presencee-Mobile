@@ -1,9 +1,12 @@
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:presencee/model/absensi_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/attendance_subject_list.dart';
 import 'package:presencee/view/widgets/header.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:provider/provider.dart';
 
 class ListHistory extends StatefulWidget {
   final int idJadwal;
@@ -20,6 +23,7 @@ class _ListHistoryState extends State<ListHistory> {
 
   @override
   Widget build(BuildContext context) {
+    final absen = Provider.of<AbsensiViewModel>(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,8 +78,8 @@ class _ListHistoryState extends State<ListHistory> {
             ),
           ),
           const SizedBox(height: 39),
-          Container(
-            height: MediaQuery.of(context).size.height - 400,
+          SizedBox(
+            height: absen.listAbsensi.length < 10  ? MediaQuery.of(context).size.height - 350 : MediaQuery.of(context).size.height,
             child: AttendanceSubsList(
               idJadwal: widget.idJadwal,
               subsList: false,

@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DiagramHistory extends StatelessWidget {
   final KehadiranViewModel manager;
   final int selectedIndex;
-  const DiagramHistory({super.key,required this.manager,required this.selectedIndex});
+  DiagramHistory({super.key,required this.selectedIndex, required this.manager});
 
+  var afterTime = DateTime.utc(2023,06,18);
+  var beforeTime = DateTime.now();
+  
+  List getWeeks(){
+      var diff = beforeTime.difference(afterTime).inDays;
+      var i = 0; 
+      List<int> weeks = [];
+      while(i<=112) { 
+          if(i % 7 == 0){
+            if(diff >= i){
+              weeks.add(i);
+              // return weeks;
+            }
+          }
+          i++;
+          // weeks.add(i);
+      }
+      // print(weeks);
+      return weeks;
+    }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,7 +67,7 @@ class DiagramHistory extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('10 dari 16',
+                      Text('${getWeeks().length} dari 16',
                           style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontsWeight: FontWeight.w600,
