@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/theme/constant.dart';
@@ -39,7 +38,7 @@ class _HistoryPageState extends State<HistoryPage> {
     super.initState();
     var now = DateTime.utc(2023,06,19);
     var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-    var nextSaturday = previousMonday.add(Duration(days: 6));
+    var nextSaturday = previousMonday.add(Duration(days: 112));
     print('monday : $previousMonday');
     print('saturday: $nextSaturday');
 
@@ -76,6 +75,7 @@ class _HistoryPageState extends State<HistoryPage> {
       //   }
 
         // Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 14,afterTime:after,beforeTime:before );
+
       });
   }
 
@@ -83,7 +83,6 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final manager = Provider.of<KehadiranViewModel>(context);
-    final managerDosen = Provider.of<DosenViewModel>(context);
     final jadwal = Provider.of<JadwalViewModel>(context);
 
     if (manager.state == DataState.initial) {
@@ -123,7 +122,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
-                    itemCount: jadwal.jadwals.length,
+                    itemCount: jadwal.jadwals.take(3).length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     itemBuilder: ((context, index) {
@@ -148,9 +147,8 @@ class _HistoryPageState extends State<HistoryPage> {
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
                                         CourseHistory(
-                                      manager: manager,
+                                      manager: jadwal,
                                       selectedIndex: index,
-                                      managerDosen: managerDosen,
                                       idJadwal: jadwal.jadwals[index].id!,
                                     ),
                                     transitionsBuilder: (context, animation,
@@ -175,7 +173,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                   semester: true,
                                   selectedIndex: index,
                                   idJadwal: 1,
-                                  // manager: manager,
                                 ),
                               ),
                             ),

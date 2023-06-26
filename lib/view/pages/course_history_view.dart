@@ -1,21 +1,24 @@
+import 'package:presencee/model/riwayat_kehadiran_model.dart';
 import 'package:presencee/view/widgets/diagram_history.dart';
 import 'package:presencee/view/widgets/header_history.dart';
 import 'package:presencee/view/widgets/list_history.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:provider/provider.dart';
 import '../../view_model/kehadiran_view_model.dart';
 import 'package:flutter/material.dart';
 import '../../theme/constant.dart';
 
 class CourseHistory extends StatefulWidget {
-  final KehadiranViewModel manager;
-  final DosenViewModel managerDosen;
+  final JadwalViewModel manager;
   final int selectedIndex;
   final int idJadwal;
 
   const CourseHistory(
       {Key? key,
       required this.manager,
-      required this.managerDosen,
+      // required this.managerDosen,
       required this.selectedIndex,
       required this.idJadwal})
       : super(key: key);
@@ -46,16 +49,14 @@ class _CourseHistoryState extends State<CourseHistory> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '${widget.manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex]} (${widget.selectedIndex < 4 ? "MU" : "EE"})',
+                        widget.manager.jadwals[widget.selectedIndex].name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontsWeight: FontWeight.w600,
                             fontSize: 24),
                       ),
                       Text(
-                        widget.managerDosen.dosen.dosens![widget.selectedIndex]
-                            .name
-                            .toString(),
+                        widget.manager.jadwals[widget.selectedIndex].dosen!.name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                             color: AppTheme.black,
                             fontsWeight: FontWeight.w400,
@@ -70,7 +71,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                 children: [
                   ListHistory(idJadwal: widget.idJadwal),
                   DiagramHistory(
-                    manager: widget.manager,
+                    manager: Provider.of<KehadiranViewModel>(context),
                     selectedIndex: widget.selectedIndex,
                   )
                 ],

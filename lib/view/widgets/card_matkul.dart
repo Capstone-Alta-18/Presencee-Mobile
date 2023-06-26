@@ -8,6 +8,7 @@ import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/pages/history_view.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
@@ -42,18 +43,16 @@ class _CardMatkulState extends State<CardMatkul> {
 
 
     final manager = Provider.of<KehadiranViewModel>(context);
-    final managerDosen = Provider.of<DosenViewModel>(context);
     final jadwal = Provider.of<JadwalViewModel>(context);
 
     
-   
-
-    final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex);
-    final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex);
-    final sakit = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Sakit"]).elementAt(widget.selectedIndex);
-    final izin = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Izin"]).elementAt(widget.selectedIndex);
-    final dispen = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Dispensasi"]).elementAt(widget.selectedIndex);
-    var total = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex);
+    // final hadir = manager.kehadiranNew.meta!.toJson().values.where((f) => f.startsWith('Hadir')).elementAt(widget.selectedIndex);
+    final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex) ?? 0;
+    final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex) ?? 0;
+    final sakit = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Sakit"]).elementAt(widget.selectedIndex) ?? 0;
+    final izin = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Izin"]).elementAt(widget.selectedIndex) ?? 0;
+    final dispen = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Dispensasi"]).elementAt(widget.selectedIndex) ?? 0;
+    var total = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex) ?? 0;
 
     List<DataKehadiran> kehadiran = [
       DataKehadiran("Hadir", hadir, "Hadir", AppTheme.primaryTheme),
@@ -118,9 +117,8 @@ class _CardMatkulState extends State<CardMatkul> {
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) =>
                                         CourseHistory(
-                                  manager: manager,
+                                  manager: jadwal,
                                   selectedIndex: index,
-                                  managerDosen: managerDosen,
                                   idJadwal: widget.idJadwal,
                                 ),
                               ),
@@ -279,9 +277,8 @@ class _CardMatkulState extends State<CardMatkul> {
                       transitionDuration: const Duration(milliseconds: 500),
                       pageBuilder: (context, animation, secondaryAnimation) =>
                           CourseHistory(
-                        manager: manager,
+                        manager: jadwal,
                         selectedIndex: widget.selectedIndex,
-                        managerDosen: managerDosen,
                         idJadwal: widget.idJadwal,
                       ),
                       transitionsBuilder:
