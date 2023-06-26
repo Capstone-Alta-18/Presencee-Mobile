@@ -38,13 +38,10 @@ class _HistoryPageState extends State<HistoryPage> {
     var now = DateTime.utc(2023,06,19);
     var previousMonday = now.subtract(Duration(days: now.weekday - 1));
     var nextSaturday = previousMonday.add(Duration(days: 112));
-    print('monday : $previousMonday');
-    print('saturday: $nextSaturday');
 
     var before = DateFormat('yyyy-MM-dd').format(nextSaturday);
     var after = DateFormat('yyyy-MM-dd').format(previousMonday);
-     print('before : $before');
-    print('after: $after');
+
 
 
 
@@ -81,7 +78,8 @@ class _HistoryPageState extends State<HistoryPage> {
               subtitle: 'Semester 2022/2',
               back: false,
             ),
-            Padding(
+            jadwal.jadwals.isNotEmpty
+            ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,9 +160,21 @@ class _HistoryPageState extends State<HistoryPage> {
                     }),
                   ),
                 ],
+              )
+            )
+            : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Tidak ada Riwayat Absen",style: AppTextStyle.poppinsTextStyle(fontSize: 20,fontsWeight: FontWeight.w600),),
+                  ],
+                )
               ),
             ),
           ],
+        
         ),
       ),
     );
