@@ -6,8 +6,10 @@ import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/history_view.dart';
 import 'package:presencee/view/widgets/State_Status_widget.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../view_model/user_view_model.dart';
@@ -15,8 +17,9 @@ import '../../view_model/user_view_model.dart';
 class PersentaseKehadiran extends StatefulWidget {
   final bool diagram;
   final int selectedIndex;
+  final int idJadwal;
   const PersentaseKehadiran(
-      {super.key, required this.diagram, required this.selectedIndex});
+      {super.key, required this.diagram, required this.selectedIndex,required this.idJadwal});
 
   @override
   State<PersentaseKehadiran> createState() => _PersentaseKehadiranState();
@@ -29,48 +32,37 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
   @override
   void initState() {
     super.initState();
+    var now = DateTime.utc(2023,06,18);
+    var previousMonday = now.subtract(Duration(days: now.weekday - 1));
+    var nextSaturday = previousMonday.add(Duration(days: 112));
+
+    var after = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
+    var before = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(nextSaturday);
+
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   final user = Provider.of<UserViewModel>(context, listen: false).user!.data;
+    //   Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+    //     idMhs: user!.id!,
+    //     afterTime: after,
+    //     beforeTime: before,
+    //     jadwalId: widget.idJadwal
+    //   );
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
     
     final manager = Provider.of<KehadiranViewModel>(context);
-    final hadir = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Hadir"])
-        .elementAt(widget.selectedIndex);
-    final alpa = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Alpa"])
-        .elementAt(widget.selectedIndex);
-    final sakit = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Sakit"])
-        .elementAt(widget.selectedIndex);
-    final izin = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Izin"])
-        .elementAt(widget.selectedIndex);
-    final dispen = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Dispensasi"])
-        .elementAt(widget.selectedIndex);
-    var total = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Total"])
-        .elementAt(widget.selectedIndex);
+    final jadwal = Provider.of<JadwalViewModel>(context);
+
+    final hadir = manager.kehadiran.meta!.hadir!.toInt();
+    final alpa = manager.kehadiran.meta!.alpa!.toInt();
+    final sakit = manager.kehadiran.meta!.sakit!.toInt();
+    final izin = manager.kehadiran.meta!.izin!.toInt();
+    final dispen = manager.kehadiran.meta!.dispensasi!.toInt();
+    final total = manager.kehadiran.totalCount!.toInt();
+    
 
     List<DataKehadiran> kehadiran = [
       DataKehadiran("Hadir", hadir, "Hadir", AppTheme.primaryTheme),
@@ -91,7 +83,6 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
 
     getWeeks(){
       var diff = beforeTime.difference(afterTime).inDays;
-      print(diff);
       var i = 0; 
       List<int> weeks = [];
       while(i<=112) { 
@@ -109,28 +100,30 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
     }
 
     getPercent1() {
-      double percent = manager.kehadiranNew.meta!
-              .toJson()
-              .values
-              .toList()
-              .map((e) => e["Total"])
-              .reduce((value, element) => (value + element)) /
-           (manager.kehadiranNew.meta!.toJson().length * 16) *
-          100;
+      // double percent = manager.kehadiranNew.meta!
+      //         .toJson()
+      //         .values
+      //         .toList()
+      //         .map((e) => e["Total"])
+      //         .reduce((value, element) => (value + element)) /
+      //      (manager.kehadiranNew.meta!.toJson().length * 16) *
+      //     100;
+      double percent = manager.kehadiran.totalCount!.toDouble() / (jadwal.jadwals.length * 16) * 100;
       return percent
           .toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2);
     }
 
     getPercent2() {
-      double percent = manager.kehadiranNew.meta!
-              .toJson()
-              .values
-              .toList()
-              .map((e) => e["Total"])
-              .elementAt(widget.selectedIndex) /
-          16 *
-          100;
-      return percent
+      // double percent = manager.kehadiranNew.meta!
+      //         .toJson()
+      //         .values
+      //         .toList()
+      //         .map((e) => e["Total"])
+      //         .elementAt(widget.selectedIndex) /
+      //     16 *
+      //     100;
+      double percent = manager.kehadiran.totalCount!.toDouble() / 16 * 100;
+      return percent > 100 ? 100 : percent
           .toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2);
     }
 
@@ -141,13 +134,8 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
             animation: true,
             animationDuration: 1200,
             lineWidth: 15.0,
-            percent: manager.kehadiranNew.meta!
-                    .toJson()
-                    .values
-                    .toList()
-                    .map((e) => e["Total"])
-                    .reduce((value, element) => (value + element)) /
-                (manager.kehadiranNew.meta!.toJson().length * 16),
+            // percent: 0.8,
+            percent: manager.kehadiran.totalCount!.toDouble() / 48,
             center: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

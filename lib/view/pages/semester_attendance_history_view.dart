@@ -51,6 +51,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                     child: PersentaseKehadiran(
                       diagram: false,
                       selectedIndex: 0,
+                      idJadwal: 0,
                     ),
                   ),
                   const Padding(padding: EdgeInsets.only(bottom: 43)),

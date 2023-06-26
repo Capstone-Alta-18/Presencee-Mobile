@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
@@ -33,10 +34,27 @@ class CardMatkul extends StatefulWidget {
 }
 
 class _CardMatkulState extends State<CardMatkul> {
-  @override
-  void initState() {
-    super.initState();
-  }
+
+//  @override
+//   void initState() {
+//     super.initState();
+//     var now = DateTime.utc(2023,06,19);
+//     var previousMonday = now.subtract(Duration(days: now.weekday - 1));
+//     var nextSaturday = previousMonday.add(Duration(days: 112));
+
+//     var after = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
+//     var before = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(nextSaturday);
+
+//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+//       final user = Provider.of<UserViewModel>(context, listen: false).user!.data;
+//       Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+//         idMhs: user!.id ?? 0,
+//         afterTime: after,
+//         beforeTime: before,
+//         jadwalId: widget.idJadwal
+//       );
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +65,19 @@ class _CardMatkulState extends State<CardMatkul> {
 
     
     // final hadir = manager.kehadiranNew.meta!.toJson().values.where((f) => f.startsWith('Hadir')).elementAt(widget.selectedIndex);
-    final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex) ?? 0;
-    final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex) ?? 0;
-    final sakit = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Sakit"]).elementAt(widget.selectedIndex) ?? 0;
-    final izin = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Izin"]).elementAt(widget.selectedIndex) ?? 0;
-    final dispen = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Dispensasi"]).elementAt(widget.selectedIndex) ?? 0;
-    var total = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex) ?? 0;
+    final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex);
+    final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex);
+    final sakit = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Sakit"]).elementAt(widget.selectedIndex);
+    final izin = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Izin"]).elementAt(widget.selectedIndex);
+    final dispen = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Dispensasi"]).elementAt(widget.selectedIndex);
+    var total = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex);
+
+    // final hadir = manager.kehadiran.meta!.hadir!.toInt();
+    // final alpa = manager.kehadiran.meta!.alpa!.toInt();
+    // final sakit = manager.kehadiran.meta!.sakit!.toInt();
+    // final izin = manager.kehadiran.meta!.izin!.toInt();
+    // final dispen = manager.kehadiran.meta!.dispensasi!.toInt();
+    // final total = manager.kehadiran.totalCount!.toInt();
 
     List<DataKehadiran> kehadiran = [
       DataKehadiran("Hadir", hadir, "Hadir", AppTheme.primaryTheme),
@@ -100,29 +125,29 @@ class _CardMatkulState extends State<CardMatkul> {
                             borderRadius: BorderRadius.circular(10)),
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(0.0, 1.0);
-                                  const end = Offset.zero;
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: Curves.ease));
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        CourseHistory(
-                                  manager: jadwal,
-                                  selectedIndex: index,
-                                  idJadwal: widget.idJadwal,
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   PageRouteBuilder(
+                            //     transitionsBuilder: (context, animation,
+                            //         secondaryAnimation, child) {
+                            //       const begin = Offset(0.0, 1.0);
+                            //       const end = Offset.zero;
+                            //       var tween = Tween(begin: begin, end: end)
+                            //           .chain(CurveTween(curve: Curves.ease));
+                            //       return SlideTransition(
+                            //         position: animation.drive(tween),
+                            //         child: child,
+                            //       );
+                            //     },
+                            //     pageBuilder:
+                            //         (context, animation, secondaryAnimation) =>
+                            //             CourseHistory(
+                            //       manager: jadwal,
+                            //       selectedIndex: index,
+                            //       idJadwal: widget.idJadwal,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: Padding(
                             padding:
@@ -272,30 +297,30 @@ class _CardMatkulState extends State<CardMatkul> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          CourseHistory(
-                        manager: jadwal,
-                        selectedIndex: widget.selectedIndex,
-                        idJadwal: widget.idJadwal,
-                      ),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        var begin = const Offset(1.0, 0.0);
-                        var end = Offset.zero;
-                        var curve = Curves.ease;
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
+                  // Navigator.of(context).push(
+                  //   PageRouteBuilder(
+                  //     transitionDuration: const Duration(milliseconds: 500),
+                  //     pageBuilder: (context, animation, secondaryAnimation) =>
+                  //         CourseHistory(
+                  //       manager: jadwal,
+                  //       selectedIndex: widget.selectedIndex,
+                  //       idJadwal: widget.idJadwal,
+                  //     ),
+                  //     transitionsBuilder:
+                  //         (context, animation, secondaryAnimation, child) {
+                  //       var begin = const Offset(1.0, 0.0);
+                  //       var end = Offset.zero;
+                  //       var curve = Curves.ease;
+                  //       var tween = Tween(begin: begin, end: end)
+                  //           .chain(CurveTween(curve: curve));
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  //       return SlideTransition(
+                  //         position: animation.drive(tween),
+                  //         child: child,
+                  //       );
+                  //     },
+                  //   ),
+                  // );
                 },
                 icon: const Icon(
                   PhosphorIcons.caret_right,

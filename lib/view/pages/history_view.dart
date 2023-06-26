@@ -1,17 +1,23 @@
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:presencee/model/riwayat_dashboard.dart';
+import 'package:presencee/model/riwayat_kehadiran_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
 import 'package:presencee/view/widgets/persentase_kehadiran.dart';
+import 'package:presencee/view_model/app_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import "package:provider/provider.dart";
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DataKehadiran {
   DataKehadiran(this.xData, this.yData, this.text, this.color);
@@ -35,25 +41,28 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void initState() {
     super.initState();
-    var now = DateTime.utc(2023,06,19);
-    var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-    var nextSaturday = previousMonday.add(Duration(days: 112));
-
-    var before = DateFormat('yyyy-MM-dd').format(nextSaturday);
-    var after = DateFormat('yyyy-MM-dd').format(previousMonday);
-
-
-
-
-   
-    
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final user =
-          Provider.of<UserViewModel>(context, listen: false).user?.data;
-      Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
+      final mahasiswa = Provider.of<MahasiswaViewModel>(context, listen: false)
+          .mahasiswaSingle;
+      var now = DateTime.now();
+      var jadwal = DateTime.utc(2023,06,18);
+      var jamAfter = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(now);
+      var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
+      var previousMonday = jadwal.subtract(Duration(days: jadwal.weekday - 1));
+      var nextSaturday = previousMonday.add(const Duration(days: 112));
+      var createdAfter =
+          DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
+      var createdBefore =
+          DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
       Provider.of<KehadiranViewModel>(context, listen: false)
-              .getKehadiranNew(idMhs: user?.mahasiswa?.id ?? 0, afterTime: after,beforeTime: before);
-      });
+        .getKehadiranNew(idMhs: mahasiswa.userId ?? 0, afterTime: createdAfter,beforeTime: createdBefore);
+      Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+        idMhs: mahasiswa.userId ?? 0,
+        afterTime: createdAfter,
+        beforeTime: createdBefore,
+        jadwalId: 3267043513,
+      );  
+    });
   }
 
 
@@ -89,6 +98,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: PersentaseKehadiran(
                       diagram: false,
                       selectedIndex: 0,
+                      idJadwal: 0,
                     ),
                   ),
                   const Padding(padding: EdgeInsets.only(bottom: 43)),
@@ -100,7 +110,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   ListView.builder(
                     physics: const ScrollPhysics(),
-                    itemCount: jadwal.jadwals.take(3).length,
+                    itemCount: jadwal.jadwals.length,
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     itemBuilder: ((context, index) {
@@ -125,8 +135,8 @@ class _HistoryPageState extends State<HistoryPage> {
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
                                         CourseHistory(
-                                      manager: jadwal,
-                                      selectedIndex: index,
+                                      matkul: jadwal.jadwals[index].name!,
+                                      dosen: jadwal.jadwals[index].dosen!.name!,
                                       idJadwal: jadwal.jadwals[index].id!,
                                     ),
                                     transitionsBuilder: (context, animation,
@@ -150,7 +160,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                 child: CardMatkul(
                                   semester: true,
                                   selectedIndex: index,
-                                  idJadwal: 1,
+                                  idJadwal: jadwal.jadwals[index].id ?? 0,
                                 ),
                               ),
                             ),

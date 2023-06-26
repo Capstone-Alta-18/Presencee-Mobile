@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -93,6 +94,15 @@ class _SchedulePageState extends State<SchedulePage> {
           userId: mahasiswa.userId!,
           jamAfter: createdAfter,
           jamBefore: createdBefore);
+      Provider.of<KehadiranViewModel>(context, listen: false)
+        .getKehadiranNew(idMhs: mahasiswa.userId ?? 0, afterTime: createdAfter,beforeTime: createdBefore);
+      Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+        idMhs: mahasiswa.userId ?? 0,
+        afterTime: createdAfter,
+        beforeTime: createdBefore,
+        jadwalId: 0,
+      );
+          
     });
     Timer.periodic(const Duration(seconds: 1), (_) {
       timeController.add(DateTime.now());

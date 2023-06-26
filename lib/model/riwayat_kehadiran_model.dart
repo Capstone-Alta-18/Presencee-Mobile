@@ -33,18 +33,18 @@ class Meta {
       {this.akuntansi, this.ilustrasi, this.mathematics});
 
   Meta.fromJson(Map<String, dynamic> json) {
-    akuntansi = json['Akuntansi'] != null
-        ? Akuntansi.fromJson(json['Akuntansi'])
+    mathematics = json['Mathematics'] != null
+        ? Akuntansi.fromJson(json['Mathematics'])
+        : null;
+    ilustrasi = json['Ilustrasi'] != null
+        ? Akuntansi.fromJson(json['Ilustrasi'])
+        : null;
+    akuntansi = json['Bahasa Indonesia'] != null
+        ? Akuntansi.fromJson(json['Bahasa Indonesia'])
         : null;
     // bahasaIndonesia = json['Bahasa Indonesia'] != null
     //     ? Akuntansi.fromJson(json['Bahasa Indonesia'])
     //     : null;
-    ilustrasi = json['Ilustrasi'] != null
-        ? Akuntansi.fromJson(json['Ilustrasi'])
-        : null;
-    mathematics = json['Mathematics'] != null
-        ? Akuntansi.fromJson(json['Mathematics'])
-        : null;
     // agama = json['Agama'] != null
     //     ? Akuntansi.fromJson(json['Agama'])
     //     : null;
@@ -58,9 +58,6 @@ class Meta {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    if (akuntansi != null) {
-      data['Akuntansi'] = akuntansi!.toJson();
-    }
     // if (bahasaIndonesia != null) {
     //   data['Bahasa Indonesia'] = bahasaIndonesia!.toJson();
     // }
@@ -70,11 +67,14 @@ class Meta {
     // if (agama != null) {
     //   data['Agama'] = agama!.toJson();
     // }
+    if (mathematics != null) {
+      data['Mathematics'] = mathematics!.toJson();
+    }
     if (ilustrasi != null) {
       data['Ilustrasi'] = ilustrasi!.toJson();
     }
-    if (mathematics != null) {
-      data['Mathematics'] = mathematics!.toJson();
+    if (akuntansi != null) {
+      data['Bahasa Indonesia'] = akuntansi!.toJson();
     }
     // if (agamaDosen != null) {
     //   data['Agama_Dosen'] = agamaDosen!.toJson();

@@ -11,12 +11,16 @@ import '../../theme/constant.dart';
 
 class AttendanceSubsList extends StatefulWidget {
   final ScrollController? scrollControllers;
+  final String? matkul;
+  final String? dosen;
   final int idJadwal;
   final bool subsList;
 
   const   AttendanceSubsList({
     super.key,
     this.scrollControllers,
+    this.matkul,
+    this.dosen,
     required this.idJadwal,
     required this.subsList
   });
@@ -57,7 +61,7 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
     } else if (manager.state == DataState.loading) {
       return const Center();
     } else if (manager.state == DataState.error) {
-      return Center(child: Text("Tidak ada riwayat absensi",style: AppTextStyle.poppinsTextStyle(fontSize: 20,fontsWeight: FontWeight.w600,color: AppTheme.primaryTheme),),);
+      return Center(child: Text("Tidak ada riwayat absensi",style: AppTextStyle.poppinsTextStyle(fontSize: 20,fontsWeight: FontWeight.w600),),);
     }
     return Consumer<AbsensiViewModel>(
         builder: ((context, value, child) => value.listAbsensi.isEmpty
@@ -226,7 +230,7 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
                   ),
                   const Divider(),
                   if(widget.subsList == true)
-                  if (value.listAbsensi.length > 6)
+                  if (value.listAbsensi.length > 1)
                     Column(
                       children: [
                         ElevatedButton(
@@ -238,8 +242,8 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
                                         CourseHistory(
-                                      manager: Provider.of<JadwalViewModel>(context),
-                                      selectedIndex: 2,
+                                      matkul: widget.matkul ?? '',
+                                      dosen: widget.dosen ?? '',
                                       idJadwal: widget.idJadwal,
                                     ),
                                     transitionsBuilder: (context, animation,
