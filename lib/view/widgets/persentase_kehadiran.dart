@@ -23,9 +23,9 @@ class PersentaseKehadiran extends StatefulWidget {
 }
 
 class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
-  var afterTime = DateTime.utc(2023,06,18);
+  var afterTime = DateTime.utc(2023, 06, 18);
   var beforeTime = DateTime.now();
-  
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,6 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
 
   @override
   Widget build(BuildContext context) {
-    
     final manager = Provider.of<KehadiranViewModel>(context);
     final hadir = manager.kehadiranNew.meta!
         .toJson()
@@ -89,20 +88,20 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
       return const ErrorMatkulCards();
     }
 
-    getWeeks(){
+    getWeeks() {
       var diff = beforeTime.difference(afterTime).inDays;
-      print(diff);
-      var i = 0; 
+      // print(diff);
+      var i = 0;
       List<int> weeks = [];
-      while(i<=112) { 
-          if(i % 7 == 0){
-            if(diff >= i){
-              weeks.add(i);
-              // return weeks;
-            }
+      while (i <= 112) {
+        if (i % 7 == 0) {
+          if (diff >= i) {
+            weeks.add(i);
+            // return weeks;
           }
-          i++;
-          // weeks.add(i);
+        }
+        i++;
+        // weeks.add(i);
       }
       // print(weeks);
       return weeks;
@@ -115,7 +114,7 @@ class _PersentaseKehadiranState extends State<PersentaseKehadiran> {
               .toList()
               .map((e) => e["Total"])
               .reduce((value, element) => (value + element)) /
-           (manager.kehadiranNew.meta!.toJson().length * 16) *
+          (manager.kehadiranNew.meta!.toJson().length * 16) *
           100;
       return percent
           .toStringAsFixed(percent.truncateToDouble() == percent ? 0 : 2);

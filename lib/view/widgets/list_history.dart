@@ -79,7 +79,9 @@ class _ListHistoryState extends State<ListHistory> {
           ),
           const SizedBox(height: 39),
           SizedBox(
-            height: absen.listAbsensi.length < 10  ? MediaQuery.of(context).size.height - 350 : MediaQuery.of(context).size.height,
+            height: absen.listAbsensi.length < 10
+                ? MediaQuery.of(context).size.height - 350
+                : MediaQuery.of(context).size.height,
             child: AttendanceSubsList(
               idJadwal: widget.idJadwal,
               subsList: false,

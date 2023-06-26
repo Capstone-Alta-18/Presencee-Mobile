@@ -8,28 +8,30 @@ import 'package:provider/provider.dart';
 class DiagramHistory extends StatelessWidget {
   final KehadiranViewModel manager;
   final int selectedIndex;
-  DiagramHistory({super.key,required this.selectedIndex, required this.manager});
+  DiagramHistory(
+      {super.key, required this.selectedIndex, required this.manager});
 
-  var afterTime = DateTime.utc(2023,06,18);
+  var afterTime = DateTime.utc(2023, 06, 18);
   var beforeTime = DateTime.now();
-  
-  List getWeeks(){
-      var diff = beforeTime.difference(afterTime).inDays;
-      var i = 0; 
-      List<int> weeks = [];
-      while(i<=112) { 
-          if(i % 7 == 0){
-            if(diff >= i){
-              weeks.add(i);
-              // return weeks;
-            }
-          }
-          i++;
-          // weeks.add(i);
+
+  List getWeeks() {
+    var diff = beforeTime.difference(afterTime).inDays;
+    var i = 0;
+    List<int> weeks = [];
+    while (i <= 112) {
+      if (i % 7 == 0) {
+        if (diff >= i) {
+          weeks.add(i);
+          // return weeks;
+        }
       }
-      // print(weeks);
-      return weeks;
+      i++;
+      // weeks.add(i);
     }
+    // print(weeks);
+    return weeks;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -76,11 +76,11 @@ class _SchedulePageState extends State<SchedulePage> {
       final mahasiswa = Provider.of<MahasiswaViewModel>(context, listen: false)
           .mahasiswaSingle;
       var now = DateTime.now();
-      var jadwal = DateTime.utc(2023,06,18);
+      // var jadwal = DateTime.utc(2023, 06, 18);
       var jamAfter = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(now);
       var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
-      var previousMonday = jadwal.subtract(Duration(days: jadwal.weekday - 1));
-      var nextSaturday = previousMonday.add(const Duration(days: 112));
+      var previousMonday = now.subtract(Duration(days: now.weekday - 1));
+      var nextSaturday = previousMonday.add(const Duration(days: 6));
       var createdAfter =
           DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
       var createdBefore =

@@ -30,34 +30,32 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-
   bool isLoading = true;
-    
+
   @override
   void initState() {
     super.initState();
-    var now = DateTime.utc(2023,06,19);
+    var now = DateTime.now();
+    // var jadwal = DateTime.utc(2023, 06, 18);
     var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-    var nextSaturday = previousMonday.add(Duration(days: 112));
+    var nextSaturday = previousMonday.add(const Duration(days: 6));
+    var createdAfter =
+        DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
+    var createdBefore =
+        DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
 
-    var before = DateFormat('yyyy-MM-dd').format(nextSaturday);
-    var after = DateFormat('yyyy-MM-dd').format(previousMonday);
-
-
-
-
-   
-    
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final mahasiswa =
-          Provider.of<MahasiswaViewModel>(context, listen: false).mahasiswaSingle;
+      final mahasiswa = Provider.of<MahasiswaViewModel>(context, listen: false)
+          .mahasiswaSingle;
       Provider.of<DosenViewModel>(context, listen: false).getDosenModel();
-      Provider.of<KehadiranViewModel>(context, listen: false)
-              .getKehadiranNew(idMhs: mahasiswa.id!, afterTime: after,beforeTime: before);
+      Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(
+          idMhs: mahasiswa.id!,
+          afterTime: createdAfter,
+          beforeTime: createdBefore);
       // Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(userId: user.id!, jamAfter: after, jamBefore: before);
       // final jadwal = Provider.of<JadwalViewModel>(context, listen: false).jadwals.length;
       // print(jadwal);
-      
+
       // SharedPreferences sharedPreferences =
       //       await SharedPreferences.getInstance();
       //   final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
@@ -71,11 +69,9 @@ class _HistoryPageState extends State<HistoryPage> {
       //     });
       //   }
 
-        // Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 14,afterTime:after,beforeTime:before );
-
-      });
+      // Provider.of<KehadiranViewModel>(context, listen: false).getKehadiranNew(idMhs: 14,afterTime:after,beforeTime:before );
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +83,15 @@ class _HistoryPageState extends State<HistoryPage> {
     } else if (manager.state == DataState.loading) {
       return const LoadingSemesterHistoryCard();
     } else if (manager.state == DataState.error) {
-      return Center(child: Text("Terjadi Kesalahan",style: AppTextStyle.poppinsTextStyle(fontSize: 30,fontsWeight: FontWeight.w600,color: AppTheme.primaryTheme),),);
+      return Center(
+        child: Text(
+          "Terjadi Kesalahan",
+          style: AppTextStyle.poppinsTextStyle(
+              fontSize: 30,
+              fontsWeight: FontWeight.w600,
+              color: AppTheme.primaryTheme),
+        ),
+      );
     }
     return Scaffold(
       body: SingleChildScrollView(
@@ -95,106 +99,111 @@ class _HistoryPageState extends State<HistoryPage> {
           children: [
             const Header(
               title: 'Riwayat Kehadiran',
-              subtitle: 'Semester 2022/2',
+              subtitle: 'Semester 2023/2',
               back: false,
             ),
             jadwal.jadwals.isNotEmpty
-            ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(padding: EdgeInsets.only(bottom: 55)),
-                  const Center(
-                    child: PersentaseKehadiran(
-                      diagram: false,
-                      selectedIndex: 0,
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(bottom: 43)),
-                  Text(
-                    "Kehadiran Per Mata Kuliah",
-                    textAlign: TextAlign.start,
-                    style: AppTextStyle.poppinsTextStyle(
-                        fontSize: 18, fontsWeight: FontWeight.w600),
-                  ),
-                  ListView.builder(
-                    physics: const ScrollPhysics(),
-                    itemCount: jadwal.jadwals.take(3).length,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    itemBuilder: ((context, index) {
-                      return AnimationConfiguration.staggeredList(
-                        position: index,
-                        child: FadeInAnimation(
-                          curve: Curves.easeInCubic,
-                          duration: const Duration(milliseconds: 700),
-                          child: Card(
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: InkWell(
-                              splashColor:
-                                  AppTheme.primaryTheme.withOpacity(0.4),
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        const Duration(milliseconds: 500),
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        CourseHistory(
-                                      manager: jadwal,
-                                      selectedIndex: index,
-                                      idJadwal: jadwal.jadwals[index].id!,
-                                    ),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      var begin = const Offset(1.0, 0.0);
-                                      var end = Offset.zero;
-                                      var curve = Curves.ease;
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve));
-
-                                      return SlideTransition(
-                                        position: animation.drive(tween),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                              child: SizedBox(
-                                height: 128,
-                                child: CardMatkul(
-                                  semester: true,
-                                  selectedIndex: index,
-                                  idJadwal: 1,
-                                ),
-                              ),
-                            ),
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(padding: EdgeInsets.only(bottom: 55)),
+                        const Center(
+                          child: PersentaseKehadiran(
+                            diagram: false,
+                            selectedIndex: 0,
                           ),
                         ),
-                      );
-                    }),
+                        const Padding(padding: EdgeInsets.only(bottom: 43)),
+                        Text(
+                          "Kehadiran Per Mata Kuliah",
+                          textAlign: TextAlign.start,
+                          style: AppTextStyle.poppinsTextStyle(
+                              fontSize: 18, fontsWeight: FontWeight.w600),
+                        ),
+                        ListView.builder(
+                          physics: const ScrollPhysics(),
+                          itemCount: jadwal.jadwals.take(3).length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          itemBuilder: ((context, index) {
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              child: FadeInAnimation(
+                                curve: Curves.easeInCubic,
+                                duration: const Duration(milliseconds: 700),
+                                child: Card(
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: InkWell(
+                                    splashColor:
+                                        AppTheme.primaryTheme.withOpacity(0.4),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        PageRouteBuilder(
+                                          transitionDuration:
+                                              const Duration(milliseconds: 500),
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              CourseHistory(
+                                            manager: jadwal,
+                                            selectedIndex: index,
+                                            idJadwal: jadwal.jadwals[index].id!,
+                                          ),
+                                          transitionsBuilder: (context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child) {
+                                            var begin = const Offset(1.0, 0.0);
+                                            var end = Offset.zero;
+                                            var curve = Curves.ease;
+                                            var tween = Tween(
+                                                    begin: begin, end: end)
+                                                .chain(
+                                                    CurveTween(curve: curve));
+
+                                            return SlideTransition(
+                                              position: animation.drive(tween),
+                                              child: child,
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      height: 128,
+                                      child: CardMatkul(
+                                        semester: true,
+                                        selectedIndex: index,
+                                        idJadwal: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ))
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Tidak ada Riwayat Absen",
+                          style: AppTextStyle.poppinsTextStyle(
+                              fontSize: 20, fontsWeight: FontWeight.w600),
+                        ),
+                      ],
+                    )),
                   ),
-                ],
-              )
-            )
-            : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Tidak ada Riwayat Absen",style: AppTextStyle.poppinsTextStyle(fontSize: 20,fontsWeight: FontWeight.w600),),
-                  ],
-                )
-              ),
-            ),
           ],
-        
         ),
       ),
     );
