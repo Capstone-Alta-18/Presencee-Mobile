@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
+import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -228,7 +230,34 @@ class _AttendanceSubsListState extends State<AttendanceSubsList> {
                     Column(
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        const Duration(milliseconds: 500),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        CourseHistory(
+                                      manager: Provider.of<JadwalViewModel>(context),
+                                      selectedIndex: 2,
+                                      idJadwal: widget.idJadwal,
+                                    ),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = const Offset(1.0, 0.0);
+                                      var end = Offset.zero;
+                                      var curve = Curves.ease;
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppTheme.primaryTheme,
                             shape: RoundedRectangleBorder(
