@@ -22,7 +22,7 @@ class BarChartWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Color.fromARGB(26, 0, 0, 0).withOpacity(0.2),
+            color: const Color.fromARGB(26, 0, 0, 0).withOpacity(0.2),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, 3),
@@ -39,7 +39,8 @@ class BarChartWidget extends StatelessWidget {
                   color: Colors.transparent,
                   child: IconButton(
                     onPressed: () {},
-                    icon: Image.asset("lib/assets/icons/arrow_left.png"/* , height: 25 */),
+                    icon: Image.asset(
+                        "lib/assets/icons/arrow_left.png" /* , height: 25 */),
                   ),
                 ),
               ),
@@ -57,20 +58,18 @@ class BarChartWidget extends StatelessWidget {
                       child: Text(
                         'Minggu ke-8',
                         style: AppTextStyle.poppinsTextStyle(
-                          color: AppTheme.white,
-                          fontSize: 14,
-                          fontsWeight: FontWeight.w500
-                        ),
+                            color: AppTheme.white,
+                            fontSize: 14,
+                            fontsWeight: FontWeight.w500),
                       ),
                     ),
                   ),
                   Text(
                     '10-14 April 2022',
                     style: AppTextStyle.poppinsTextStyle(
-                      color: AppTheme.black,
-                      fontSize: 12,
-                      fontsWeight: FontWeight.w400
-                    ),
+                        color: AppTheme.black,
+                        fontSize: 12,
+                        fontsWeight: FontWeight.w400),
                   )
                 ],
               ),
@@ -79,7 +78,8 @@ class BarChartWidget extends StatelessWidget {
                   color: Colors.transparent,
                   child: IconButton(
                     onPressed: () {},
-                    icon: Image.asset("lib/assets/icons/arrow_right.png"/* , height: 25 */),
+                    icon: Image.asset(
+                        "lib/assets/icons/arrow_right.png" /* , height: 25 */),
                   ),
                 ),
               ),
@@ -99,10 +99,9 @@ class BarChartWidget extends StatelessWidget {
                     bottomTitles: SideTitles(
                       showTitles: true,
                       getTextStyles: (value) => AppTextStyle.poppinsTextStyle(
-                        color: AppTheme.black_2,
-                        fontSize: 12,
-                        fontsWeight: FontWeight.w400
-                      ),
+                          color: AppTheme.black_2,
+                          fontSize: 12,
+                          fontsWeight: FontWeight.w400),
                       margin: 16,
                       getTitles: (double value) {
                         switch (value.toInt()) {
@@ -134,9 +133,7 @@ class BarChartWidget extends StatelessWidget {
                             barRods: [
                               BarChartRodData(
                                 y: value,
-                                colors: [
-                                  AppTheme.primaryTheme_3
-                                ],
+                                colors: [AppTheme.primaryTheme_3],
                                 width: 8,
                               ),
                             ],

@@ -8,6 +8,8 @@ class SnackbarAlertDialog {
       required Color iconColor, 
       required Color backgroundsColor,
       required int durations,
+      SnackBarBehavior snacksbarsBehavior = SnackBarBehavior.floating,
+      EdgeInsetsGeometry? margin,
     }) 
     {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -33,9 +35,14 @@ class SnackbarAlertDialog {
         ),
         duration: Duration(milliseconds: durations),
         dismissDirection: DismissDirection.up,
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height / 1.2, left: 20, right: 20),
+        margin: margin ??
+          EdgeInsets.only(
+            bottom: MediaQuery.of(context).size.height / 1.2,
+            left: 20,
+            right: 20,
+          ),
         backgroundColor: backgroundsColor,
-        behavior: SnackBarBehavior.floating,
+        behavior: snacksbarsBehavior,
         /* shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ), */

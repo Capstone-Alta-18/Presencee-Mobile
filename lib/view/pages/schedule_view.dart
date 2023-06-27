@@ -1,12 +1,19 @@
 import 'dart:async';
-
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:presencee/model/API/jadwal_api.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:presencee/view/widgets/today.dart';
+import '../../model/jadwal_model.dart';
 import '../../theme/constant.dart';
 import '../widgets/card_absensi.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -20,16 +27,92 @@ class _SchedulePageState extends State<SchedulePage> {
       true; // Set initial selection state of "Hari ini" button
   bool isAllSelected = false; // Set initial selection state of "Semua" button
   StreamController<DateTime> timeController = StreamController<DateTime>();
+  final TextEditingController _searchController = TextEditingController();
+
+  List<Data> _searchResults = [];
+  bool _isLoading = false;
+  bool isSearching = false;
+
+  void _performSearch(String query) {
+    if (query.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+        isSearching = true;
+      });
+
+      JadwalApi.getFilterJadwalSemua(
+        userId: 0,
+        jamAfter: '',
+        jamBefore: '',
+      ).then((List<Data> jadwalList) {
+        setState(() {
+          _isLoading = false;
+          _searchResults = jadwalList
+              .where((jadwal) => jadwal.name
+                  .toString()
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+              .toList();
+        });
+      }).catchError((error) {
+        setState(() {
+          _isLoading = false;
+          _searchResults = [];
+          isSearching = false;
+        });
+        log('Error: $error');
+      });
+    } else {
+      setState(() {
+        _searchResults = [];
+        isSearching = false;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MahasiswaViewModel>(context, listen: false).getMahasiswa();
+      final mahasiswa = Provider.of<MahasiswaViewModel>(context, listen: false)
+          .mahasiswaSingle;
+      var now = DateTime.now();
+      var jadwal = DateTime.utc(2023,06,18);
+      var jamAfter = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(now);
+      var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
+      var previousMonday = jadwal.subtract(Duration(days: jadwal.weekday - 1));
+      var nextSaturday = previousMonday.add(const Duration(days: 112));
+      var createdAfter =
+          DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
+      var createdBefore =
+          DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
+
+      Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwal(
+          userId: mahasiswa.userId!, jamAfter: jamAfter, jamBefore: jamBefore);
+
+      Provider.of<JadwalViewModel>(context, listen: false).getFilterJadwalSemua(
+          userId: mahasiswa.userId!,
+          jamAfter: createdAfter,
+          jamBefore: createdBefore);
+      Provider.of<KehadiranViewModel>(context, listen: false)
+        .getKehadiranNew(idMhs: mahasiswa.userId ?? 0, afterTime: createdAfter,beforeTime: createdBefore);
+      Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+        idMhs: mahasiswa.userId ?? 0,
+        afterTime: createdAfter,
+        beforeTime: createdBefore,
+        jadwalId: 0,
+      );
+          
     });
-    Timer.periodic(Duration(seconds: 1), (_) {
+    Timer.periodic(const Duration(seconds: 1), (_) {
       timeController.add(DateTime.now());
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController;
+    super.dispose();
   }
 
   @override
@@ -109,21 +192,225 @@ class _SchedulePageState extends State<SchedulePage> {
     );
   }
 
+  Widget _searchBar() {
+    return TextField(
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(15),
+      ],
+      controller: _searchController,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+        hintText: 'input search text...',
+        hintStyle: const TextStyle(
+          color: AppTheme.gray_2,
+        ),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(
+            color: AppTheme.gray_2,
+          ),
+        ),
+        suffixIcon: Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              left: BorderSide(
+                color: AppTheme.gray_2,
+              ),
+            ),
+          ),
+          child: IconButton(
+            icon: const Icon(
+              Icons.search,
+            ),
+            onPressed: () {
+              _performSearch(_searchController.text);
+            },
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderSide: BorderSide(
+            color: AppTheme.primaryTheme_2,
+            width: 1,
+          ),
+        ),
+      ),
+      onChanged: _performSearch,
+    );
+  }
+
   Widget _buildJadwalAbsensi() {
-    if (isTodaySelected) {
-      return CardAbsensi(
-        matkul: 'Bahasa Indonesia (MU22)',
-        hari: 'Senin',
-        jam: '09.00 - 10.00',
-      );
-    } else if (isAllSelected) {
-      return CardAbsensi(
-        matkul: 'Matematika (MTK22)',
-        hari: 'Selasa',
-        jam: '09.00 - 10.00',
-      );
+    final allJadwal = Provider.of<JadwalViewModel>(context);
+    final filterJadwal = Provider.of<JadwalViewModel>(context);
+
+    if (allJadwal.status == Status.initial) {
+      return const Center();
+    } else if (allJadwal.status == Status.loading) {
+      return const Center();
+    } else if (allJadwal.status == Status.error) {
+      return const Center();
+    }
+
+    String getInitials(String name) {
+      if (name.isEmpty) return '';
+
+      final words = name.split(' ');
+      final initials = words.map((word) => word[0].toUpperCase()).join('');
+
+      return initials;
+    }
+
+    String getDayName(String dateString) {
+      final dateTime = DateTime.parse(dateString);
+      final dayName = DateFormat('EEEE', 'id').format(dateTime);
+      return dayName;
+    }
+
+    String getTime(String dateString) {
+      final dateTime = DateTime.parse(dateString);
+      final time = DateFormat('HH:mm').format(dateTime);
+      return time;
+    }
+
+    if (isSearching) {
+      return _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _searchResults.length,
+              padding: const EdgeInsets.all(0),
+              itemBuilder: (context, index) {
+                Data jadwal = _searchResults[index];
+                final namaHari = getDayName(jadwal.jamMulai!);
+                final jamMulai = getTime(jadwal.jamMulai!);
+                final jamSelesai = getTime(jadwal.jamSelesai!);
+                final kodeKelas = getInitials(jadwal.room!.name!);
+                return CardAbsensi(
+                  matkul: jadwal.name!,
+                  dosen: jadwal.dosen!.name!,
+                  jam: "$namaHari $jamMulai-$jamSelesai",
+                  kodeKelas: kodeKelas,
+                  idJadwal: jadwal.id!,
+                );
+              },
+            );
     } else {
-      return const SizedBox.shrink();
+      if (isTodaySelected) {
+        return filterJadwal.filterJadwals.isEmpty
+            ? Card(
+                elevation: 1.2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                  splashColor: AppTheme.primaryTheme.withOpacity(0.2),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  title: Center(
+                    child: Text('Tidak ada jadwal',
+                        style: AppTextStyle.poppinsTextStyle(
+                          color: AppTheme.black,
+                          fontsWeight: FontWeight.w500,
+                          fontSize: 16,
+                        )),
+                  ),
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(0),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: filterJadwal.filterJadwals.length,
+                itemBuilder: (context, index) {
+                  final fullName = filterJadwal.filterJadwals[index].name!;
+                  final initials = getInitials(
+                      filterJadwal.filterJadwals[index].room!.name!);
+                  final dayName =
+                      getDayName(filterJadwal.filterJadwals[index].jamMulai!);
+                  final jamMulai =
+                      getTime(filterJadwal.filterJadwals[index].jamMulai!);
+                  final jamSelesai =
+                      getTime(filterJadwal.filterJadwals[index].jamSelesai!);
+                  return CardAbsensi(
+                    matkul: fullName,
+                    dosen: filterJadwal.filterJadwals[index].dosen!.name!,
+                    jam: "$dayName $jamMulai-$jamSelesai",
+                    kodeKelas: initials,
+                    idJadwal: filterJadwal.filterJadwals[index].id!,
+                  );
+                });
+      } else if (isAllSelected) {
+        return allJadwal.jadwals.isEmpty
+            ? Card(
+                elevation: 1.2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: ListTile(
+                  splashColor: AppTheme.primaryTheme.withOpacity(0.2),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  title: Center(
+                    child: Text('Tidak ada jadwal',
+                        style: AppTextStyle.poppinsTextStyle(
+                          color: AppTheme.black,
+                          fontsWeight: FontWeight.w500,
+                          fontSize: 16,
+                        )),
+                  ),
+                ),
+              )
+            : GroupedListView<Data, String>(
+                shrinkWrap: true,
+                elements: allJadwal.jadwals.map((jadwal) => jadwal).toList(),
+                groupBy: (element) => element.jamMulai!,
+                padding: const EdgeInsets.all(0),
+                groupSeparatorBuilder: (String groupByValue) {
+                  final groupHari = getDayName(groupByValue);
+                  return Row(
+                    children: [
+                      Flexible(
+                          child: Row(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 15, right: 10, bottom: 5, top: 20),
+                            child: Text(
+                              groupHari,
+                              textAlign: TextAlign.start,
+                              style: AppTextStyle.poppinsTextStyle(
+                                  fontSize: 18,
+                                  fontsWeight: FontWeight.w500,
+                                  color: AppTheme.black),
+                            ),
+                          )
+                        ],
+                      ))
+                    ],
+                  );
+                },
+                itemBuilder: (context, Data element) {
+                  final initials = getInitials(element.room!.name!);
+                  final hari = getDayName(element.jamMulai!);
+                  final jamMulai = getTime(element.jamMulai!);
+                  final jamSelesai = getTime(element.jamSelesai!);
+                  return CardAbsensi(
+                    matkul: element.name!,
+                    dosen: element.dosen!.name!,
+                    jam: '$hari $jamMulai-$jamSelesai',
+                    kodeKelas: initials,
+                    idJadwal: element.id!,
+                  );
+                },
+                itemComparator: (item1, item2) =>
+                    item1.name!.compareTo(item2.name!),
+                floatingHeader: true,
+                order: GroupedListOrder.ASC,
+              );
+      } else {
+        return const SizedBox.shrink();
+      }
     }
   }
 
@@ -186,55 +473,4 @@ class _SchedulePageState extends State<SchedulePage> {
       ],
     );
   }
-}
-
-Widget _searchBar() {
-  // bool isSearch = false;
-
-  return TextField(
-    inputFormatters: [
-      LengthLimitingTextInputFormatter(15),
-    ],
-    decoration: InputDecoration(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-      hintText: 'input search text...',
-      hintStyle: const TextStyle(
-        color: AppTheme.gray_2,
-      ),
-      border: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(
-          color: AppTheme.gray_2,
-        ),
-      ),
-      suffixIcon: Container(
-        decoration: const BoxDecoration(
-          // color: isSearch ? highlightSearch : Colors.transparent,      // change color when search are clicked
-          border: Border(
-            left: BorderSide(
-              color: AppTheme.gray_2,
-            ),
-          ),
-        ),
-        child: IconButton(
-          icon: const Icon(
-            Icons.search,
-          ),
-          onPressed: () {
-            // isSearch = !isSearch;
-          },
-        ),
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        borderSide: BorderSide(
-          color: AppTheme.primaryTheme_2,
-          width: 1,
-        ),
-      ),
-    ),
-    onChanged: (value) {
-      // Implementasi logika pencarian di sini
-    },
-  );
 }

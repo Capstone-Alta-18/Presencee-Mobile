@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/pages/course_history_view.dart';
+import 'package:presencee/view/pages/profile_view.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +50,6 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                   width: double.infinity,
                   height: 30,
                   decoration: const BoxDecoration(
-                    // color: AppTheme.gray,
                     color: Colors.transparent,
                   ),
                   child: Align(
@@ -66,7 +65,6 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                     ),
                   )),
             ),
-            // const SizedBox(height: 20),
             Expanded(
               child: ListView.separated(
                 itemCount: 5 + 1,
@@ -133,7 +131,8 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                           ),
                         ),
                         onPressed: () {
-                          var manager = Provider.of<KehadiranViewModel>(context);
+                          var manager =
+                              Provider.of<KehadiranViewModel>(context);
                           Navigator.push(
                             context,
                             PageRouteBuilder(
@@ -149,7 +148,9 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                                   child: child,
                                 );
                               },
-                              pageBuilder: (context, animation, secondaryAnimation) => CourseHistory(manager: manager, selectedIndex: index),
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const ProfilePage(),
                             ),
                           );
                         },
@@ -175,7 +176,7 @@ class _BottomSheetPresenceState extends State<BottomSheetPresence> {
                       ),
                     );
                   } else {
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   }
                 },
               ),

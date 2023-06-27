@@ -23,15 +23,18 @@ class LoadingMatkulCard extends StatelessWidget {
             child: Card(
               elevation: 2,
               color: AppTheme.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.0),
                 child: SizedBox(
                   width: 132,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      LoadingsProgress(),
+                      LoadingsProgress(
+                        loading: false,
+                      ),
                     ],
                   ),
                 ),
@@ -50,17 +53,21 @@ class LoadingSemesterHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+        body: SingleChildScrollView(
+      child: Column(
         children: [
           const Header(
             title: 'Riwayat Kehadiran',
-            subtitle: 'Semester 2022/2',
-            back: true,
+            subtitle: 'Semester 2023/2',
+            back: false,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               children: [
+                const LoadingsProgress(
+                  loading: true,
+                ),
                 Shimmer.fromColors(
                   baseColor: AppTheme.gray,
                   highlightColor: AppTheme.gray_2,
@@ -85,20 +92,44 @@ class LoadingSemesterHistoryCard extends StatelessWidget {
             ),
           ),
         ],
-      )
+      ),
+    ));
+  }
+}
+
+class JadwalLoading extends StatelessWidget {
+  const JadwalLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 1.2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: const ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          subtitle: SpinKitThreeBounce(
+            color: AppTheme.primaryTheme,
+            size: 30,
+          )),
     );
   }
 }
 
 class LoadingsProgress extends StatelessWidget {
-  const LoadingsProgress({super.key});
+  final bool loading;
+  const LoadingsProgress({super.key, required this.loading});
 
   @override
   Widget build(BuildContext context) {
-    return const SpinKitRipple(
-      color: AppTheme.primaryTheme,
-      size: 90.0,
-    );
+    return loading == false
+        ? const SpinKitRipple(
+            color: AppTheme.primaryTheme,
+            size: 90.0,
+          )
+        : const SpinKitRipple(
+            color: AppTheme.primaryTheme,
+            size: 200.0,
+          );
   }
 }
 
@@ -135,49 +166,48 @@ class ErrorSemesterHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Header(
-            title: 'Riwayat Kehadiran',
-            subtitle: 'Semester 2022/2',
-            back: true,
+        body: Column(
+      children: [
+        const Header(
+          title: 'Riwayat Kehadiran',
+          subtitle: 'Semester 2023/2',
+          back: true,
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedOpacity(
+                opacity: 1,
+                curve: Curves.easeIn,
+                duration: const Duration(milliseconds: 1200),
+                child: Lottie.asset(
+                  'lib/assets/animation/Disconnect.json',
+                  width: 280,
+                ),
+              ),
+              Text(
+                'Terjadi kesalahan',
+                style: AppTextStyle.poppinsTextStyle(
+                  fontsWeight: FontWeight.w600,
+                  fontSize: 22,
+                  color: AppTheme.error,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Silahkan coba lagi',
+                style: AppTextStyle.poppinsTextStyle(
+                  fontsWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: AppTheme.error,
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedOpacity(
-                  opacity: 1,
-                  curve: Curves.easeIn,
-                  duration: const Duration(milliseconds: 1200),
-                  child: Lottie.asset(
-                    'lib/assets/animation/Disconnect.json',
-                    width: 280,
-                  ),
-                ),
-                Text(
-                  'Terjadi kesalahan',
-                  style: AppTextStyle.poppinsTextStyle(
-                    fontsWeight: FontWeight.w600,
-                    fontSize: 22,
-                    color: AppTheme.error,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Silahkan coba lagi',
-                  style: AppTextStyle.poppinsTextStyle(
-                    fontsWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: AppTheme.error,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      )
-    );
+        ),
+      ],
+    ));
   }
 }
 
@@ -191,25 +221,24 @@ class ErrorMatkulCards extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: Center(
-          child: Column(
-            children: [
-              const Icon(
-                PhosphorIcons.wifi_x_bold,
+            child: Column(
+          children: [
+            const Icon(
+              PhosphorIcons.wifi_x_bold,
+              color: AppTheme.gray_2,
+              size: 60,
+            ),
+            Text(
+              'Terjadi kesalahan mengambil data...',
+              style: AppTextStyle.poppinsTextStyle(
+                fontsWeight: FontWeight.w600,
+                fontSize: 16,
                 color: AppTheme.gray_2,
-                size: 60,
               ),
-              Text(
-                'Terjadi kesalahan mengambil data...',
-                style: AppTextStyle.poppinsTextStyle(
-                  fontsWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: AppTheme.gray_2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          )
-        ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        )),
       ),
     );
   }
@@ -263,4 +292,3 @@ class ProfileError extends StatelessWidget {
     );
   }
 }
-

@@ -1,12 +1,21 @@
-import 'dart:io';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
+import 'package:intl/intl.dart';
+import 'package:presencee/model/mahasiswa_model.dart';
 import 'package:presencee/theme/constant.dart';
-import 'package:presencee/view/pages/camera_view.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
+import 'package:provider/provider.dart';
+
+import 'alerted_attendance.dart';
+import 'package:presencee/view_model/app_view_model.dart';
 
 class CardPresence extends StatefulWidget {
-  const CardPresence({super.key});
+  const CardPresence({
+    super.key,
+  });
 
   @override
   State<CardPresence> createState() => _CardPresenceState();
@@ -14,60 +23,115 @@ class CardPresence extends StatefulWidget {
 
 class _CardPresenceState extends State<CardPresence> {
   int? _selectedValue;
-  // File? image;
-  // String? location;
+  String? location;
+  String? address;
+  Map absenData = {};
+  Mahasiswas mahasiswa = Mahasiswas();
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
 
-  // Future<void> _getImage() async {
-  //   final picker = ImagePicker();
-  //   final pickedImage = await picker.pickImage(source: ImageSource.camera);
-  //   setState(() {
-  //     if (pickedImage != null) {
-  //       image = File(pickedImage.path);
-  //       _getLocation();
-  //     } else {
-  //       debugPrint('No image selected.');
-  //     }
-  //   });
-  // }
+  void getData() {
+    mahasiswa =
+        Provider.of<MahasiswaViewModel>(context, listen: false).mahasiswaSingle;
+    absenData = Provider.of<AppViewModel>(context, listen: false).dataAbsen;
+    setState(() {});
+  }
 
-  // Future<void> _getLocation() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
+  void keteranganAbsen({required String status}) async {
+    showDialog(
+      context: context,
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ),
+    );
+    var now = DateTime.now().toString().split(' ');
+    if (mounted) {
+      await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
+          userId: mahasiswa.userId!,
+          mahasiswaId: mahasiswa.id!,
+          jadwalId: absenData['idJadwal'],
+          timeAttemp: "${now[0]}T${now[1].split('.')[0]}+00:00",
+          matakuliah: absenData['namaMatkul'],
+          status: status,
+          location: '',
+          image: '');
+      if (mounted) {
+        Navigator.pop(context);
 
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     debugPrint('Location services are disabled.');
-  //     return;
-  //   }
+        if (Provider.of<AbsensiViewModel>(context, listen: false)
+                .absensi
+                ?.message ==
+            'success creating absen') {
+          var nows = DateTime.now();
+          var previousMonday = nows.subtract(Duration(days: nows.weekday - 1));
+          var nextSaturday = previousMonday.add(const Duration(days: 6));
+          var createdAfter =
+              DateFormat('yyyy-MM-ddT00:00:00+00:00').format(previousMonday);
+          var createdBefore =
+              DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
 
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.deniedForever) {
-  //     debugPrint(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //     return;
-  //   }
-
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission != LocationPermission.whileInUse &&
-  //         permission != LocationPermission.always) {
-  //       debugPrint(
-  //           'Location permissions are denied (actual value: $permission).');
-  //       return;
-  //     }
-  //   }
-
-  //   Position position = await Geolocator.getCurrentPosition(
-  //     desiredAccuracy: LocationAccuracy.high,
-  //   );
-
-  //   setState(() {
-  //     location = 'Lat: ${position.latitude}, Long: ${position.longitude}';
-  //   });
-  // }
+          await Provider.of<AbsensiViewModel>(context, listen: false).getAbsen(
+              userId: mahasiswa.userId!,
+              mahasiswaId: mahasiswa.id!,
+              jadwalId: absenData['idJadwal'],
+              createdAfter: createdAfter,
+              createdBefore: createdBefore);
+          if (mounted) {
+            SnackbarAlertDialog().customDialogs(context,
+                message: "Absensi berhasil",
+                icons: PhosphorIcons.check_circle_fill,
+                iconColor: AppTheme.success,
+                backgroundsColor: AppTheme.white,
+                durations: 1800);
+          }
+        } else if (Provider.of<AbsensiViewModel>(context, listen: false)
+                    .absensi
+                    ?.message ==
+                'missing or malformed jwt' ||
+            Provider.of<AbsensiViewModel>(context, listen: false)
+                    .absensi
+                    ?.message ==
+                'invalid or expired jwt') {
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Token telah kadaluarsa, harap login kembali",
+              icons: PhosphorIcons.x_circle_fill,
+              iconColor: AppTheme.error,
+              backgroundsColor: AppTheme.white,
+              durations: 1800);
+        } else {
+          SnackbarAlertDialog().customDialogs(context,
+              message: "Absensi gagal",
+              icons: PhosphorIcons.x_circle_fill,
+              iconColor: AppTheme.error,
+              backgroundsColor: AppTheme.white,
+              durations: 1800);
+        }
+        Navigator.pop(context);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final dataMahasiswa =
+        Provider.of<MahasiswaViewModel>(context).mahasiswaSingle;
     return SizedBox(
       width: MediaQuery.of(context).size.width - 40,
       child: Card(
@@ -79,7 +143,7 @@ class _CardPresenceState extends State<CardPresence> {
           children: [
             const SizedBox(height: 24),
             Text(
-              'Bahasa Indonesia',
+              absenData['namaMatkul'],
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -87,7 +151,7 @@ class _CardPresenceState extends State<CardPresence> {
               ),
             ),
             Text(
-              '(MU)',
+              '(${absenData['kodeKelas']})',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -96,7 +160,7 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Abdul Jalil',
+              absenData['namaDosen'],
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -105,7 +169,7 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 6),
             Text(
-              'Senin 07.00 - 09.00',
+              absenData['date'],
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_2,
                 fontsWeight: FontWeight.w600,
@@ -114,7 +178,7 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 30),
             Text(
-              'Kristina Fabulous',
+              dataMahasiswa.name ?? '',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black,
                 fontsWeight: FontWeight.w600,
@@ -123,7 +187,7 @@ class _CardPresenceState extends State<CardPresence> {
             ),
             const SizedBox(height: 2),
             Text(
-              '200280120739',
+              dataMahasiswa.nim ?? '',
               style: AppTextStyle.poppinsTextStyle(
                 color: AppTheme.black_3,
                 fontsWeight: FontWeight.w400,
@@ -236,7 +300,16 @@ class _CardPresenceState extends State<CardPresence> {
                                                 BorderRadius.circular(2),
                                           ),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          if (_selectedValue == 1) {
+                                            keteranganAbsen(status: 'Sakit');
+                                          } else if (_selectedValue == 2) {
+                                            keteranganAbsen(status: 'Izin');
+                                          } else if (_selectedValue == 3) {
+                                            keteranganAbsen(
+                                                status: 'Dispensasi');
+                                          }
+                                        },
                                         child: Text(
                                           'Simpan',
                                           style: AppTextStyle.poppinsTextStyle(
@@ -296,8 +369,10 @@ class _CardPresenceState extends State<CardPresence> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ElevatedButton(
-                                  onPressed: () => Navigator.pushNamed(context,
-                                      '/schedule/presence/fingerprint'),
+                                  onPressed: () => Navigator.pushNamed(
+                                    context,
+                                    '/schedule/presence/fingerprint',
+                                  ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,
                                     shape: RoundedRectangleBorder(
@@ -315,24 +390,11 @@ class _CardPresenceState extends State<CardPresence> {
                                 ),
                                 const SizedBox(width: 8),
                                 ElevatedButton(
-                                  // onPressed: () => _getImage(),
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                CameraView()));
-                                    // _getImage();
-                                    // _getLocation();
-                                    // Stack(children: [
-                                    //   Positioned(
-                                    //     top: 0,
-                                    //     child: Text(
-                                    //       location ?? 'Location not available',
-                                    //       style: TextStyle(color: Colors.white),
-                                    //     ),
-                                    //   ),
-                                    // ]);
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/schedule/presence/camera',
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryTheme_2,

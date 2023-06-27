@@ -1,11 +1,16 @@
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:presencee/model/absensi_model.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:presencee/view/widgets/attendance_subject_list.dart';
+import 'package:presencee/view/widgets/header.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
+import 'package:provider/provider.dart';
 
 class ListHistory extends StatefulWidget {
-  const ListHistory({super.key});
+  final int idJadwal;
+  const ListHistory({super.key, required this.idJadwal});
 
   @override
   State<ListHistory> createState() => _ListHistoryState();
@@ -18,6 +23,7 @@ class _ListHistoryState extends State<ListHistory> {
 
   @override
   Widget build(BuildContext context) {
+    final absen = Provider.of<AbsensiViewModel>(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +38,6 @@ class _ListHistoryState extends State<ListHistory> {
               borderRadius: BorderRadius.circular(2),
             ),
             child: DropdownButton2(
-              // https://stackoverflow.com/questions/70650773/flutter-i-want-to-show-dropdown-list-under-dropdown-flutter
               iconStyleData: const IconStyleData(
                 icon: Icon(
                   PhosphorIcons.caret_down,
@@ -40,9 +45,6 @@ class _ListHistoryState extends State<ListHistory> {
                 ),
               ),
               buttonStyleData: const ButtonStyleData(
-                  /* decoration: BoxDecoration(
-                  border: Border.all(color: AppTheme.primaryTheme),
-                ), */
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(horizontal: 16)),
               underline: Container(),
@@ -76,7 +78,13 @@ class _ListHistoryState extends State<ListHistory> {
             ),
           ),
           const SizedBox(height: 39),
-          const AttendanceSubsList(total: 17, mataKuliah: 'Bahasa Indonesia (MU22)', tanggalHadir: 'Masuk : 28 Februari', statusHadir: 'Terkonfirmasi')
+          SizedBox(
+            height: absen.listAbsensi.length < 10  ? MediaQuery.of(context).size.height - 350 : MediaQuery.of(context).size.height,
+            child: AttendanceSubsList(
+              idJadwal: widget.idJadwal,
+              subsList: false,
+            ),
+          ),
         ],
       ),
     );

@@ -6,9 +6,13 @@ import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/widgets/bottomsheet_present.dart';
 import 'package:presencee/view/widgets/card_presence.dart';
 import 'package:presencee/view/widgets/today.dart';
+import 'package:presencee/view_model/app_view_model.dart';
+import 'package:provider/provider.dart';
 
 class PresenceView extends StatefulWidget {
-  const PresenceView({super.key});
+  const PresenceView({
+    super.key,
+  });
 
   @override
   State<PresenceView> createState() => _PresenceViewState();
@@ -18,8 +22,7 @@ class _PresenceViewState extends State<PresenceView> {
   StreamController<DateTime> timeController = StreamController<DateTime>();
   @override
   void initState() {
-    // TODO: implement initState
-    Timer.periodic(Duration(seconds: 1), (_) {
+    Timer.periodic(const Duration(seconds: 1), (_) {
       timeController.add(DateTime.now());
     });
     super.initState();
@@ -28,7 +31,8 @@ class _PresenceViewState extends State<PresenceView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+        body: Consumer<AppViewModel>(
+      builder: (context, value, child) => Stack(
         alignment: Alignment.center,
         children: [
           StreamBuilder<DateTime>(
@@ -104,9 +108,11 @@ class _PresenceViewState extends State<PresenceView> {
           SizedBox(
               height: MediaQuery.of(context).size.height * 0.44,
               child: const CardPresence()),
-          const BottomContainer(), // butuh tambahan button di bawah
+          BottomContainer(
+            idJadwal: value.dataAbsen['idJadwal'],
+          ),
         ],
       ),
-    );
+    ));
   }
 }

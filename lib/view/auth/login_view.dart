@@ -2,14 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:presencee/model/API/privates.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:presencee/theme/constant.dart';
 import '../../view_model/user_view_model.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../widgets/alerted_success_attendance.dart';
-// import 'dart:math' as math;
+import '../widgets/alerted_attendance.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -62,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async {
     setState(() {
-      isFailedLogin = true;
       isLoading = true;
     });
     showDialog(
@@ -89,27 +88,37 @@ class _LoginPageState extends State<LoginPage> {
         .userLogin(emailController.text, passController.text);
     if (mounted) {
       Navigator.pop(context);
-      UserViewModel userViewModel =
-          Provider.of<UserViewModel>(context, listen: false);
-      if (userViewModel.user != null) {
+
+      if (apiToken.isNotEmpty) {
         isLoading = false;
-        debugPrint(userViewModel.user?.message);
-        debugPrint(userViewModel.user?.token);
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('//home', (route) => false);
-        SnackbarAlertDialog().customDialogs(context,
-            message: "Login Berhasil",
-            icons: PhosphorIcons.check_circle_fill,
-            iconColor: AppTheme.success,
-            backgroundsColor: AppTheme.white,
-            durations: 1800);
+        if (mounted) {
+          UserViewModel userViewModel =
+              Provider.of<UserViewModel>(context, listen: false);
+          await Provider.of<MahasiswaViewModel>(context, listen: false)
+              .getOneMahasiswa(
+                  oneId: userViewModel.user?.data?.mahasiswa?.id ?? 0);
+          if (mounted) {
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('//home', (route) => false);
+            SnackbarAlertDialog().customDialogs(context,
+                message: "Login Berhasil",
+                icons: PhosphorIcons.check_circle_fill,
+                iconColor: AppTheme.success,
+                backgroundsColor: AppTheme.white,
+                margin: const EdgeInsets.only(bottom: 0),
+                durations: 1800);
+          }
+        }
       } else {
         setState(() {
+          isFailedLogin = true;
           SnackbarAlertDialog().customDialogs(context,
               message: "Login gagal",
               icons: PhosphorIcons.x_circle_fill,
               backgroundsColor: AppTheme.error,
               iconColor: AppTheme.white,
+              snacksbarsBehavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(bottom: 0),
               durations: 1200);
           isLoading = false;
         });
@@ -148,9 +157,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextFormField(
+                      key: const ValueKey('email'),
                       controller: emailController,
                       textInputAction: TextInputAction.next,
-                      autofocus: true,
+                      // autofocus: true,
                       decoration: InputDecoration(
                         hintText: "yourname@students.com",
                         hintStyle: const TextStyle(
@@ -196,6 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextFormField(
+                      key: const ValueKey('password'),
                       controller: passController,
                       obscureText: _secureText,
                       textInputAction: TextInputAction.done,
@@ -218,19 +229,6 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                       decoration: InputDecoration(
-                        // 2 opsi icon password
-                        /* suffixIcon: Transform(
-                          alignment: Alignment.center,
-                          transform: Matrix4.rotationY(math.pi),
-                          child: IconButton(
-                            onPressed: () => showHide(),
-                            icon: Icon(
-                              _secureText
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility,
-                            ),
-                          ),
-                        ), */
                         suffixIcon: IconButton(
                           onPressed: () => showHide(),
                           icon: Icon(
@@ -265,6 +263,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
+                        key: const ValueKey('login-button'),
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 40),
                           backgroundColor: AppTheme.primaryTheme_2,
@@ -305,6 +304,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Center(
+                      key: const ValueKey('forgot-button'),
                       child: TextButton(
                         onPressed: () =>
                             Navigator.of(context).pushNamed('//help'),

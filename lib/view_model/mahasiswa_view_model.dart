@@ -12,8 +12,10 @@ enum Status {
 class MahasiswaViewModel extends ChangeNotifier {
   List<Mahasiswas> _siswas = [];
   Mahasiswas _siswaOne = Mahasiswas();
+  MahasiswaStatus _mahasiswaStatus = MahasiswaStatus();
   List<Mahasiswas> get mahasiswass => _siswas;
   Mahasiswas get mahasiswaSingle => _siswaOne;
+  MahasiswaStatus get mahasiswaStatus => _mahasiswaStatus;
 
   Status _state = Status.initial;
   Status get state => _state;
@@ -36,6 +38,40 @@ class MahasiswaViewModel extends ChangeNotifier {
     try {
       final mahasiswaSingle = await MahasiswaAPI.getOneMahasiswa(oneId: oneId);
       _siswaOne = mahasiswaSingle;
+      _state = Status.completed;
+      notifyListeners();
+    } catch (e) {
+      _state = Status.error;
+      notifyListeners();
+    }
+    notifyListeners();
+  }
+
+  updateMahasiswa(
+      {required int idMahasiswa,
+      required String name,
+      required String email,
+      required String nim,
+      required String image,
+      required String phone,
+      required String jurusan,
+      required String tahunMasuk,
+      required String ipk,
+      required int userId}) async {
+    _state = Status.loading;
+    try {
+      final mahasiswaStatus = await MahasiswaAPI.updateMahasiswa(
+          idMahasiswa: idMahasiswa,
+          name: name,
+          email: email,
+          nim: nim,
+          image: image,
+          phone: phone,
+          jurusan: jurusan,
+          tahunMasuk: tahunMasuk,
+          ipk: ipk,
+          userId: userId);
+      _mahasiswaStatus = mahasiswaStatus;
       _state = Status.completed;
       notifyListeners();
     } catch (e) {

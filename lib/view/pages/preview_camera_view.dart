@@ -1,49 +1,132 @@
-import 'dart:io';
-
-import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
-import 'package:intl/intl.dart';
-import 'package:presencee/theme/constant.dart';
+import 'package:presencee/model/mahasiswa_model.dart';
 import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/upload_view_model.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:presencee/theme/constant.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:intl/intl.dart';
+import 'dart:io';
+import 'package:presencee/view_model/app_view_model.dart';
+import 'package:presencee/view_model/mahasiswa_view_model.dart';
+
+import '../widgets/alerted_attendance.dart';
 
 class PreviewScreen extends StatefulWidget {
   final XFile imgPath;
   final String location;
-  const PreviewScreen(
-      {super.key, required this.imgPath, required this.location});
+  const PreviewScreen({
+    super.key,
+    required this.imgPath,
+    required this.location,
+  });
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
+  bool isLoading = false;
+  Map absenData = {};
+  Mahasiswas mahasiswa = Mahasiswas();
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  void getData() {
+    mahasiswa =
+        Provider.of<MahasiswaViewModel>(context, listen: false).mahasiswaSingle;
+    absenData = Provider.of<AppViewModel>(context, listen: false).dataAbsen;
+    setState(() {});
+  }
+
   void uploadImage() async {
-    await Provider.of<UploadImageViewModel>(context, listen: false)
-        .uploadImage(widget.imgPath);
+    setState(() {
+      isLoading = true;
+    });
+    var now = DateTime.now().toString().split(' ');
     if (mounted) {
-      final url =
-          Provider.of<UploadImageViewModel>(context, listen: false).image?.url;
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      final idUser = sharedPreferences.getInt('id_user');
-      final idMahasiswa = sharedPreferences.getInt('id_mahasiswa');
-      // var f = DateFormat("yyyy-MM-ddTHH:mm:ss").format(DateTime.now());
-      // print(f);
+      await Provider.of<UploadImageViewModel>(context, listen: false)
+          .uploadImage(widget.imgPath);
       if (mounted) {
-        await Provider.of<AbsensiViewModel>(context, listen: false).createAbsen(
-            userId: idUser!,
-            mahasiswaId: idMahasiswa!,
-            jadwalId: 1,
-            timeAttemp: '2023-06-18T03:40:50+08:00',
-            // DateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(DateTime.now()),
-            matakuliah: 'Akuntansi',
-            status: 'Hadir',
-            location: widget.location,
-            image: url!);
+        final url = Provider.of<UploadImageViewModel>(context, listen: false)
+            .image
+            ?.url;
+        if (mounted) {
+          await Provider.of<AbsensiViewModel>(context, listen: false)
+              .createAbsen(
+                  userId: mahasiswa.userId!,
+                  mahasiswaId: mahasiswa.id!,
+                  jadwalId: absenData['idJadwal'],
+                  timeAttemp: "${now[0]}T${now[1].split('.')[0]}+00:00",
+                  matakuliah: absenData['namaMatkul'],
+                  status: 'Hadir',
+                  location: widget.location,
+                  image: url!);
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+            if (Provider.of<AbsensiViewModel>(context, listen: false)
+                    .absensi
+                    ?.message ==
+                'success creating absen') {
+              var nows = DateTime.now();
+              var previousMonday =
+                  nows.subtract(Duration(days: nows.weekday - 1));
+              var nextSaturday = previousMonday.add(const Duration(days: 6));
+              var createdAfter = DateFormat('yyyy-MM-ddT00:00:00+00:00')
+                  .format(previousMonday);
+              var createdBefore =
+                  DateFormat('yyyy-MM-ddT23:59:00+00:00').format(nextSaturday);
+
+              await Provider.of<AbsensiViewModel>(context, listen: false)
+                  .getAbsen(
+                      userId: mahasiswa.userId!,
+                      mahasiswaId: mahasiswa.id!,
+                      jadwalId: absenData['idJadwal'],
+                      createdAfter: createdAfter,
+                      createdBefore: createdBefore);
+              if (mounted) {
+                SnackbarAlertDialog().customDialogs(context,
+                    message: "Presensi berhasil",
+                    icons: PhosphorIcons.check_circle_fill,
+                    iconColor: AppTheme.success,
+                    backgroundsColor: AppTheme.white,
+                    durations: 1800);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
+            } else if (Provider.of<AbsensiViewModel>(context, listen: false)
+                        .absensi
+                        ?.message ==
+                    'missing or malformed jwt' ||
+                Provider.of<AbsensiViewModel>(context, listen: false)
+                        .absensi
+                        ?.message ==
+                    'invalid or expired jwt') {
+              SnackbarAlertDialog().customDialogs(context,
+                  message: "Token telah kadaluarsa, harap login kembali",
+                  icons: PhosphorIcons.x_circle_fill,
+                  iconColor: AppTheme.error,
+                  backgroundsColor: AppTheme.white,
+                  durations: 1800);
+            } else {
+              SnackbarAlertDialog().customDialogs(context,
+                  message: "Presensi gagal, kelas telah selesai",
+                  icons: PhosphorIcons.x_circle_fill,
+                  iconColor: AppTheme.error,
+                  backgroundsColor: AppTheme.white,
+                  durations: 1800);
+            }
+          }
+        }
       }
     }
   }
@@ -82,7 +165,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // Navigator.of(context).pop();
                       },
                       icon: const Icon(
                         PhosphorIcons.x,
@@ -161,7 +243,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 children: [
                   const SizedBox(height: 24),
                   Text(
-                    'Bahasa Indonesia',
+                    absenData['namaMatkul'],
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -169,7 +251,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     ),
                   ),
                   Text(
-                    '(MU)',
+                    '(${absenData['kodeKelas']})',
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -178,7 +260,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Abdul Jalil',
+                    absenData['namaDosen'],
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -187,7 +269,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Senin 07.00 - 09.00',
+                    absenData['date'],
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_2,
                       fontsWeight: FontWeight.w600,
@@ -196,7 +278,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    'Kristina Fabulous',
+                    mahasiswa.name!,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black,
                       fontsWeight: FontWeight.w600,
@@ -205,35 +287,39 @@ class _PreviewScreenState extends State<PreviewScreen> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '200280120739',
+                    mahasiswa.nim!,
                     style: AppTextStyle.poppinsTextStyle(
                       color: AppTheme.black_3,
                       fontsWeight: FontWeight.w400,
                       fontSize: 14,
                     ),
                   ),
-                  const SizedBox(height: 81),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.04),
                   ElevatedButton(
-                    onPressed: () {
-                      uploadImage();
-                    }
-                    // Navigator.pushNamed(
-                    //     context, '/schedule/presence/fingerprint')
-                    ,
+                    onPressed: !isLoading ? () => uploadImage() : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primaryTheme_2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    child: Text(
-                      'Konfirmasi Kehadiran',
-                      style: AppTextStyle.poppinsTextStyle(
-                        color: AppTheme.white,
-                        fontSize: 14,
-                        fontsWeight: FontWeight.w400,
-                      ),
-                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 128,
+                            child: SpinKitThreeBounce(
+                              color: AppTheme.white,
+                              size: 13.3,
+                            ),
+                          )
+                        : Text(
+                            'Konfirmasi Kehadiran',
+                            style: AppTextStyle.poppinsTextStyle(
+                              color: AppTheme.white,
+                              fontSize: 14,
+                              fontsWeight: FontWeight.w400,
+                            ),
+                          ),
                   ),
                   const SizedBox(height: 24),
                 ],
