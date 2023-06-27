@@ -38,7 +38,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
           children: [
             const Header(
               title: 'Riwayat Kehadiran',
-              subtitle: 'Semester 2022/2',
+              subtitle: 'Semester 2023/2',
               back: true,
             ),
             Padding(
