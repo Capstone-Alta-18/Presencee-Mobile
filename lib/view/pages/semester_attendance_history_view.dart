@@ -6,6 +6,7 @@ import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view/widgets/card_matkul.dart';
 import 'package:presencee/view/widgets/header.dart';
 import 'package:presencee/theme/constant.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'course_history_view.dart';
@@ -37,7 +38,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
           children: [
             const Header(
               title: 'Riwayat Kehadiran',
-              subtitle: 'Semester 2022/2',
+              subtitle: 'Semester 2023/2',
               back: true,
             ),
             Padding(
@@ -50,6 +51,7 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                     child: PersentaseKehadiran(
                       diagram: false,
                       selectedIndex: 0,
+                      idJadwal: 0,
                     ),
                   ),
                   const Padding(padding: EdgeInsets.only(bottom: 43)),
@@ -79,38 +81,40 @@ class _SemesterHistoryState extends State<SemesterHistory> {
                               splashColor:
                                   AppTheme.primaryTheme.withOpacity(0.4),
                               onTap: () {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    transitionDuration:
-                                        const Duration(milliseconds: 500),
-                                    pageBuilder: (context, animation,
-                                            secondaryAnimation) =>
-                                        CourseHistory(
-                                      manager: manager,
-                                      selectedIndex: index,
-                                      managerDosen: managerDosen,
-                                    ),
-                                    transitionsBuilder: (context, animation,
-                                        secondaryAnimation, child) {
-                                      var begin = const Offset(1.0, 0.0);
-                                      var end = Offset.zero;
-                                      var curve = Curves.ease;
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve));
+                                // Navigator.of(context).push(
+                                //   PageRouteBuilder(
+                                //     transitionDuration:
+                                //         const Duration(milliseconds: 500),
+                                //     pageBuilder: (context, animation,
+                                //             secondaryAnimation) =>
+                                //         CourseHistory(
+                                //       manager: manager,
+                                //       selectedIndex: index,
+                                //       managerDosen: managerDosen,
+                                //       idJadwal: 1,
+                                //     ),
+                                //     transitionsBuilder: (context, animation,
+                                //         secondaryAnimation, child) {
+                                //       var begin = const Offset(1.0, 0.0);
+                                //       var end = Offset.zero;
+                                //       var curve = Curves.ease;
+                                //       var tween = Tween(begin: begin, end: end)
+                                //           .chain(CurveTween(curve: curve));
 
-                                      return SlideTransition(
-                                        position: animation.drive(tween),
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
+                                //       return SlideTransition(
+                                //         position: animation.drive(tween),
+                                //         child: child,
+                                //       );
+                                //     },
+                                //   ),
+                                // );
                               },
                               child: SizedBox(
                                 height: 128,
                                 child: CardMatkul(
                                   semester: true,
                                   selectedIndex: index,
+                                  idJadwal: 1,
                                 ),
                               ),
                             ),

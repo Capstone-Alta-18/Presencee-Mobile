@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:presencee/model/API/jadwal_api.dart';
 import 'package:presencee/view_model/jadwal_view_model.dart';
+import 'package:presencee/view_model/kehadiran_view_model.dart';
 import 'package:presencee/view_model/mahasiswa_view_model.dart';
 import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -76,10 +77,11 @@ class _SchedulePageState extends State<SchedulePage> {
       final mahasiswa = Provider.of<MahasiswaViewModel>(context, listen: false)
           .mahasiswaSingle;
       var now = DateTime.now();
+      var jadwal = DateTime.utc(2023,06,18);
       var jamAfter = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(now);
       var jamBefore = DateFormat('yyyy-MM-ddT23:59:00+00:00').format(now);
-      var previousMonday = now.subtract(Duration(days: now.weekday - 1));
-      var nextSaturday = previousMonday.add(const Duration(days: 6));
+      var previousMonday = jadwal.subtract(Duration(days: jadwal.weekday - 1));
+      var nextSaturday = previousMonday.add(const Duration(days: 112));
       var createdAfter =
           DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
       var createdBefore =
@@ -92,6 +94,15 @@ class _SchedulePageState extends State<SchedulePage> {
           userId: mahasiswa.userId!,
           jamAfter: createdAfter,
           jamBefore: createdBefore);
+      Provider.of<KehadiranViewModel>(context, listen: false)
+        .getKehadiranNew(idMhs: mahasiswa.userId ?? 0, afterTime: createdAfter,beforeTime: createdBefore);
+      Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+        idMhs: mahasiswa.userId ?? 0,
+        afterTime: createdAfter,
+        beforeTime: createdBefore,
+        jadwalId: 0,
+      );
+          
     });
     Timer.periodic(const Duration(seconds: 1), (_) {
       timeController.add(DateTime.now());
@@ -231,6 +242,14 @@ class _SchedulePageState extends State<SchedulePage> {
   Widget _buildJadwalAbsensi() {
     final allJadwal = Provider.of<JadwalViewModel>(context);
     final filterJadwal = Provider.of<JadwalViewModel>(context);
+
+    if (allJadwal.status == Status.initial) {
+      return const Center();
+    } else if (allJadwal.status == Status.loading) {
+      return const Center();
+    } else if (allJadwal.status == Status.error) {
+      return const Center();
+    }
 
     String getInitials(String name) {
       if (name.isEmpty) return '';

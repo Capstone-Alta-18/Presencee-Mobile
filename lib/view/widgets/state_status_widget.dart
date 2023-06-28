@@ -58,7 +58,7 @@ class LoadingSemesterHistoryCard extends StatelessWidget {
         children: [
           const Header(
             title: 'Riwayat Kehadiran',
-            subtitle: 'Semester 2022/2',
+            subtitle: 'Semester 2023/2',
             back: false,
           ),
           Padding(
@@ -106,13 +106,11 @@ class JadwalLoading extends StatelessWidget {
       elevation: 1.2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: const ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        subtitle: SpinKitThreeBounce(
-          color: AppTheme.primaryTheme,
-          size: 30,
-        )
-        
-      ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          subtitle: SpinKitThreeBounce(
+            color: AppTheme.primaryTheme,
+            size: 30,
+          )),
     );
   }
 }
@@ -172,7 +170,7 @@ class ErrorSemesterHistoryCard extends StatelessWidget {
       children: [
         const Header(
           title: 'Riwayat Kehadiran',
-          subtitle: 'Semester 2022/2',
+          subtitle: 'Semester 2023/2',
           back: true,
         ),
         Expanded(
