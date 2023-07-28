@@ -31,11 +31,11 @@ class KehadiranApi {
 
       if (response.statusCode == 200) {
         final datas = response as List;
-        print('response data : ${datas}');
+        // print('response data : ${datas}');
         List<RiwayatKehadiran> kehadiran = (jsonDecode(response.data) as List).map((model) => RiwayatKehadiran.fromJson(model)).toList();
         // List<RiwayatKehadiran> kehadiran = List<RiwayatKehadiran>.from(
         //     datas.map((model) => RiwayatKehadiran.fromJson(model))).toList();
-        print('kehadiran: $kehadiran');
+        // print('kehadiran: $kehadiran');
         return kehadiran;
       } else {
         throw Exception('Failed to load kehadiran');

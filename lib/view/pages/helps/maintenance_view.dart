@@ -13,10 +13,9 @@ class MaintenancePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              // child: Image.asset("lib/assets/images/maintenance.png"),
-              child: LottieBuilder.asset("lib/assets/animation/under-maintenance.json")
-            ),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: LottieBuilder.asset(
+                    "lib/assets/animation/under-maintenance.json")),
             const SizedBox(height: 44),
             Text(
               "Maaf atas ketidaknyamanan, Halaman ini dalam perbaikan",

@@ -2,11 +2,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:presencee/view/widgets/alerted_attendance.dart';
 
 class AuthBiometrics {
   static final auth = LocalAuthentication();
-  // List<BiometricType> availableBiometrics = [];
 
   static showFailedDialog(BuildContext context) {
     showDialog(
@@ -44,10 +42,10 @@ class AuthBiometrics {
 
   static Future<bool> authenticate() async {
     bool isAuthenticated = false;
-    
+
     try {
       bool canCheckBiometrics = await hasBiometrics();
-      
+
       if (canCheckBiometrics) {
         isAuthenticated = await auth.authenticate(
           localizedReason: 'Untuk Absen silahkan sidik jari kamu',
@@ -58,7 +56,6 @@ class AuthBiometrics {
         );
       } else {
         debugPrint('Biometrics not available');
-        // AllDialogsAttendance.failedDialog(context);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -70,6 +67,4 @@ class AuthBiometrics {
     }
     return isAuthenticated;
   }
-
-  
 }

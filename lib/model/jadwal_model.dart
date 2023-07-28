@@ -26,24 +26,28 @@ class Data {
   final int? matakuliahId;
   final int? roomId;
   final String? sks;
-  final String? jam;
+  final String? jamMulai;
+  final String? jamSelesai;
   final String? name;
   final String? description;
   final int? userId;
   final int? dosenId;
   Dosen? dosen;
+  Room? room;
 
   Data(
       {this.id,
       this.matakuliahId,
       this.roomId,
       this.sks,
-      this.jam,
+      this.jamMulai,
+      this.jamSelesai,
       this.name,
       this.description,
       this.userId,
       this.dosenId,
-      this.dosen});
+      this.dosen,
+      this.room});
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
@@ -51,38 +55,43 @@ class Data {
       matakuliahId: json['matakuliah_id'],
       roomId: json['room_id'],
       sks: json['sks'],
-      jam: json['jam'],
+      jamMulai: json['jam_mulai'],
+      jamSelesai: json['jam_selesai'],
       name: json['name'],
       description: json['description'],
       userId: json['user_id'],
       dosenId: json['dosen_id'],
-      dosen: json['dosen'] != null ? Dosen.fromJson(json['dosen']) : null
-    );
+      dosen: json['dosen'] != null ? Dosen.fromJson(json['dosen']) : null,
+      room: json['room'] != null ? Room.fromJson(json['room']) : null);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['matakuliah_id'] = this.matakuliahId;
-    data['room_id'] = this.roomId;
-    data['sks'] = this.sks;
-    data['jam'] = this.jam;
-    data['name'] = this.name;
-    data['description'] = this.description;
-    data['user_id'] = this.userId;
-    data['dosen_id'] = this.dosenId;
-    if (this.dosen != null) {
-      data['dosen'] = this.dosen!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['matakuliah_id'] = matakuliahId;
+    data['room_id'] = roomId;
+    data['sks'] = sks;
+    data['jam_mulai'] = jamMulai;
+    data['jam_selesai'] = jamSelesai;
+    data['name'] = name;
+    data['description'] = description;
+    data['user_id'] = userId;
+    data['dosen_id'] = dosenId;
+    if (dosen != null) {
+      data['dosen'] = dosen!.toJson();
+    }
+    if (room != null) {
+      data['room'] = room!.toJson();
     }
     return data;
   }
 }
 
 class Dosen {
-  int? iD;
+  int? id;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
   String? name;
   String? email;
   String? nip;
@@ -91,7 +100,7 @@ class Dosen {
   int? userId;
 
   Dosen(
-      {this.iD,
+      {this.id,
       this.createdAt,
       this.updatedAt,
       this.deletedAt,
@@ -103,7 +112,7 @@ class Dosen {
       this.userId});
 
   Dosen.fromJson(Map<String, dynamic> json) {
-    iD = json['ID'];
+    id = json['ID'];
     createdAt = json['CreatedAt'];
     updatedAt = json['UpdatedAt'];
     deletedAt = json['DeletedAt'];
@@ -116,17 +125,58 @@ class Dosen {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ID'] = this.iD;
-    data['CreatedAt'] = this.createdAt;
-    data['UpdatedAt'] = this.updatedAt;
-    data['DeletedAt'] = this.deletedAt;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['nip'] = this.nip;
-    data['phone'] = this.phone;
-    data['image'] = this.image;
-    data['user_id'] = this.userId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ID'] = id;
+    data['CreatedAt'] = createdAt;
+    data['UpdatedAt'] = updatedAt;
+    data['DeletedAt'] = deletedAt;
+    data['name'] = name;
+    data['email'] = email;
+    data['nip'] = nip;
+    data['phone'] = phone;
+    data['image'] = image;
+    data['user_id'] = userId;
+    return data;
+  }
+}
+
+class Room {
+  int? id;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+  String? name;
+  String? location;
+  String? code;
+
+  Room(
+      {this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.name,
+      this.location,
+      this.code});
+
+  Room.fromJson(Map<String, dynamic> json) {
+    id = json['ID'];
+    createdAt = json['CreatedAt'];
+    updatedAt = json['UpdatedAt'];
+    deletedAt = json['DeletedAt'];
+    name = json['name'];
+    location = json['location'];
+    code = json['code'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['ID'] = id;
+    data['CreatedAt'] = createdAt;
+    data['UpdatedAt'] = updatedAt;
+    data['DeletedAt'] = deletedAt;
+    data['name'] = name;
+    data['location'] = location;
+    data['code'] = code;
     return data;
   }
 }
