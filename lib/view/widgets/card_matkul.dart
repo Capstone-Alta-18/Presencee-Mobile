@@ -1,24 +1,32 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phosphor_icons/flutter_phosphor_icons.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:presencee/theme/constant.dart';
 import 'package:presencee/view/pages/course_history_view.dart';
 import 'package:presencee/view/pages/history_view.dart';
 import 'package:presencee/view/widgets/state_status_widget.dart';
+import 'package:presencee/view_model/absensi_view_model.dart';
 import 'package:presencee/view_model/dosen_view_model.dart';
+import 'package:presencee/view_model/jadwal_view_model.dart';
 import 'package:presencee/view_model/kehadiran_view_model.dart';
+import 'package:presencee/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CardMatkul extends StatefulWidget {
   final bool semester;
   final int selectedIndex;
+  final int idJadwal;
 
   const CardMatkul({
     super.key,
     required this.semester,
     required this.selectedIndex,
+    required this.idJadwal
   });
 
   @override
@@ -26,52 +34,50 @@ class CardMatkul extends StatefulWidget {
 }
 
 class _CardMatkulState extends State<CardMatkul> {
-  @override
-  void initState() {
-    super.initState();
-  }
+
+//  @override
+//   void initState() {
+//     super.initState();
+//     var now = DateTime.utc(2023,06,19);
+//     var previousMonday = now.subtract(Duration(days: now.weekday - 1));
+//     var nextSaturday = previousMonday.add(Duration(days: 112));
+
+//     var after = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(previousMonday);
+//     var before = DateFormat('yyyy-MM-ddT00:01:00+00:00').format(nextSaturday);
+
+//     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+//       final user = Provider.of<UserViewModel>(context, listen: false).user!.data;
+//       Provider.of<KehadiranViewModel>(context,listen: false).getKehadiran(
+//         idMhs: user!.id ?? 0,
+//         afterTime: after,
+//         beforeTime: before,
+//         jadwalId: widget.idJadwal
+//       );
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
-    final manager = Provider.of<KehadiranViewModel>(context);
-    final managerDosen = Provider.of<DosenViewModel>(context);
 
-    final hadir = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Hadir"])
-        .elementAt(widget.selectedIndex);
-    final alpa = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Alpa"])
-        .elementAt(widget.selectedIndex);
-    final sakit = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Sakit"])
-        .elementAt(widget.selectedIndex);
-    final izin = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Izin"])
-        .elementAt(widget.selectedIndex);
-    final dispen = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Dispensasi"])
-        .elementAt(widget.selectedIndex);
-    var total = manager.kehadiranNew.meta!
-        .toJson()
-        .values
-        .toList()
-        .map((e) => e["Total"])
-        .elementAt(widget.selectedIndex);
+
+    final manager = Provider.of<KehadiranViewModel>(context);
+    final jadwal = Provider.of<JadwalViewModel>(context);
+
+    
+    // final hadir = manager.kehadiranNew.meta!.toJson().values.where((f) => f.startsWith('Hadir')).elementAt(widget.selectedIndex);
+    final hadir = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Hadir"]).elementAt(widget.selectedIndex);
+    final alpa = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Alpa"]).elementAt(widget.selectedIndex);
+    final sakit = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Sakit"]).elementAt(widget.selectedIndex);
+    final izin = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Izin"]).elementAt(widget.selectedIndex);
+    final dispen = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Dispensasi"]).elementAt(widget.selectedIndex);
+    var total = manager.kehadiranNew.meta!.toJson().values.toList().map((e) => e["Total"]).elementAt(widget.selectedIndex);
+
+    // final hadir = manager.kehadiran.meta!.hadir!.toInt();
+    // final alpa = manager.kehadiran.meta!.alpa!.toInt();
+    // final sakit = manager.kehadiran.meta!.sakit!.toInt();
+    // final izin = manager.kehadiran.meta!.izin!.toInt();
+    // final dispen = manager.kehadiran.meta!.dispensasi!.toInt();
+    // final total = manager.kehadiran.totalCount!.toInt();
 
     List<DataKehadiran> kehadiran = [
       DataKehadiran("Hadir", hadir, "Hadir", AppTheme.primaryTheme),
@@ -90,8 +96,9 @@ class _CardMatkulState extends State<CardMatkul> {
       return const ErrorMatkulCards();
     }
 
-    Color cardColor(int selectedIndex) {
-      if (selectedIndex <= 1) {
+    Color cardColor(int selectedIndex){
+      // if (manager.kehadiran[selectedIndex].kodeMatkul.toString() == "MU"){
+      if (selectedIndex <= 3){
         return AppTheme.greenCard;
       } else {
         return AppTheme.purpleCard;
@@ -118,29 +125,29 @@ class _CardMatkulState extends State<CardMatkul> {
                             borderRadius: BorderRadius.circular(10)),
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  const begin = Offset(0.0, 1.0);
-                                  const end = Offset.zero;
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: Curves.ease));
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        CourseHistory(
-                                  manager: manager,
-                                  selectedIndex: index,
-                                  managerDosen: managerDosen,
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   PageRouteBuilder(
+                            //     transitionsBuilder: (context, animation,
+                            //         secondaryAnimation, child) {
+                            //       const begin = Offset(0.0, 1.0);
+                            //       const end = Offset.zero;
+                            //       var tween = Tween(begin: begin, end: end)
+                            //           .chain(CurveTween(curve: Curves.ease));
+                            //       return SlideTransition(
+                            //         position: animation.drive(tween),
+                            //         child: child,
+                            //       );
+                            //     },
+                            //     pageBuilder:
+                            //         (context, animation, secondaryAnimation) =>
+                            //             CourseHistory(
+                            //       manager: jadwal,
+                            //       selectedIndex: index,
+                            //       idJadwal: widget.idJadwal,
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: Padding(
                             padding:
@@ -214,30 +221,33 @@ class _CardMatkulState extends State<CardMatkul> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                  padding: const EdgeInsets.only(left: 0.0),
-                  child: SizedBox(
-                    width: 100,
-                    child:
-                        SfCircularChart(annotations: <CircularChartAnnotation>[
-                      CircularChartAnnotation(
-                        widget: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: cardColor(widget.selectedIndex),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              widget.selectedIndex > 1 ? "EE" : "MU",
-                              style: AppTextStyle.poppinsTextStyle(
-                                  color: AppTheme.black,
-                                  fontSize: 22,
-                                  fontsWeight: FontWeight.w600),
+                padding: const EdgeInsets.only(left: 0.0),
+                child: SizedBox(
+                  width: 100,
+                  child: SfCircularChart(
+                    // borderColor: Colors.amber,
+                    // centerX: '30',
+                    annotations: <CircularChartAnnotation>[
+                        CircularChartAnnotation(
+                            widget: Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: cardColor(widget.selectedIndex),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  widget.selectedIndex > 3 ? "EE" : "MU",
+                                  // manager.kehadiran[widget.selectedIndex].kodeMatkul.toString(),
+                                  style: AppTextStyle.poppinsTextStyle(
+                                      color: AppTheme.black,
+                                      fontSize: 22,
+                                      fontsWeight: FontWeight.w600),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
                     ], series: <DoughnutSeries<DataKehadiran, String>>[
                       DoughnutSeries<DataKehadiran, String>(
                         radius: '40',
@@ -262,11 +272,10 @@ class _CardMatkulState extends State<CardMatkul> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        manager.kehadiranNew.meta!
-                            .toJson()
-                            .keys
-                            .toList()[widget.selectedIndex]
-                            .toString(),
+                        // matkul.toString(),
+                        // manager.kehadiranNew.meta!.toJson().entries.toList()[widget.selectedIndex].toString(),
+                        // manager.kehadiranNew.meta!.toJson().keys.toList()[widget.selectedIndex].toString(),
+                        jadwal.jadwals[widget.selectedIndex].name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,
                           fontSize: 16,
@@ -274,8 +283,8 @@ class _CardMatkulState extends State<CardMatkul> {
                         ),
                       ),
                       Text(
-                        managerDosen.dosen.dosens![widget.selectedIndex].name
-                            .toString(),
+                        jadwal.jadwals[widget.selectedIndex].dosen!.name.toString(),
+                        // managerDosen.dosen.dosens![widget.selectedIndex].name.toString(),
                         style: AppTextStyle.poppinsTextStyle(
                           color: AppTheme.black,
                           fontSize: 14,
@@ -288,30 +297,30 @@ class _CardMatkulState extends State<CardMatkul> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          CourseHistory(
-                        manager: manager,
-                        selectedIndex: widget.selectedIndex,
-                        managerDosen: managerDosen,
-                      ),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        var begin = const Offset(1.0, 0.0);
-                        var end = Offset.zero;
-                        var curve = Curves.ease;
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve));
+                  // Navigator.of(context).push(
+                  //   PageRouteBuilder(
+                  //     transitionDuration: const Duration(milliseconds: 500),
+                  //     pageBuilder: (context, animation, secondaryAnimation) =>
+                  //         CourseHistory(
+                  //       manager: jadwal,
+                  //       selectedIndex: widget.selectedIndex,
+                  //       idJadwal: widget.idJadwal,
+                  //     ),
+                  //     transitionsBuilder:
+                  //         (context, animation, secondaryAnimation, child) {
+                  //       var begin = const Offset(1.0, 0.0);
+                  //       var end = Offset.zero;
+                  //       var curve = Curves.ease;
+                  //       var tween = Tween(begin: begin, end: end)
+                  //           .chain(CurveTween(curve: curve));
 
-                        return SlideTransition(
-                          position: animation.drive(tween),
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  //       return SlideTransition(
+                  //         position: animation.drive(tween),
+                  //         child: child,
+                  //       );
+                  //     },
+                  //   ),
+                  // );
                 },
                 icon: const Icon(
                   PhosphorIcons.caret_right,
